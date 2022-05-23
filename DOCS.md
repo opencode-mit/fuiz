@@ -9,12 +9,18 @@ Server ADT:
         registers a player to the given sessionID with a username, it must be unique, if successful it will
         return the token to be passed in later calls to the ADT
 
-    showNextQuestion(sessionID: string, token: hash): {question: json}
+    getNextAction(sessionID: string, token: hash)
 
     submitAnswer(sessionID: string, playerID: string, playerToken: hash, answerID: string)
 
-    showLeaderboard(sessionID: string, token: hash)
+    private showLeaderboard(sessionID: string, leaderboard: json)
         sends leaderboard to current active users of given sessionID
+
+    private showQuestion(sessionID: string, question: json)
+        sends a question to current active users of given sessionID
+
+    private showStatistics(sessionID: string, question: json)
+        sends statistics/correct answers to current active users of given session ID
 
 
 Client ADT:
@@ -26,13 +32,13 @@ Client ADT:
 
     onReceiveLeaderboard(leaderboard: event)
 
+    onReceiveStatistics(stats: event)
+
 
 Gamemode ADT:
     constructor(config: json)
 
-    getNextQuestion(): {question: json}
-
-    getLeaderboard(): {leaderboard: json}
+    getNextAction(): {action: json}
 
     submitAnswer(playerID: string, answerID: string)
 
@@ -40,6 +46,4 @@ Gamemode ADT:
 Host ADT:
     startGame(config: json)
 
-    showLeaderboard()
-
-    showNextQuestion()
+    continue(config: json)
