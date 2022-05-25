@@ -1,5 +1,5 @@
 Server ADT:
-    mapping: (sessionID: string) -> (token: hash, game: Gamemode ADT, mapping (playerID: string) -> (token: hash))
+    mapping: (sessionID: string) -> (token: hash, game: Gamemode ADT, watchers: string[], mapping (playerID: string) -> (token: hash))
 
     registerHost(config: json): {sessionID: string, token: hash}
         register a current fuiz with the given configuration, returns a sessionID and a token to be passed
@@ -9,18 +9,16 @@ Server ADT:
         registers a player to the given sessionID with a username, it must be unique, if successful it will
         return the token to be passed in later calls to the ADT
 
-    getNextAction(sessionID: string, token: hash)
+    registerWatcher(sessionID: string):
+        registers a watcher to the given sessionID
+
+    resolveAction(sessionID: string, actionID: number, token: hash)
 
     submitAnswer(sessionID: string, playerID: string, playerToken: hash, answerID: string)
 
-    private showLeaderboard(sessionID: string, leaderboard: json)
-        sends leaderboard to current active users of given sessionID
+    private announceAction(sessionID: string, action: json)
+        sends action to current active users of given sessionID
 
-    private showQuestion(sessionID: string, question: json)
-        sends a question to current active users of given sessionID
-
-    private showStatistics(sessionID: string, question: json)
-        sends statistics/correct answers to current active users of given session ID
 
 
 Client ADT:
@@ -28,22 +26,20 @@ Client ADT:
 
     sendAnswer(answerID: string)
 
-    onReceiveQuestion(question: event)
+    onReceiveAction(action: event)
 
-    onReceiveLeaderboard(leaderboard: event)
-
-    onReceiveStatistics(stats: event)
 
 
 Gamemode ADT:
-    constructor(config: json)
+    constructor(config: json, announceAction: (action) -> void)
 
-    getNextAction(): {action: json}
+    resolveAction(actionID: number): {action: json}
 
-    submitAnswer(playerID: string, answerID: string)
+    submitAnswer(questionID: number, playerID: string, answerID: string)
+
 
 
 Host ADT:
     startGame(config: json)
 
-    continue(config: json)
+    resolveAction(actionID: number)
