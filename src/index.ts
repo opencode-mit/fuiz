@@ -46,7 +46,16 @@ export type Action = {
     content: string,
     answers: Array<answer>
 } | {
-    type: 'leaderboard'
+    type: 'leaderboard',
+    final: boolean,
+    results: Array<{playerID: PlayerID, score: number}>
+} | {
+    type: 'statistics',
+    content: string,
+    answers: Array<answer>
+} | {
+    type: 'question_only',
+    content: string
 };
 
 /**

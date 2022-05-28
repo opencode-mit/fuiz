@@ -35,6 +35,7 @@ class Quiz implements Gamemode {
     private readonly answers: Array<Array<Answer>> = [];
     private currentQuestion = -1;
     private acceptingResponses = false;
+    private readonly questionTimes: number[] = [];
 
     /**
      * Creates a Quiz with the given configuration.
@@ -79,6 +80,8 @@ class Quiz implements Gamemode {
         this.toBeResolved.push({ resolved: false, callback: this.stopQuestion });
         setTimeout(() => this.resolveAction(this.toBeResolved.length - 1), this.config.delay);
         this.acceptingResponses = true;
+        this.answers.push([]);
+        this.questionTimes.push(Date.now());
         this.announceCallback({
             type: 'question',
             content: question.content,
@@ -86,6 +89,32 @@ class Quiz implements Gamemode {
                 return { content: answer.content };
             })
         });
+    }
+
+    /**
+     * Calculates the leaderboard by rewarding one point to each correct response.
+     * 
+     * @returns playerIDs and their associated score
+     */
+    private calculateLeaderboard(): Array<{playerID: PlayerID, score: number}> {
+        const scores = new Map<PlayerID, number>();
+        for(let questionID = 0; questionID < this.questionTimes.length; questionID++) {
+            const playerAnswers = this.answers[questionID];
+            const questionAnswers = this.config.questions[questionID].answers;
+            if(playerAnswers === undefined || questionAnswers === undefined) continue; //TODO: should be assert
+            for(const playerAnswer of playerAnswers) {
+                const currentAnswer = questionAnswers[playerAnswer.answerID];
+                if(currentAnswer !== undefined && currentAnswer.correct === true){
+                    const currentScore = scores.get(playerAnswer.playerID) ?? 0;
+                    scores.set(playerAnswer.playerID, currentScore + 1);
+                }
+            }
+        }
+        const leaderboard = new Array<{playerID: PlayerID, score: number}>();
+        for(const [playerID, score] of scores.entries()) {
+            leaderboard.push({playerID: playerID, score: score});
+        }
+        return leaderboard;
     }
 
     /**
@@ -98,7 +127,9 @@ class Quiz implements Gamemode {
         }
         this.acceptingResponses = false;
         this.announceCallback({
-            type: 'leaderboard'
+            type: 'leaderboard',
+            final: this.currentQuestion === this.config.questions.length - 1,
+            results: this.calculateLeaderboard()
         });
     }
 
