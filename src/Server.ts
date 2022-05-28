@@ -1,9 +1,7 @@
 type Hash = string;
-type SessionID = string;
-type PlayerID = string;
 type UserTokens = Map<PlayerID, Hash>;
-import { Action, GameConfig } from ".";
-import {Gamemode, createGame} from "./Gamemode";
+import { Action, GameConfig, PlayerID, SessionID } from ".";
+import { Gamemode, createGame } from "./Gamemode";
 
 function getRandomSessionID(existing: SessionID[]): SessionID {
     return "ABC123"; //TODO: Implement me
@@ -14,16 +12,16 @@ function getRandomHash(): Hash {
 }
 
 class Server {
-    private readonly mapping = new Map<SessionID, {token: Hash, game: Gamemode, users: UserTokens}>();
+    private readonly mapping = new Map<SessionID, { token: Hash, game: Gamemode, users: UserTokens }>();
 
-    public constructor() {};
+    public constructor() { };
 
-    public registerHost(config: GameConfig) : {sessionID: SessionID, token: Hash} {
+    public registerHost(config: GameConfig): { sessionID: SessionID, token: Hash } {
         const nextSessionID = getRandomSessionID(Array.from(this.mapping.keys()));
         const token = getRandomHash();
         const announceFunc = (action: Action) => this.announceAction(nextSessionID, action);
-        this.mapping.set(nextSessionID, {token: token, game: createGame(config, announceFunc), users: new Map()});
-        return {sessionID: nextSessionID, token: token};
+        this.mapping.set(nextSessionID, { token: token, game: createGame(config, announceFunc), users: new Map() });
+        return { sessionID: nextSessionID, token: token };
     }
 
     public registerPlayer(sessionID: SessionID, playerID: PlayerID): Hash | undefined {
