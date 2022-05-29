@@ -54,7 +54,7 @@ class Quiz implements Gamemode {
      * @inheritdoc
      */
     public submitAnswer(questionID: number, playerID: string, answerID: number): void {
-        const questionAnswers = this.answers[questionID];
+        const questionAnswers: Answer[] | undefined = this.answers[questionID];
         if (this.acceptingResponses && questionAnswers !== undefined && this.currentQuestion === questionID) {
             questionAnswers.push({ playerID: playerID, answerID: answerID, timeSubmitted: Date.now() });
         } else {
@@ -100,7 +100,9 @@ class Quiz implements Gamemode {
         const scores = new Map<PlayerID, number>();
         for(let questionID = 0; questionID < this.questionTimes.length; questionID++) {
             const playerAnswers = this.answers[questionID];
-            const questionAnswers = this.config.questions[questionID].answers;
+            const question = this.config.questions[questionID];
+            if (question === undefined) continue;
+            const questionAnswers = question.answers;
             if(playerAnswers === undefined || questionAnswers === undefined) continue; //TODO: should be assert
             for(const playerAnswer of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];

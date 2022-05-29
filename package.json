@@ -6,6 +6,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && tsc",
+    "compile": "npm run build && npx browserify src/FuizClient.ts -v --debug -p tsify -o dist/client-bundle.js",
+    "watchify-client": "npx watchify src/FuizClient.ts -v --debug -p tsify -o dist/client-bundle.js",
     "start": "npm run build && node dist/index.js",
     "faststart": "node dist/index.js"
   },
@@ -17,6 +19,10 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
-    "rimraf": "^3.0.2"
+    "browserify": "^17.0.0",
+    "eslint": "^8.16.0",
+    "rimraf": "^3.0.2",
+    "tsify": "^5.0.4",
+    "watchify": "^4.0.0"
   }
 }
