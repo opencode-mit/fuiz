@@ -5,7 +5,11 @@ const templates = {
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="answer-container">
-            ${question.answers.map(answer => `<button class="answer">${answer.content}</button>`).join("")}
+            ${question.answers.map(answer => `
+            <button class="answer pushable">
+                <span class="front">${answer.content}</span>
+            </button>`
+            ).join("")}
         </div>
     </div>`,
     leaderboard: (leaderboard: Leaderboard) => `
