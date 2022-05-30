@@ -2,12 +2,37 @@ import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError } fr
 import { Gamemode, createQuiz } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
+const randInt = (n: number) => Math.floor(Math.random() * n);
+
+/**
+ * Generates an easy to read session id that's different from existing session ids.
+ * @param existing an array of existing session ids
+ * @returns a new session id
+ */
 function getRandomSessionID(existing: SessionID[]): SessionID {
-    return "ABC123"; //TODO: Implement me
+    const easyAlphabet = "023456789ACDEFGHJKLOQRSTUVWXYZ"; // broad research concludes that these letters are easy to say
+    const length = 6;
+    let result: SessionID; // assuming string
+    do {
+        result = "";
+        for (let i = 0; i < length; i++) {
+            result += easyAlphabet[randInt(easyAlphabet.length)];
+        }
+    } while(existing.includes(result));
+    return result;
 }
 
+/**
+ * @returns a random hash
+ */
 function getRandomHash(): Hash {
-    return "123oijasd"; //TODO: Implement me
+    const alphabet = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ1234567890";
+    const length = 32;
+    let result: Hash = "";
+    for (let i = 0; i < length; i++) {
+        result += alphabet[randInt(alphabet.length)];
+    }
+    return result;
 }
 
 export class GameManager {
