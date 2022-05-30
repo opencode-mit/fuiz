@@ -12,3 +12,7 @@ export function showLeaderboard(leaderboard: Leaderboard) {
 export function showQuestionOnly(content: string) {
     document.body.innerHTML = templates.questionOnly(content);
 }
+
+export function showPlayersQuestion(question: Question) {
+    document.body.innerHTML = templates.playersQuestion(question);
+}

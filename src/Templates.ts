@@ -28,7 +28,17 @@ const templates = {
     questionOnly: (content: string) => `
     <div class="questiononly-container">
         <div class="question">${content}</div>
-    </div>`
+    </div>`,
+    playersQuestion: (question: Question) => `
+    <div class="players-question-container">
+        <div class="answer-container">
+            ${question.answers.map(answer => `
+            <button class="answer pushable">
+                <span class="front"></span>
+            </button>`
+            ).join("")}
+        </div>
+    </div>`,
 }
 
 export default templates;

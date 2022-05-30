@@ -1,25 +1,25 @@
-import { showLeaderboard, showQuestion, showQuestionOnly } from "./Drawing";
+import { showLeaderboard, showQuestion, showQuestionOnly, showPlayersQuestion } from "./Drawing";
 
-// showQuestion({
-//     content: 'How will you answer for your actions?',
-//     answers: [
-//         {
-//             content: 'You cannot'
-//         }, {
-//             content: 'The consequences'
-//         }, {
-//             content: 'Stop running'
-//         }, {
-//             content: 'I\'m behind you'
-//         }
-//     ]
-// });
+showPlayersQuestion({
+    content: 'How will you answer for your actions?',
+    answers: [
+        {
+            content: 'You cannot'
+        }, {
+            content: 'The consequences'
+        }, {
+            content: 'Stop running'
+        }, {
+            content: 'I\'m behind you'
+        }
+    ]
+});
 
 // showLeaderboard([
-//     {playerID: "adhami", score: 100},
+//     {playerID: "minecraft", score: 600},
 //     {playerID: "barish", score: 400},
 //     {playerID: "hannah", score: 300},
-//     {playerID: "minecraft", score: 600}
+//     {playerID: "adhami", score: 100}
 // ]);
 
-showQuestionOnly("Am I behind you? (Hint: Yes)");
+// showQuestionOnly("Am I behind you? (Hint: Yes)");
