@@ -1,4 +1,4 @@
-import { Action, GameConfig, PlayerID, SessionID, Hash } from ".";
+import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError } from ".";
 import { Gamemode, createGame } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
@@ -39,25 +39,18 @@ class Server {
 
     public resolveAction(sessionID: SessionID, actionID: number, token: Hash): void {
         const game = this.mapping.get(sessionID);
-        if (game !== undefined && game.token === token) {
-            game.game.resolveAction(actionID);
-        } else {
-            //raise error or something D:
-        }
+        if(game === undefined) throw new AuthenticationError("SessionID was not found");
+        if(game.token !== token) throw new AuthenticationError("Host Token doesn't match");
+        game.game.resolveAction(actionID);
     }
-
+    
     public submitAnswer(sessionID: SessionID, playerID: PlayerID, playerToken: Hash, questionID: number,answerID: number): void {
         const game = this.mapping.get(sessionID);
-        if (game !== undefined) {
-            const userToken = game.users.get(playerID);
-            if (userToken !== undefined && userToken === playerToken) {
-                game.game.submitAnswer(questionID, playerID, answerID);
-            } else {
-                //raise error or something D:
-            }
-        } else {
-            //raise error or something D:
-        }
+        if(game === undefined) throw new AuthenticationError("SessionID was not found");
+        const userToken = game.users.get(playerID);
+        if(userToken === undefined) throw new AuthenticationError("Player was not found");
+        if(userToken !== playerToken) throw new AuthenticationError("Player Token doesn't match");
+        game.game.submitAnswer(questionID, playerID, answerID);
     }
 }
 

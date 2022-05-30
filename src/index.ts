@@ -40,10 +40,10 @@ export type Question = {
 export type GameConfig = {
     gamemode: 'quiz',
     delay: number,
-    questions: Array<QuestionSolved> 
+    questions: Array<QuestionSolved>
 };
 
-export type Leaderboard = Array<{playerID: PlayerID, score: number}>;
+export type Leaderboard = Array<{ playerID: PlayerID, score: number }>;
 
 /**
  * Represents an action announced to players/hosts/watchers.
@@ -74,3 +74,14 @@ export type SessionID = string;
  * Represents a unique playerID given by the player.
  */
 export type PlayerID = string;
+
+export class AuthenticationError extends Error {
+    public constructor(message: string) {
+        super(message);
+        Object.setPrototypeOf(this, AuthenticationError.prototype)
+    }
+
+    getReason() {
+        return this.message;
+    }
+}

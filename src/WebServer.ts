@@ -4,6 +4,7 @@ import express, { Application, json } from 'express';
 import HttpStatus from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
 import { GameManager } from './Server';
+import { AuthenticationError } from '.';
 
 export class WebServer {
     private readonly app: Application;
@@ -22,23 +23,51 @@ export class WebServer {
 
         this.app.post('/register', (request, response) => {
             const { jsonConfig } = request.body;
-            console.log(jsonConfig);
-            assert(jsonConfig);
-            const config = JSON.parse(jsonConfig);
-            const { sessionID, token } = this.gameManager.registerHost(config);
-            response
-                .status(HttpStatus.ACCEPTED)
-                .type('json')
-                .send(JSON.stringify({ sessionID: sessionID, token: token }));
+            try {
+                assert(jsonConfig);
+                const config = JSON.parse(jsonConfig);
+                const { sessionID, token } = this.gameManager.registerHost(config);
+                response
+                    .status(HttpStatus.ACCEPTED)
+                    .type('json')
+                    .send(JSON.stringify({ sessionID: sessionID, token: token }));
+            } catch (error) {
+                response
+                    .status(HttpStatus.BAD_REQUEST)
+                    .send();
+            }
         });
 
         this.app.post('/resolve', (request, response) => {
             const { sessionID, token, actionID } = request.body;
-            assert(sessionID);
-            assert(token);
-            assert(actionID);
-            this.gameManager.resolveAction(sessionID, Number.parseInt(actionID), token);
-            response.status(HttpStatus.ACCEPTED);
+            if (sessionID === undefined || sessionID === undefined || actionID === undefined) {
+                response
+                    .status(HttpStatus.BAD_REQUEST)
+                    .type('json')
+                    .send({status: "fail", message: "bad parameters"});
+                return;
+            }
+            try {
+                this.gameManager.resolveAction(sessionID, Number.parseInt(actionID), token);
+            } catch(error) {
+                if (error instanceof AuthenticationError) {
+                    response
+                        .status(HttpStatus.BAD_REQUEST)
+                        .type('json')
+                        .send({status: "fail", message: error.getReason()});
+                    return;
+                } else {
+                    response
+                        .status(HttpStatus.BAD_REQUEST)
+                        .type('json')
+                        .send({status: "fail", message: "something went wrong"});
+                    return;
+                }
+            }
+            response
+                .status(HttpStatus.ACCEPTED)
+                .type('json')
+                .send({status: "success"});
         });
     }
 
