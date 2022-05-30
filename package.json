@@ -8,20 +8,26 @@
     "build": "npm run clean && tsc",
     "compile": "npm run build && npx browserify src/FuizClient.ts -v --debug -p tsify -o dist/client-bundle.js",
     "watchify-client": "npx watchify src/FuizClient.ts -v --debug -p tsify -o dist/client-bundle.js",
-    "start": "npm run build && node dist/index.js",
+    "start-server": "npm run build && node --require source-map-support/register dist/FuizServer.js",
     "faststart": "node dist/index.js"
   },
   "author": "adhami3310 and BarishNamazov",
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/multer": "^1.4.7",
     "assert": "^2.0.0",
     "express": "^4.18.1",
+    "express-async-handler": "^1.2.0",
     "http-status-codes": "^2.2.0",
     "typescript": "^4.7.2"
   },
   "dependencies": {
+    "body-parser": "^1.20.0",
     "browserify": "^17.0.0",
     "eslint": "^8.16.0",
+    "multer": "^1.4.4-lts.1",
     "rimraf": "^3.0.2",
+    "source-map-support": "^0.5.21",
     "tsify": "^5.0.4",
     "watchify": "^4.0.0"
   }

@@ -1,5 +1,7 @@
 import { showLeaderboard, showQuestion, showQuestionOnly, showPlayersQuestion } from "./Drawing";
 
+export const url = "http://localhost:8888";
+
 // showQuestion({
 //     content: 'How will you answer for your actions?',
 //     answers: [

@@ -1,5 +1,6 @@
 import { GameConfig, Action } from ".";
 import { PlayerID } from ".";
+import { Deferred } from "./Deferred";
 
 /**
  * Represents an answer by a Player at a certain time.
@@ -31,7 +32,7 @@ export interface Gamemode {
 
 class Quiz implements Gamemode {
 
-    private readonly toBeResolved: Array<{ resolved: boolean, callback: () => void }> = [];
+    private readonly toBeResolved: Array<{ resolved: boolean, deferred: Deferred<void> }> = [];
     private readonly answers: Array<Array<Answer>> = [];
     private currentQuestion = -1;
     private acceptingResponses = false;
@@ -47,7 +48,10 @@ class Quiz implements Gamemode {
         private readonly config: GameConfig,
         private readonly announceCallback: (action: Action) => void
     ) {
-        this.toBeResolved.push({ resolved: false, callback: this.startGame })
+        const startGameDeferred = new Deferred<void>();
+        this.toBeResolved.push({ resolved: false, deferred: startGameDeferred });
+        const self = this;
+        startGameDeferred.promise.then(() => self.startGame());
     }
 
     /**
@@ -77,7 +81,10 @@ class Quiz implements Gamemode {
         this.currentQuestion++;
         const question = this.config.questions[this.currentQuestion];
         if (question === undefined) return;
-        this.toBeResolved.push({ resolved: false, callback: this.stopQuestion });
+        const questionDeferred = new Deferred<void>();
+        const self = this;
+        questionDeferred.promise.then(() => self.stopQuestion());
+        this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
         setTimeout(() => this.resolveAction(this.toBeResolved.length - 1), this.config.delay);
         this.acceptingResponses = true;
         this.answers.push([]);
@@ -126,7 +133,10 @@ class Quiz implements Gamemode {
      */ 
     private stopQuestion(): void {
         if (this.currentQuestion < this.config.questions.length - 1) {
-            this.toBeResolved.push({ resolved: false, callback: this.announceNextQuestion });
+            const leaderboardDeferred = new Deferred<void>();
+            const self = this;
+            leaderboardDeferred.promise.then(() => self.announceNextQuestion());
+            this.toBeResolved.push({ resolved: false, deferred: leaderboardDeferred });
         }
         this.acceptingResponses = false;
         this.announceCallback({
@@ -143,7 +153,7 @@ class Quiz implements Gamemode {
         const action = this.toBeResolved[actionID];
         if (action !== undefined && action.resolved === false) {
             action.resolved = true;
-            action.callback();
+            action.deferred.resolve();
         } else {
             //do somethig D:
         }

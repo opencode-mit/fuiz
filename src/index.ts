@@ -1,4 +1,9 @@
 /**
+ * Represent a token used for authentication.
+ */
+export type Hash = string;
+
+/**
  * Represents an answer and if it's correct or not.
  */
 type AnswerSolved = {

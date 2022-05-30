@@ -1,7 +1,6 @@
-type Hash = string;
-type UserTokens = Map<PlayerID, Hash>;
-import { Action, GameConfig, PlayerID, SessionID } from ".";
+import { Action, GameConfig, PlayerID, SessionID, Hash } from ".";
 import { Gamemode, createGame } from "./Gamemode";
+type UserTokens = Map<PlayerID, Hash>;
 
 function getRandomSessionID(existing: SessionID[]): SessionID {
     return "ABC123"; //TODO: Implement me
@@ -34,6 +33,7 @@ class Server {
     }
 
     private announceAction(sessionID: SessionID, action: Action): void {
+        console.log(action);
         //TODO: Implement me using websockets
     }
 
@@ -60,3 +60,5 @@ class Server {
         }
     }
 }
+
+export { Server as GameManager };
