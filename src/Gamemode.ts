@@ -11,6 +11,9 @@ type Answer = {
     timeSubmitted: number
 }
 
+/**
+ * Represents a Gamemode that takes answers and communicates with the server.
+ */
 export interface Gamemode {
 
     /**
@@ -31,6 +34,15 @@ export interface Gamemode {
 }
 
 export class Quiz implements Gamemode {
+    
+    // Abstraction Function
+    // AF(toBeResolved, answers, currentQuestion, acceptingResponses, questionTimes) =
+    //      A quiz game last displayed the question #currentQuestion and is accepting
+    //      responses based on acceptingResponses, it showed the times where these 
+    //      questions were announced in questionTimes, and stores players answers for 
+    //      each question in answers, it has a list of promises to be resolved for the
+    //      quiz to progress
+    
 
     private readonly toBeResolved: Array<{ resolved: boolean, deferred: Deferred<void> }> = [];
     private readonly answers: Array<Array<Answer>> = [];
