@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 body {
     margin: 0;
     --question-offwhite: #eee;
@@ -11,24 +15,34 @@ body {
     --answer-dark-blue: #115db8;
     --answer-green: #288a0e;
     --answer-dark-green: #237b0b;
-    background: var(--question-offwhite);
+    --answer-correct: #67bf3a;
+    --answer-dark-correct: #58a332;
+    --answer-wrong: #ff3456;
+    --answer-dark-wrong: #d92c49;
 }
 
 .question-container {
     display: flex;
     flex-direction: column;
+    background: var(--question-offwhite);
+    height: 100%;
 }
 
-.question {
+.question-container .question {
     background: white;
     font-size: 2em;
     font-weight: bold;
     text-align: center;
-    padding: 0.2em 0;
+    padding: 0.6em 0;
     border-bottom: solid black;
 }
 
-.answer-container {
+.question-container .gap {
+    flex: 3;
+}
+
+.question-container .answer-container {
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 }
@@ -50,6 +64,7 @@ body {
     border-radius: 0.2em;
     will-change: transform;
     transform: translateY(-4px);
+    height: 100%;
 }
 
 .pushable.disabled {
@@ -60,7 +75,7 @@ body {
     transform: translateY(-1px);
 }
 
-.answer {
+.question-container .answer {
     margin: 0.2em;
     color: white;
     font-weight: bold;
@@ -68,13 +83,12 @@ body {
     text-align: left;
 }
 
-.answer .front {
+.question-container .answer .front {
     display: flex;
     align-items: center;
-    padding: 0.4em 0.2em;
 }
 
-.answer .front::before {
+.question-container .answer .front::before {
     content: ' ';
     display: inline-block;
     height: 1em;
@@ -82,58 +96,112 @@ body {
     padding: 0 0.3em;
 }
 
-.answer.disabled {
+.question-container .answer.disabled {
     background: var(--answer-dark-gray);
 }
 
-.answer.disabled .front {
+.question-container .answer.disabled .front {
     background: var(--answer-gray);
 }
 
-.answer:where(:nth-child(1)) {
+.question-container .answer:where(:nth-child(1)) {
     background: var(--answer-dark-red);
 }
 
-.answer:where(:nth-child(1)) .front {
+.question-container .answer:where(:nth-child(1)) .front {
     background: var(--answer-red);
 }
 
-.answer:nth-child(1) .front::before {
+.question-container .answer:nth-child(1) .front::before {
     background: center / contain no-repeat url('../media/fuiz_circle.svg');
 }
 
-.answer:where(:nth-child(2)) {
+.question-container .answer:where(:nth-child(2)) {
     background: var(--answer-dark-orange);
 }
 
-.answer:where(:nth-child(2)) .front {
+.question-container .answer:where(:nth-child(2)) .front {
     background: var(--answer-orange);
 }
 
-.answer:nth-child(2) .front::before {
+.question-container .answer:nth-child(2) .front::before {
     background: center / contain no-repeat url('../media/fuiz_square.svg');
 }
 
-.answer:where(:nth-child(3)) {
+.question-container .answer:where(:nth-child(3)) {
     background: var(--answer-dark-green);
 }
 
-.answer:where(:nth-child(3)) .front {
+.question-container .answer:where(:nth-child(3)) .front {
     background: var(--answer-green);
 }
 
-.answer:nth-child(3) .front::before {
+.question-container .answer:nth-child(3) .front::before {
     background: center / contain no-repeat url('../media/fuiz_triangle.svg');
 }
 
-.answer:where(:nth-child(4)) {
+.question-container .answer:where(:nth-child(4)) {
     background: var(--answer-dark-blue);
 }
 
-.answer:where(:nth-child(4)) .front {
+.question-container .answer:where(:nth-child(4)) .front {
     background: var(--answer-blue);
 }
 
-.answer:nth-child(4) .front::before {
+.question-container .answer:nth-child(4) .front::before {
     background: center / contain no-repeat url('../media/fuiz_tilted.svg');
+}
+
+.leaderboard {
+    background: var(--answer-orange);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.leaderboard .title {
+    background: white;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bolder;
+    padding: 0.6em 0;
+}
+
+.leaderboard .record-container {
+    font-size: 1.5em;
+    padding: 0 2em;
+    margin: 1em 0;
+}
+
+.leaderboard .record {
+    display: flex;
+    color: white;
+    border-radius: 0.2em;
+    padding: 0.4em;
+    font-weight: bold;
+    justify-content: space-between;
+}
+
+.leaderboard .rank {
+    padding-right: 1em;
+}
+
+.leaderboard .record.own {
+    background: white;
+    color: var(--answer-orange);
+}
+
+.questiononly-container {
+    background: var(--answer-orange);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.questiononly-container .question {
+    background: white;
+    font-size: 2em;
+    padding: 0.6em 0;
+    text-align: center;
 }

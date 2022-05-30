@@ -1,4 +1,4 @@
-import { showLeaderboard, showQuestion } from "./Drawing";
+import { showLeaderboard, showQuestion, showQuestionOnly } from "./Drawing";
 
 // showQuestion({
 //     content: 'How will you answer for your actions?',
@@ -15,9 +15,11 @@ import { showLeaderboard, showQuestion } from "./Drawing";
 //     ]
 // });
 
-showLeaderboard([
-    {playerID: "adhami", score: 100},
-    {playerID: "barish", score: 400},
-    {playerID: "hannah", score: 300},
-    {playerID: "minecraft", score: 600}
-]);
+// showLeaderboard([
+//     {playerID: "adhami", score: 100},
+//     {playerID: "barish", score: 400},
+//     {playerID: "hannah", score: 300},
+//     {playerID: "minecraft", score: 600}
+// ]);
+
+showQuestionOnly("Am I behind you? (Hint: Yes)");
