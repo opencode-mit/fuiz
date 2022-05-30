@@ -116,6 +116,7 @@ class Quiz implements Gamemode {
         for(const [playerID, score] of scores.entries()) {
             leaderboard.push({playerID: playerID, score: score});
         }
+        leaderboard.sort((a, b) => b.score - a.score);
         return leaderboard;
     }
 
