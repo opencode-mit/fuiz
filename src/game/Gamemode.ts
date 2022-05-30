@@ -1,5 +1,4 @@
-import { GameConfig, Action } from ".";
-import { PlayerID } from ".";
+import { GameConfig, Action, PlayerID } from "../types";
 import { Deferred } from "./Deferred";
 
 /**

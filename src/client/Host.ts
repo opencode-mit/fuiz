@@ -1,4 +1,4 @@
-import { GameConfig, SessionID, Hash } from ".";
+import { GameConfig, SessionID, Hash } from "../types";
 import { url } from "./FuizClient";
 
 class Host {

@@ -1,4 +1,4 @@
-import { Leaderboard, Question } from '.';
+import { Leaderboard, Question } from '../types';
 import templates from './Templates';
 
 export function showQuestion(question: Question) {

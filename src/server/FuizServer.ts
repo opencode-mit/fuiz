@@ -1,4 +1,4 @@
-import { GameManager } from "./Server";
+import { GameManager } from "../game/GameManager";
 import { WebServer } from './WebServer';
 
 async function main(): Promise<void> {

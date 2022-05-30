@@ -1,4 +1,4 @@
-import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError } from ".";
+import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError } from "../types";
 import { Gamemode, createQuiz } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 

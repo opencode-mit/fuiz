@@ -3,8 +3,8 @@ import { Server } from 'http';
 import express, { Application, json } from 'express';
 import HttpStatus from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
-import { GameManager } from './GameManager';
-import { AuthenticationError } from '.';
+import { GameManager } from '../game/GameManager';
+import { AuthenticationError } from '../types';
 
 export class WebServer {
     private readonly app: Application;

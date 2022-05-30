@@ -1,4 +1,4 @@
-import { Question, Leaderboard } from '.';
+import { Question, Leaderboard } from '../types';
 
 const templates = {
     question: (question: Question) => `
