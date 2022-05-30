@@ -36,4 +36,27 @@ class Server {
     private announceAction(sessionID: SessionID, action: Action): void {
         //TODO: Implement me using websockets
     }
+
+    public resolveAction(sessionID: SessionID, actionID: number, token: Hash): void {
+        const game = this.mapping.get(sessionID);
+        if (game !== undefined && game.token === token) {
+            game.game.resolveAction(actionID);
+        } else {
+            //raise error or something D:
+        }
+    }
+
+    public submitAnswer(sessionID: SessionID, playerID: PlayerID, playerToken: Hash, questionID: number,answerID: number): void {
+        const game = this.mapping.get(sessionID);
+        if (game !== undefined) {
+            const userToken = game.users.get(playerID);
+            if (userToken !== undefined && userToken === playerToken) {
+                game.game.submitAnswer(questionID, playerID, answerID);
+            } else {
+                //raise error or something D:
+            }
+        } else {
+            //raise error or something D:
+        }
+    }
 }

@@ -1,19 +1,19 @@
 import { showLeaderboard, showQuestion, showQuestionOnly, showPlayersQuestion } from "./Drawing";
 
-showPlayersQuestion({
-    content: 'How will you answer for your actions?',
-    answers: [
-        {
-            content: 'You cannot'
-        }, {
-            content: 'The consequences'
-        }, {
-            content: 'Stop running'
-        }, {
-            content: 'I\'m behind you'
-        }
-    ]
-});
+// showQuestion({
+//     content: 'How will you answer for your actions?',
+//     answers: [
+//         {
+//             content: 'You cannot'
+//         }, {
+//             content: 'The consequences'
+//         }, {
+//             content: 'Stop running'
+//         }, {
+//             content: 'I\'m behind you'
+//         }
+//     ]
+// });
 
 // showLeaderboard([
 //     {playerID: "minecraft", score: 600},
