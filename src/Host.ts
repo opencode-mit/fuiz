@@ -13,7 +13,7 @@ class Host {
         this.token = json["token"];
     }
 
-    public resolveAction(actionID: number): void {
-        fetch(url + `/resolve/${this.sessionID}/${this.token}/${actionID}`);
+    public async resolveAction(actionID: number): Promise<Response> {
+        return fetch(url + `/resolve/${this.sessionID}/${this.token}/${actionID}`);
     }
 }

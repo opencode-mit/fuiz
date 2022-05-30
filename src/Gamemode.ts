@@ -18,7 +18,7 @@ export interface Gamemode {
      * 
      * @param questionID index of the question (0-indexed)
      * @param playerID the assigned playerID
-     * @param answerID the index of the question (0-indexed)
+     * @param answerID the index of the answer (0-indexed)
      */
     submitAnswer(questionID: number, playerID: PlayerID, answerID: number): void;
 
@@ -30,7 +30,7 @@ export interface Gamemode {
     resolveAction(actionID: number): void;
 }
 
-class Quiz implements Gamemode {
+export class Quiz implements Gamemode {
 
     private readonly toBeResolved: Array<{ resolved: boolean, deferred: Deferred<void> }> = [];
     private readonly answers: Array<Array<Answer>> = [];
@@ -70,12 +70,13 @@ class Quiz implements Gamemode {
      * Starts the Quiz by showing first question.
      */
     private startGame(): void {
+        this.currentQuestion = -1;
         this.announceNextQuestion();
     }
 
     /**
-     * Announces the next available question and recieves answers immediately.
-     * Adds an action once resolved it will stop recieving answers and will show leaderboard.
+     * Announces the next available question and receives answers immediately.
+     * Adds an action once resolved it will stop receiving answers and will show leaderboard.
      */
     private announceNextQuestion(): void {
         this.currentQuestion++;
@@ -162,12 +163,12 @@ class Quiz implements Gamemode {
 }
 
 /**
- * Creates a game with the given configuration.
+ * Creates a Quiz game with the given configuration.
  * 
  * @param config the game configuration
  * @param announceCallback the function to call to announce actions
  * @returns a gamemode instance depending on the game configuration
  */
-export function createGame(config: GameConfig, announceCallback: (action: Action) => void): Gamemode {
+export function createQuiz(config: GameConfig, announceCallback: (action: Action) => void): Gamemode {
     return new Quiz(config, announceCallback);
 }

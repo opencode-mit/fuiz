@@ -4,6 +4,7 @@ type Resolver<T> = (value: T | PromiseLike<T>) => void;
 type Rejector = (reason: Error) => void;
 
 /** Deferred represents a promise plus operations to resolve or reject it. Credit towards 6.031 staff. */
+/** https://web.mit.edu/6.031/www/sp22/classes/23-mutual-exclusion/code.html#deferredts */
 export class Deferred<T> {
 
     /** The promise. */

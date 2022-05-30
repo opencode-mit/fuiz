@@ -1,5 +1,5 @@
 import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError } from ".";
-import { Gamemode, createGame } from "./Gamemode";
+import { Gamemode, createQuiz } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
 function getRandomSessionID(existing: SessionID[]): SessionID {
@@ -10,7 +10,7 @@ function getRandomHash(): Hash {
     return "123oijasd"; //TODO: Implement me
 }
 
-class Server {
+export class GameManager {
     private readonly mapping = new Map<SessionID, { token: Hash, game: Gamemode, users: UserTokens }>();
 
     public constructor() { };
@@ -19,7 +19,7 @@ class Server {
         const nextSessionID = getRandomSessionID(Array.from(this.mapping.keys()));
         const token = getRandomHash();
         const announceFunc = (action: Action) => this.announceAction(nextSessionID, action);
-        this.mapping.set(nextSessionID, { token: token, game: createGame(config, announceFunc), users: new Map() });
+        this.mapping.set(nextSessionID, { token: token, game: createQuiz(config, announceFunc), users: new Map() });
         return { sessionID: nextSessionID, token: token };
     }
 
@@ -53,5 +53,3 @@ class Server {
         game.game.submitAnswer(questionID, playerID, answerID);
     }
 }
-
-export { Server as GameManager };

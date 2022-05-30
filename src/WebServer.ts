@@ -3,7 +3,7 @@ import { Server } from 'http';
 import express, { Application, json } from 'express';
 import HttpStatus from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
-import { GameManager } from './Server';
+import { GameManager } from './GameManager';
 import { AuthenticationError } from '.';
 
 export class WebServer {
