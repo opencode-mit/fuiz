@@ -4,7 +4,7 @@ type UserTokens = Map<PlayerID, Hash>;
 
 const randInt = (n: number) => Math.floor(Math.random() * n);
 const randElt = (a: string) => a[randInt(a.length)] ?? "";
-const randStr = (n: number, a: string) => Array(n).map(() => randElt(a)).join("");
+const randStr = (n: number, a: string) => Array(n).fill("").map(() => randElt(a)).join("");
 
 /**
  * Generates an easy to read session id that's different from existing session ids.
