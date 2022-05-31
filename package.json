@@ -8,7 +8,7 @@
     "build": "npm run clean && tsc",
     "compile": "npm run build && npx browserify src/client/FuizClient.ts -v --debug -p tsify -o dist/client/client-bundle.js",
     "watchify-client": "npx watchify src/client/FuizClient.ts -v --debug -p tsify -o dist/client/client-bundle.js",
-    "start-server": "npm run build && node --require source-map-support/register dist/server/FuizServer.js"
+    "start-server": "npm run compile && node --require source-map-support/register dist/server/FuizServer.js"
   },
   "author": "adhami3310 and BarishNamazov",
   "devDependencies": {

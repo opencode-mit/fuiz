@@ -38,3 +38,7 @@ export function showPlayersQuestion(question: Question) {
 export function showHostQuestion(question: Question, actionID: number) {
     document.body.innerHTML = templates.hostQuestion(question, actionID);
 }
+
+export function showMainControls() {
+    document.body.innerHTML = templates.joinMake();
+}

@@ -1,4 +1,4 @@
-import { showLeaderboard, showQuestion, showQuestionOnly, showPlayersQuestion, setUpResolve, showHostQuestion } from "./Drawing";
+import * as drawing from "./Drawing";
 import { Host } from "./Host";
 
 export const url = "http://localhost:8888";
@@ -72,11 +72,11 @@ async function sampleSetup() {
         ]
     });
     
-    setUpResolve(host);
+    drawing.setUpResolve(host);
     
     await host.resolveAction(0);
     
-    showHostQuestion({
+    drawing.showHostQuestion({
         content: "2+2=",
         answers: [
             {
@@ -93,4 +93,6 @@ async function sampleSetup() {
 }
 
 
-sampleSetup();
+// sampleSetup();
+
+drawing.showMainControls();

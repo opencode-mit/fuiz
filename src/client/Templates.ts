@@ -62,6 +62,17 @@ const templates = {
             ).join("")}
         </div>
     </div>`,
+    joinMake: () => `
+    <form id="register">
+        <label for="jsonConfig">JSON Config</label>
+        <textarea id="jsonConfig" name="jsonConfig"></textarea>
+        <button class="pushable blue">Start</button>
+    </form>
+    <form id="join">
+        <label for="sessionID">Session ID</label>
+        <input type="text" id="sessionID" name="sessionID">
+        <button class="pushable blue">Join</button>
+    </form>`
 }
 
 export default templates;
