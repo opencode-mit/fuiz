@@ -27,6 +27,8 @@ export const url = "http://localhost:8888";
 
 // showQuestionOnly("Am I behind you? (Hint: Yes)");
 
+export const host = new Host();
+
 async function sampleSetup() {
     const host = new Host();
     

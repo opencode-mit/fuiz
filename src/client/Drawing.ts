@@ -1,4 +1,6 @@
+import assert from 'assert';
 import { Leaderboard, Question } from '../types';
+import { host } from './FuizClient';
 import { Host } from './Host';
 import templates from './Templates';
 
@@ -41,4 +43,17 @@ export function showHostQuestion(question: Question, actionID: number) {
 
 export function showMainControls() {
     document.body.innerHTML = templates.joinMake();
+    document.querySelector("#register")?.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const jsonConfig = formData.get("jsonConfig")?.toString();
+        assert(jsonConfig);
+        const gameConfig = JSON.parse(jsonConfig);
+        await host.startGame(gameConfig);
+        host.resolveAction(0);
+    });
+    document.querySelector("#join")?.addEventListener("submit", (event) => {
+        event.preventDefault();
+    });
 }

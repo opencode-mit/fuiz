@@ -40,14 +40,30 @@ export class WebServer {
         });
 
         this.app.post('/register', (request, response) => {
-            const { jsonConfig } = request.body;
             try {
+                const { jsonConfig } = request.body;
                 assert(jsonConfig);
                 const { sessionID, token } = this.gameManager.registerHost(jsonConfig);
                 response
                     .status(HttpStatus.ACCEPTED)
                     .type('json')
                     .send(JSON.stringify({ sessionID: sessionID, token: token }));
+            } catch (error) {
+                response
+                    .status(HttpStatus.BAD_REQUEST)
+                    .send();
+            }
+        });
+
+        this.app.post('/registerPlayer', (request, response) => {
+            try {
+                const { sessionID, playerID } = request.body;
+                assert(sessionID && playerID);
+                const token = this.gameManager.registerPlayer(sessionID, playerID);
+                response
+                    .status(HttpStatus.ACCEPTED)
+                    .type('json')
+                    .send(JSON.stringify({ token: token }));
             } catch (error) {
                 response
                     .status(HttpStatus.BAD_REQUEST)
@@ -66,6 +82,10 @@ export class WebServer {
             }
             try {
                 this.gameManager.resolveAction(sessionID, Number.parseInt(actionID), token);
+                response
+                    .status(HttpStatus.ACCEPTED)
+                    .type('json')
+                    .send({ status: "success" });
             } catch (error) {
                 if (error instanceof AuthenticationError) {
                     response
@@ -81,10 +101,6 @@ export class WebServer {
                     return;
                 }
             }
-            response
-                .status(HttpStatus.ACCEPTED)
-                .type('json')
-                .send({ status: "success" });
         });
     }
 
