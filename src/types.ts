@@ -72,7 +72,7 @@ export type Action = {
  */
 export type SessionID = string;
 export const SESSION_ID_LENGTH = 6;
-export const EASY_ALPHABET = "023456789ACDEFGHJKLOQRSTUVWXYZ";
+export const EASY_ALPHABET = "023456789ACDEFGHJKLOQRSTUVWXYZ"; // broad research concludes that these letters are easy to say
 
 /**
  * Represents a unique playerID given by the player.
