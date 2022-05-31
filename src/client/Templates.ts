@@ -63,16 +63,34 @@ const templates = {
         </div>
     </div>`,
     joinMake: () => `
-    <form id="register">
-        <label for="jsonConfig">JSON Config</label>
-        <textarea id="jsonConfig" name="jsonConfig"></textarea>
-        <button class="pushable blue">Start</button>
-    </form>
-    <form id="join">
-        <label for="sessionID">Session ID</label>
-        <input type="text" id="sessionID" name="sessionID">
-        <button class="pushable blue">Join</button>
-    </form>`
+    <main class="menu">
+        <div class="form-container">
+            <form id="register">
+                <div class="input">
+                    <label for="jsonConfig">JSON Config</label>
+                    <textarea id="jsonConfig" name="jsonConfig"></textarea>
+                </div>
+                <button class="pushable blue">
+                    <span class="front">
+                        Start
+                    </span>
+                </button>
+            </form>
+            <form id="join">
+                <div class="input">
+                    <label for="playerID">Name</label>
+                    <input type="text" id="playerID" name="playerID">
+                    <label for="sessionID">Session ID</label>
+                    <input type="text" id="sessionID" name="sessionID">
+                </div>
+                <button class="pushable blue">
+                    <span class="front">
+                        Join
+                    </span>
+                </button>
+            </form>
+        <div>
+    </main>`
 }
 
 export default templates;
