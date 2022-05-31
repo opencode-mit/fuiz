@@ -85,3 +85,5 @@ export class AuthenticationError extends Error {
         return this.message;
     }
 }
+
+export type SocketID = string;
