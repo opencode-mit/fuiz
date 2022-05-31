@@ -60,9 +60,9 @@ export class Quiz implements Gamemode {
         private readonly announceCallback: (action: Action) => void
     ) {
         const startGameDeferred = new Deferred<void>();
-        this.toBeResolved.push({ resolved: false, deferred: startGameDeferred });
         const self = this;
         startGameDeferred.promise.then(() => self.startGame());
+        this.toBeResolved.push({ resolved: false, deferred: startGameDeferred });
     }
 
     /**

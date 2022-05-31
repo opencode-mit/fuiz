@@ -1,8 +1,10 @@
-import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError } from "../types";
+import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET } from "../types";
 import { Gamemode, createQuiz } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
 const randInt = (n: number) => Math.floor(Math.random() * n);
+const randElt = (a: string) => a[randInt(a.length)] ?? "";
+const randStr = (n: number, a: string) => Array(n).map(() => randElt(a)).join("");
 
 /**
  * Generates an easy to read session id that's different from existing session ids.
@@ -10,15 +12,11 @@ const randInt = (n: number) => Math.floor(Math.random() * n);
  * @returns a new session id
  */
 function getRandomSessionID(existing: SessionID[]): SessionID {
-    const easyAlphabet = "023456789ACDEFGHJKLOQRSTUVWXYZ"; // broad research concludes that these letters are easy to say
-    const length = 6;
+    const length = SESSION_ID_LENGTH;
     let result: SessionID; // assuming string
     do {
-        result = "";
-        for (let i = 0; i < length; i++) {
-            result += easyAlphabet[randInt(easyAlphabet.length)];
-        }
-    } while(existing.includes(result));
+        result = randStr(SESSION_ID_LENGTH, EASY_ALPHABET);
+    } while (existing.includes(result));
     return result;
 }
 
@@ -26,13 +24,7 @@ function getRandomSessionID(existing: SessionID[]): SessionID {
  * @returns a random hash
  */
 function getRandomHash(): Hash {
-    const alphabet = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ1234567890";
-    const length = 32;
-    let result: Hash = "";
-    for (let i = 0; i < length; i++) {
-        result += alphabet[randInt(alphabet.length)];
-    }
-    return result;
+    return randStr(HASH_LENGTH, ALPHABET);
 }
 
 export class GameManager {
@@ -64,17 +56,17 @@ export class GameManager {
 
     public resolveAction(sessionID: SessionID, actionID: number, token: Hash): void {
         const game = this.mapping.get(sessionID);
-        if(game === undefined) throw new AuthenticationError("SessionID was not found");
-        if(game.token !== token) throw new AuthenticationError("Host Token doesn't match");
+        if (game === undefined) throw new AuthenticationError("SessionID was not found");
+        if (game.token !== token) throw new AuthenticationError("Host Token doesn't match");
         game.game.resolveAction(actionID);
     }
-    
-    public submitAnswer(sessionID: SessionID, playerID: PlayerID, playerToken: Hash, questionID: number,answerID: number): void {
+
+    public submitAnswer(sessionID: SessionID, playerID: PlayerID, playerToken: Hash, questionID: number, answerID: number): void {
         const game = this.mapping.get(sessionID);
-        if(game === undefined) throw new AuthenticationError("SessionID was not found");
+        if (game === undefined) throw new AuthenticationError("SessionID was not found");
         const userToken = game.users.get(playerID);
-        if(userToken === undefined) throw new AuthenticationError("Player was not found");
-        if(userToken !== playerToken) throw new AuthenticationError("Player Token doesn't match");
+        if (userToken === undefined) throw new AuthenticationError("Player was not found");
+        if (userToken !== playerToken) throw new AuthenticationError("Player Token doesn't match");
         game.game.submitAnswer(questionID, playerID, answerID);
     }
 }
