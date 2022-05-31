@@ -8,12 +8,14 @@ class Host {
     public constructor() { }
 
     public async startGame(config: GameConfig): Promise<void> {
-        const json = await (await fetch(url + `/register/${JSON.stringify(config)}`)).json();
+        const request = fetch(url + '/register', {method: 'POST', body: JSON.stringify({jsonConfig: config})});
+        const json = await (await request).json();
         this.sessionID = json["sessionID"];
         this.token = json["token"];
     }
 
     public async resolveAction(actionID: number): Promise<Response> {
+        //TODO: USE WEBSOCKETS
         return fetch(url + `/resolve/${this.sessionID}/${this.token}/${actionID}`);
     }
 }
