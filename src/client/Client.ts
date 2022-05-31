@@ -13,7 +13,7 @@ export class Client {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({sessionID: sessionID, playerID: playerID});
+            body: JSON.stringify({sessionID: sessionID, playerID: playerID})
         });
         const json = await (await request).json();
         this.sessionID = sessionID;

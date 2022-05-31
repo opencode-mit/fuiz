@@ -1,3 +1,4 @@
+import { Client } from "./Client";
 import * as drawing from "./Drawing";
 import { Host } from "./Host";
 
@@ -28,6 +29,7 @@ export const url = "http://localhost:8888";
 // showQuestionOnly("Am I behind you? (Hint: Yes)");
 
 export const host = new Host();
+export const client = new Client();
 
 async function sampleSetup() {
     const host = new Host();

@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { Leaderboard, Question } from '../types';
-import { host } from './FuizClient';
+import { client, host } from './FuizClient';
 import { Host } from './Host';
 import templates from './Templates';
 
@@ -55,5 +55,11 @@ export function showMainControls() {
     });
     document.querySelector("#join")?.addEventListener("submit", (event) => {
         event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const playerID = formData.get("playerID")?.toString();
+        const sessionID = formData.get("sessionID")?.toString();
+        assert(playerID && sessionID);
+        client.registerGame(playerID, sessionID);
     });
 }
