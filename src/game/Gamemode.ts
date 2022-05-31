@@ -96,8 +96,9 @@ export class Quiz implements Gamemode {
         const questionDeferred = new Deferred<void>();
         const self = this;
         questionDeferred.promise.then(() => self.stopQuestion());
+        const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        setTimeout(() => this.resolveAction(this.toBeResolved.length - 1), this.config.delay);
+        setTimeout(() => this.resolveAction(deferredID), this.config.delay);
         this.acceptingResponses = true;
         this.answers.push([]);
         this.questionTimes.push(Date.now());
@@ -164,6 +165,7 @@ export class Quiz implements Gamemode {
     public resolveAction(actionID: number): void {
         const action = this.toBeResolved[actionID];
         if (action !== undefined && action.resolved === false) {
+            console.log(`resolved ${actionID}`);
             action.resolved = true;
             action.deferred.resolve();
         } else {

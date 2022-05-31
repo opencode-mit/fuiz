@@ -1,4 +1,5 @@
-import { showLeaderboard, showQuestion, showQuestionOnly, showPlayersQuestion } from "./Drawing";
+import { showLeaderboard, showQuestion, showQuestionOnly, showPlayersQuestion, setUpResolve, showHostQuestion } from "./Drawing";
+import { Host } from "./Host";
 
 export const url = "http://localhost:8888";
 
@@ -25,3 +26,71 @@ export const url = "http://localhost:8888";
 // ]);
 
 // showQuestionOnly("Am I behind you? (Hint: Yes)");
+
+async function sampleSetup() {
+    const host = new Host();
+    
+    const json = await host.startGame({
+        gamemode: 'quiz',
+        delay: 10000,
+        questions: [
+            {
+                content: "2+2=",
+                answers: [
+                    {
+                        content: "4",
+                        correct: true
+                    }, {
+                        content: "2",
+                        correct: false
+                    }, {
+                        content: "6",
+                        correct: false
+                    }, {
+                        content: "8",
+                        correct: false
+                    }
+                ]
+            }, {
+                content: "What is the capital of Jordan?",
+                answers: [
+                    {
+                        content: "Amman",
+                        correct: true
+                    }, {
+                        content: "Brazil",
+                        correct: false
+                    }, {
+                        content: "The Unites States of America",
+                        correct: false
+                    }, {
+                        content: "Irbid",
+                        correct: false
+                    }
+                ]
+            }
+        ]
+    });
+    
+    setUpResolve(host);
+    
+    await host.resolveAction(0);
+    
+    showHostQuestion({
+        content: "2+2=",
+        answers: [
+            {
+                content: "4"
+            }, {
+                content: "2"
+            }, {
+                content: "6"
+            }, {
+                content: "8"
+            }
+        ]
+    }, 1);
+}
+
+
+sampleSetup();

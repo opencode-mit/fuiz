@@ -1,6 +1,18 @@
 import { Question, Leaderboard } from '../types';
 
 const templates = {
+    hostQuestion: (question: Question, actionID: number) => `
+    <div class="question-container">
+        <div class="question">${question.content}</div>
+        <div class="gap"><button id="resolve#${actionID}">Next</button></div>
+        <div class="answer-container">
+            ${question.answers.map(answer => `
+            <button class="answer pushable">
+                <span class="front">${answer.content}</span>
+            </button>`
+            ).join("")}
+        </div>
+    </div>`,
     question: (question: Question) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
@@ -23,8 +35,19 @@ const templates = {
                 <span class="score">${record.score}</span>
             </div>`).join("")}
         </div>
-    </div>
-    `,
+    </div>`,
+    hostLeaderboard: (leaderboard: Leaderboard, actionID: number) => `
+    <div class="leaderboard">
+        <div class="title">Leaderboard</div>
+        <div class="record-container">
+            ${leaderboard.map((record, i) => `
+            <div class="record">
+                <span class="user"><span class="rank">${i+1}</span>${record.playerID}</span>
+                <span class="score">${record.score}</span>
+            </div>`).join("")}
+        </div>
+        <button id="resolve#${actionID}">Next</button>
+    </div>`,
     questionOnly: (content: string) => `
     <div class="questiononly-container">
         <div class="question">${content}</div>
