@@ -2,6 +2,8 @@
  * Represent a token used for authentication.
  */
 export type Hash = string;
+export const HASH_LENGTH = 32;
+export const ALPHABET = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ1234567890";
 
 /**
  * Represents an answer and if it's correct or not.
@@ -69,6 +71,8 @@ export type Action = {
  * Represents unique SessionID genereated at random.
  */
 export type SessionID = string;
+export const SESSION_ID_LENGTH = 6;
+export const EASY_ALPHABET = "023456789ACDEFGHJKLOQRSTUVWXYZ"; // broad research concludes that these letters are easy to say
 
 /**
  * Represents a unique playerID given by the player.
