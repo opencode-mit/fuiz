@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import { SessionID } from "../types";
+import { SessionID, SocketID } from "../types";
 import { Deferred } from "../game/Deferred";
 
 export class ClientSocket {
@@ -8,11 +8,10 @@ export class ClientSocket {
 
     public constructor(
         public readonly session: SessionID,
-        callback: (message: any) => void
+        callback: (session: SessionID, message: any) => void
     ) {
         this.socket = io();
         this.deferred = new Deferred();
-
         this.socket.on("connect", () => {
             console.log("connected!");
             this.deferred.resolve();
@@ -22,15 +21,19 @@ export class ClientSocket {
             this.socket.connect(); // try reconnecting
         });
 
-        this.socket.on(session, callback);
+        this.socket.on("action", (message) => callback(session, message));
     }
 
     public sendMessage(message: any) {
-        this.socket.emit(this.session, message);
+        this.socket.emit("action", message);
+    }
+
+    public get id(): SocketID {
+        return this.socket.id;
     }
 }
 
-async function makeConnectedSocket(
+export async function makeConnectedSocket(
     session: SessionID,
     callback: (message: any) => void
 ): Promise<ClientSocket> {

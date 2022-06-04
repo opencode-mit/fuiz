@@ -9,7 +9,7 @@ import path from 'path';
 
 export class WebServer {
     private readonly app: Application;
-    private server: Server | undefined;
+    public server: Server | undefined;
 
     public constructor(private readonly gameManager: GameManager, private readonly port: number) {
         this.app = express();
@@ -57,9 +57,9 @@ export class WebServer {
 
         this.app.post('/registerPlayer', (request, response) => {
             try {
-                const { sessionID, playerID } = request.body;
+                const { sessionID, playerID, socketID } = request.body;
                 assert(sessionID && playerID);
-                const token = this.gameManager.registerPlayer(sessionID, playerID);
+                const token = this.gameManager.registerPlayer(socketID, sessionID, playerID);
                 response
                     .status(HttpStatus.ACCEPTED)
                     .type('json')

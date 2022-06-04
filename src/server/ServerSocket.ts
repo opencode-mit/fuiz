@@ -1,4 +1,5 @@
 import assert from "assert";
+import { Server as HTTPServer } from 'http';
 import { Server, Socket } from "socket.io";
 import { Hash, SessionID, SocketID } from "../types";
 
@@ -10,16 +11,18 @@ export class ServerSocket {
     >;
 
     public constructor(
-        private readonly port: number,
-        private readonly callback: (message: any) => void
+        server: HTTPServer,
+        private readonly callback: (session: SessionID, message: any) => void
     ) {
-        this.io = new Server(this.port);
+        this.io = new Server(server);
         this.socketMapping = new Map();
+        this.start();
     }
 
-    public start() {
+    private start() {
         this.io.on("connection", (socket) => {
             // new user has connected, but not assigned to any session
+            console.log(socket.id, "connected");
             this.socketMapping.set(socket.id, { session: undefined, socket: socket });
 
             socket.on("disconnect", () => {
@@ -34,10 +37,10 @@ export class ServerSocket {
         assert(socketDetails !== undefined);
         const socket = socketDetails.socket;
         socket.join(session);
-        socket.on(session, this.callback);
+        socket.on("action", (message) => this.callback(session, message));
     }
 
     public broadcast(session: SessionID, message: any) {
-        this.io.to(session).emit(message);
+        this.io.to(session).emit("action", message);
     }
 }

@@ -1,4 +1,7 @@
-import { Action, GameConfig, PlayerID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET } from "../types";
+import assert from 'assert';
+import { Server as HTTPServer } from 'http';
+import { ServerSocket } from "../server/ServerSocket";
+import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET } from "../types";
 import { Gamemode, createQuiz } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
@@ -29,8 +32,13 @@ function getRandomHash(): Hash {
 
 export class GameManager {
     private readonly mapping = new Map<SessionID, { token: Hash, game: Gamemode, users: UserTokens }>();
+    private socketManager: ServerSocket | undefined;
 
     public constructor() { };
+
+    public setSocketManager(server: HTTPServer) {
+        this.socketManager = new ServerSocket(server, (m) => {console.log(m)});
+    }
 
     public registerHost(config: GameConfig): { sessionID: SessionID, token: Hash } {
         const nextSessionID = getRandomSessionID(Array.from(this.mapping.keys()));
@@ -40,8 +48,9 @@ export class GameManager {
         return { sessionID: nextSessionID, token: token };
     }
 
-    public registerPlayer(sessionID: SessionID, playerID: PlayerID): Hash | undefined {
-        //TODO: Add Websocket functionality
+    public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): Hash | undefined {
+        assert(this.socketManager !== undefined);
+        this.socketManager.addToSession(socketID, sessionID);
         const game = this.mapping.get(sessionID);
         if (game === undefined) return undefined;
         const playerToken = getRandomHash();
@@ -50,8 +59,9 @@ export class GameManager {
     }
 
     private announceAction(sessionID: SessionID, action: Action): void {
+        assert(this.socketManager !== undefined);
         console.log(action);
-        //TODO: Implement me using websockets
+        this.socketManager.broadcast(sessionID, action);
     }
 
     public resolveAction(sessionID: SessionID, actionID: number, token: Hash): void {
