@@ -53,18 +53,22 @@ export type Leaderboard = Array<{ playerID: PlayerID, score: number }>;
 export type Action = {
     type: 'question',
     content: string,
-    answers: Array<Answer>
+    answers: Array<Answer>,
+    actionID?: number
 } | {
     type: 'leaderboard',
     final: boolean,
     results: Leaderboard
+    actionID?: number
 } | {
     type: 'statistics',
     content: string,
     answers: Array<Answer>
+    actionID?: number
 } | {
     type: 'question_only',
     content: string
+    actionID?: number
 };
 
 /**

@@ -295,9 +295,49 @@ body {
     flex-direction: column;
     flex: 1;
     gap: 0.5em;
-
 }
 
 label, input, textarea, button {
     display: block;
+}
+
+.starting {
+    height: 100%;
+    background: var(--answer-orange);
+}
+
+.starting .title {
+    background: white;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bolder;
+    padding: 0.6em 0;
+    display: flex;
+    justify-content: center;
+}
+
+.starting .players {
+    text-align: center;
+    overflow: hidden;
+    height: max-content;
+}
+
+.starting .name {
+    background: var(--answer-dark-orange);
+    padding: 0.2em;
+    margin: 0.2em;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.starting button {
+    position: absolute;
+    right: 1em;
+    color: white;
+    font-weight: bold;
+}
+
+.starting .front {
+    padding: 1em 2em;
 }

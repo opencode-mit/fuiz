@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Leaderboard, Question } from '../types';
+import { Leaderboard, PlayerID, Question, SessionID } from '../types';
 import { client, host } from './FuizClient';
 import { Host } from './Host';
 import templates from './Templates';
@@ -51,7 +51,6 @@ export function showMainControls() {
         assert(jsonConfig);
         const gameConfig = JSON.parse(jsonConfig);
         await host.startGame(gameConfig);
-        host.resolveAction(0);
     });
     document.querySelector("#join")?.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -62,4 +61,12 @@ export function showMainControls() {
         assert(playerID && sessionID);
         client.registerGame(playerID, sessionID);
     });
+}
+
+export function showStartingScreen(sessionID: SessionID, players: PlayerID[]): void {
+    document.body.innerHTML = templates.startingScreen(sessionID, players);
+}
+
+export function showHostStartingScreen(sessionID: SessionID, players: PlayerID[], actionID: number): void {
+    document.body.innerHTML = templates.hostStartingScreen(sessionID, players, actionID);
 }

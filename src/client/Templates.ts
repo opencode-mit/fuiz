@@ -1,4 +1,4 @@
-import { Question, Leaderboard } from '../types';
+import { Question, Leaderboard, SessionID, PlayerID } from '../types';
 
 const templates = {
     hostQuestion: (question: Question, actionID: number) => `
@@ -90,7 +90,21 @@ const templates = {
                 </button>
             </form>
         <div>
-    </main>`
+    </main>`,
+    startingScreen: (sessionID: SessionID, players: PlayerID[]) => `
+    <main class="starting">
+        <div class="title">${sessionID}</div>
+        <div class="players">
+            ${players.map((player) => `<span class="name">${player}</span>`).join("")}
+        </div>
+    </main>`,
+    hostStartingScreen: (sessionID: SessionID, players: PlayerID[], actionID: number) => `
+    <main class="starting">
+        <div class="title">${sessionID}<button id="resolve#${actionID}" class="pushable blue"><div class="front">Start</div></button></div>
+        <div class="players">
+            ${players.map((player) => `<span class="name">${player}</span>`).join("")}
+        </div>
+    </main>`,
 }
 
 export default templates;

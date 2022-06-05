@@ -107,7 +107,8 @@ export class Quiz implements Gamemode {
             content: question.content,
             answers: question.answers.map((answer) => {
                 return { content: answer.content };
-            })
+            }),
+            actionID:  deferredID
         });
     }
 
@@ -145,18 +146,26 @@ export class Quiz implements Gamemode {
      * In addition, it adds an action once resolved will show next question if available.
      */ 
     private stopQuestion(): void {
+        this.acceptingResponses = false;
         if (this.currentQuestion < this.config.questions.length - 1) {
             const leaderboardDeferred = new Deferred<void>();
             const self = this;
+            const deferredID = this.toBeResolved.length;
             leaderboardDeferred.promise.then(() => self.announceNextQuestion());
             this.toBeResolved.push({ resolved: false, deferred: leaderboardDeferred });
+            this.announceCallback({
+                type: 'leaderboard',
+                final: this.currentQuestion === this.config.questions.length - 1,
+                results: this.calculateLeaderboard(),
+                actionID: deferredID
+            });
+        } else {
+            this.announceCallback({
+                type: 'leaderboard',
+                final: this.currentQuestion === this.config.questions.length - 1,
+                results: this.calculateLeaderboard()
+            });
         }
-        this.acceptingResponses = false;
-        this.announceCallback({
-            type: 'leaderboard',
-            final: this.currentQuestion === this.config.questions.length - 1,
-            results: this.calculateLeaderboard()
-        });
     }
 
     /**

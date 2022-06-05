@@ -2,6 +2,7 @@ import assert from "assert";
 import { GameConfig, SessionID, Hash, Action } from "../types";
 import { ClientSocket, makeConnectedSocket } from "./ClientSocket";
 import { url } from "./FuizClient";
+import * as drawing from "./Drawing";
 
 export class Host {
     private sessionID: SessionID | undefined;
@@ -29,6 +30,7 @@ export class Host {
             },
             body: JSON.stringify({ sessionID: json["sessionID"], socketID: this.socket.id })
         });
+        drawing.showHostStartingScreen(json["sessionID"], [], 0);
     }
 
     public async resolveAction(actionID: number): Promise<Response> {
@@ -45,6 +47,22 @@ export class Host {
 
     private onReciveAction(sessionID: SessionID, action: Action): void {
         if (sessionID != this.sessionID) return;
-        console.log(action);
+        if (action.type === 'question_only') {
+            drawing.showQuestionOnly(action.content);
+        } else if(action.type === 'question') {
+            const id = action.actionID;
+            if(id !== undefined) {
+                drawing.showHostQuestion(action, id);
+            } else {
+                drawing.showQuestion(action);
+            }
+        } else if(action.type === 'leaderboard') {
+            const id = action.actionID;
+            if(id !== undefined) {
+                drawing.showHostLeaderboard(action.results, id);
+            } else {
+                drawing.showLeaderboard(action.results);
+            }
+        }
     }
 }
