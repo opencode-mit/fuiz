@@ -33,7 +33,7 @@ export class Client {
         if (action.type === 'question_only') {
             drawing.showQuestionOnly(action.content);
         } else if(action.type === 'question') {
-            drawing.showQuestion(action);
+            drawing.showQuestion(action, action.questionID);
         } else if(action.type === 'leaderboard') {
             drawing.showLeaderboard(action.results);
         }

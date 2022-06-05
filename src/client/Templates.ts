@@ -1,25 +1,25 @@
 import { Question, Leaderboard, SessionID, PlayerID } from '../types';
 
 const templates = {
-    hostQuestion: (question: Question, actionID: number) => `
+    hostQuestion: (question: Question, actionID: number, questionID: number) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap"><button id="resolve#${actionID}">Next</button></div>
-        <div class="answer-container">
-            ${question.answers.map(answer => `
-            <button class="answer pushable">
+        <div class="answer-container" id="question#${questionID}">
+            ${question.answers.map((answer, i) => `
+            <button class="answer pushable" id="answer#${i}">
                 <span class="front">${answer.content}</span>
             </button>`
             ).join("")}
         </div>
     </div>`,
-    question: (question: Question) => `
+    question: (question: Question, questionID: number) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap"></div>
-        <div class="answer-container">
-            ${question.answers.map(answer => `
-            <button class="answer pushable">
+        <div class="answer-container" id="question#${questionID}">
+            ${question.answers.map((answer, i) => `
+            <button class="answer pushable" id="answer#${i}">
                 <span class="front">${answer.content}</span>
             </button>`
             ).join("")}
@@ -52,11 +52,11 @@ const templates = {
     <div class="questiononly-container">
         <div class="question">${content}</div>
     </div>`,
-    playersQuestion: (question: Question) => `
+    playersQuestion: (question: Question, questionID: number) => `
     <div class="players-question-container">
-        <div class="answer-container">
-            ${question.answers.map(answer => `
-            <button class="answer pushable">
+        <div class="answer-container" id="question#${questionID}">
+            ${question.answers.map((answer, i) => `
+            <button class="answer pushable" id="answer#${i}">
                 <span class="front"></span>
             </button>`
             ).join("")}

@@ -33,3 +33,4 @@ export const client = new Client();
 
 drawing.showMainControls();
 drawing.setUpResolve(host);
+drawing.setUpAnswer(client);

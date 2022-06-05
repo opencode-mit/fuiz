@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { Leaderboard, PlayerID, Question, SessionID } from '../types';
+import { Client } from './Client';
 import { client, host } from './FuizClient';
 import { Host } from './Host';
 import templates from './Templates';
@@ -17,8 +18,25 @@ export function setUpResolve(host: Host) {
     });
 }
 
-export function showQuestion(question: Question) {
-    document.body.innerHTML = templates.question(question);
+export function setUpAnswer(client: Client) {
+    document.body.addEventListener("click", (event) => {
+        if (!event || !event.target) return;
+        const element = event.target as HTMLElement;
+        const button = element.closest("button");
+        if (!button) return;
+        if (!button.id.match(/answer\#[0-9]+/)) return;
+        console.log(`answering!`);
+        const answerCotnainer = button.closest(".answer-container");
+        if (!answerCotnainer) return;
+        const answerID = Number.parseInt(button.id.slice(7));
+        const questionID = Number.parseInt(answerCotnainer.id.slice(9));
+        console.log(`answering ${answerID}!`);
+        client.submitAnswer(questionID, answerID);
+    });
+}
+
+export function showQuestion(question: Question, questionID: number) {
+    document.body.innerHTML = templates.question(question, questionID);
 }
 
 export function showLeaderboard(leaderboard: Leaderboard) {
@@ -33,12 +51,12 @@ export function showQuestionOnly(content: string) {
     document.body.innerHTML = templates.questionOnly(content);
 }
 
-export function showPlayersQuestion(question: Question) {
-    document.body.innerHTML = templates.playersQuestion(question);
+export function showPlayersQuestion(question: Question, questionID: number) {
+    document.body.innerHTML = templates.playersQuestion(question, questionID);
 }
 
-export function showHostQuestion(question: Question, actionID: number) {
-    document.body.innerHTML = templates.hostQuestion(question, actionID);
+export function showHostQuestion(question: Question, actionID: number, questionID: number) {
+    document.body.innerHTML = templates.hostQuestion(question, actionID, questionID);
 }
 
 export function showMainControls() {

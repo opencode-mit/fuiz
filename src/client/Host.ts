@@ -51,9 +51,9 @@ export class Host {
         } else if(action.type === 'question') {
             const id = action.actionID;
             if(id !== undefined) {
-                drawing.showHostQuestion(action, id);
+                drawing.showHostQuestion(action, id, action.questionID);
             } else {
-                drawing.showQuestion(action);
+                drawing.showQuestion(action, action.questionID);
             }
         } else if(action.type === 'leaderboard') {
             const id = action.actionID;
