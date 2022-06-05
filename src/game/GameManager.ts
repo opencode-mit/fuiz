@@ -56,6 +56,7 @@ export class GameManager {
     public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): Hash | undefined {
         const game = this.mapping.get(sessionID);
         if (game === undefined) return undefined;
+        if (game.users.get(playerID) !== undefined) return undefined;
         const playerToken = getRandomHash();
         game.users.set(playerID, playerToken);
         this.registerSocket(sessionID, socketID);
