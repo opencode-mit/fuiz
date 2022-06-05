@@ -35,7 +35,7 @@ export class Client {
         } else if(action.type === 'question') {
             drawing.showQuestion(action, action.questionID);
         } else if(action.type === 'leaderboard') {
-            drawing.showLeaderboard(action.results);
+            drawing.showLeaderboard(action.results, this.playerID);
         }
     }
 

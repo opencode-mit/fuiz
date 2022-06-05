@@ -39,12 +39,14 @@ export function showQuestion(question: Question, questionID: number) {
     document.body.innerHTML = templates.question(question, questionID);
 }
 
-export function showLeaderboard(leaderboard: Leaderboard) {
+export function showLeaderboard(leaderboard: Leaderboard, playerID?: PlayerID) {
     document.body.innerHTML = templates.leaderboard(leaderboard);
+    if(playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
 }
 
-export function showHostLeaderboard(leaderboard: Leaderboard, actionID: number) {
+export function showHostLeaderboard(leaderboard: Leaderboard, actionID: number, playerID?: PlayerID) {
     document.body.innerHTML = templates.hostLeaderboard(leaderboard, actionID);
+    if(playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
 }
 
 export function showQuestionOnly(content: string) {

@@ -5,7 +5,6 @@ import { Deferred } from "./Deferred";
  * Represents an answer by a Player at a certain time.
  */
 type Answer = {
-    playerID: PlayerID,
     answerID: number,
     timeSubmitted: number
 }
@@ -44,7 +43,7 @@ export class Quiz implements Gamemode {
     
 
     private readonly toBeResolved: Array<{ resolved: boolean, deferred: Deferred<void> }> = [];
-    private readonly answers: Array<Array<Answer>> = [];
+    private readonly answers: Array<Map<PlayerID, Answer>> = [];
     private currentQuestion = -1;
     private acceptingResponses = false;
     private readonly questionTimes: number[] = [];
@@ -69,9 +68,9 @@ export class Quiz implements Gamemode {
      * @inheritdoc
      */
     public submitAnswer(questionID: number, playerID: string, answerID: number): void {
-        const questionAnswers: Answer[] | undefined = this.answers[questionID];
-        if (this.acceptingResponses && questionAnswers !== undefined && this.currentQuestion === questionID) {
-            questionAnswers.push({ playerID: playerID, answerID: answerID, timeSubmitted: Date.now() });
+        const questionAnswers = this.answers[questionID];
+        if (this.acceptingResponses && questionAnswers !== undefined && this.currentQuestion === questionID && questionAnswers.get(playerID) === undefined) {
+            questionAnswers.set(playerID, {answerID: answerID, timeSubmitted: Date.now()});
         } else {
             // do something D:
         }
@@ -100,7 +99,7 @@ export class Quiz implements Gamemode {
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
         setTimeout(() => this.resolveAction(deferredID), this.config.delay);
         this.acceptingResponses = true;
-        this.answers.push([]);
+        this.answers.push(new Map());
         this.questionTimes.push(Date.now());
         this.announceCallback({
             type: 'question',
@@ -126,11 +125,11 @@ export class Quiz implements Gamemode {
             if (question === undefined) continue;
             const questionAnswers = question.answers;
             if(playerAnswers === undefined || questionAnswers === undefined) continue; //TODO: should be assert
-            for(const playerAnswer of playerAnswers) {
+            for(const [playerID, playerAnswer] of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];
                 if(currentAnswer !== undefined && currentAnswer.correct === true){
-                    const currentScore = scores.get(playerAnswer.playerID) ?? 0;
-                    scores.set(playerAnswer.playerID, currentScore + 1);
+                    const currentScore = scores.get(playerID) ?? 0;
+                    scores.set(playerID, currentScore + 1);
                 }
             }
         }
