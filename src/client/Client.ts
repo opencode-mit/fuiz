@@ -4,6 +4,7 @@ import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
 
 export class Client {
+    private playerID: PlayerID | undefined;
     private sessionID: SessionID | undefined;
     private token: Hash | undefined;
     private socket: ClientSocket | undefined;
@@ -23,6 +24,7 @@ export class Client {
         const json = await (await request).json();
         this.sessionID = sessionID;
         this.token = json["token"];
+        this.playerID = playerID;
         drawing.showStartingScreen(sessionID, [playerID]);
     }
 
@@ -34,6 +36,19 @@ export class Client {
             drawing.showQuestion(action);
         } else if(action.type === 'leaderboard') {
             drawing.showLeaderboard(action.results);
+        }
+    }
+
+    public submitAnswer(questionID: number, answerID: number): void {
+        if (this.sessionID && this.playerID && this.token) {
+            this.socket?.sendMessage({
+                type: 'answer',
+                sessionID: this.sessionID,
+                playerID: this.playerID,
+                playerToken: this.token,
+                questionID: questionID,
+                answerID: answerID
+            });
         }
     }
 }

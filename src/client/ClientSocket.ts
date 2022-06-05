@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import { SessionID, SocketID } from "../types";
+import { ClientAnswer, SessionID, SocketID } from "../types";
 import { Deferred } from "../game/Deferred";
 
 export class ClientSocket {
@@ -24,7 +24,7 @@ export class ClientSocket {
         this.socket.on("action", (message) => callback(session, message));
     }
 
-    public sendMessage(message: any) {
+    public sendMessage(message: ClientAnswer) {
         this.socket.emit("action", message);
     }
 

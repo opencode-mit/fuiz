@@ -1,7 +1,7 @@
 import assert from "assert";
 import { Server as HTTPServer } from 'http';
 import { Server, Socket } from "socket.io";
-import { Hash, SessionID, SocketID } from "../types";
+import { ClientAnswer, Hash, SessionID, SocketID } from "../types";
 
 export class ServerSocket {
     private readonly io: Server;
@@ -12,7 +12,7 @@ export class ServerSocket {
 
     public constructor(
         server: HTTPServer,
-        private readonly callback: (session: SessionID, message: any) => void
+        private readonly callback: (session: SessionID, message: ClientAnswer) => void
     ) {
         this.io = new Server(server);
         this.socketMapping = new Map();

@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { Server as HTTPServer } from 'http';
 import { ServerSocket } from "../server/ServerSocket";
-import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET } from "../types";
+import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET, ClientAnswer } from "../types";
 import { Gamemode, createQuiz } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
@@ -37,7 +37,7 @@ export class GameManager {
     public constructor() { };
 
     public setSocketManager(server: HTTPServer) {
-        this.socketManager = new ServerSocket(server, (m) => { console.log(m) });
+        this.socketManager = new ServerSocket(server, (sessionID, message) => this.receiveResponse(sessionID, message));
     }
 
     public registerHost(config: GameConfig): { sessionID: SessionID, token: Hash } {
@@ -81,5 +81,13 @@ export class GameManager {
         if (userToken === undefined) throw new AuthenticationError("Player was not found");
         if (userToken !== playerToken) throw new AuthenticationError("Player Token doesn't match");
         game.game.submitAnswer(questionID, playerID, answerID);
+    }
+
+    public receiveResponse(sessionID: SessionID, message: ClientAnswer): void {
+        if (message.type === 'answer') {
+            this.submitAnswer(message.sessionID, message.playerID, message.playerToken, message.questionID, message.answerID);
+        } else if(message.type === 'resolve') {
+            this.resolveAction(message.sessionID, message.actionID, message.token);
+        }
     }
 }

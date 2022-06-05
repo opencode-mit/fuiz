@@ -33,16 +33,15 @@ export class Host {
         drawing.showHostStartingScreen(json["sessionID"], [], 0);
     }
 
-    public async resolveAction(actionID: number): Promise<Response> {
+    public resolveAction(actionID: number): void {
         //TODO: USE WEBSOCKETS
         assert(this.token !== undefined && this.sessionID !== undefined);
-        return fetch(url + '/resolve', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ sessionID: this.sessionID, token: this.token, actionID: actionID })
-        });
+        this.socket?.sendMessage({
+            type: 'resolve',
+            sessionID: this.sessionID,
+            actionID: actionID,
+            token: this.token
+        })
     }
 
     private onReciveAction(sessionID: SessionID, action: Action): void {

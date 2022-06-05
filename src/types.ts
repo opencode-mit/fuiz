@@ -52,6 +52,7 @@ export type Leaderboard = Array<{ playerID: PlayerID, score: number }>;
  */
 export type Action = {
     type: 'question',
+    questionID: number,
     content: string,
     answers: Array<Answer>,
     actionID?: number
@@ -70,6 +71,20 @@ export type Action = {
     content: string
     actionID?: number
 };
+
+export type ClientAnswer = {
+    type: 'answer',
+    sessionID: SessionID,
+    playerID: PlayerID,
+    playerToken: Hash,
+    questionID: number,
+    answerID: number
+} | {
+    type: 'resolve',
+    sessionID: SessionID,
+    actionID: number,
+    token: Hash
+}
 
 /**
  * Represents unique SessionID genereated at random.

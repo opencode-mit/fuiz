@@ -104,6 +104,7 @@ export class Quiz implements Gamemode {
         this.questionTimes.push(Date.now());
         this.announceCallback({
             type: 'question',
+            questionID: this.currentQuestion,
             content: question.content,
             answers: question.answers.map((answer) => {
                 return { content: answer.content };
