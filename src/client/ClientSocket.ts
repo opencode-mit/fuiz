@@ -35,7 +35,7 @@ export class ClientSocket {
 
 export async function makeConnectedSocket(
     session: SessionID,
-    callback: (message: any) => void
+    callback: (sessionID: SessionID, message: any) => void
 ): Promise<ClientSocket> {
     const clientSocket = new ClientSocket(session, callback);
     await clientSocket.deferred.promise;

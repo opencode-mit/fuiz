@@ -37,7 +37,7 @@ export class GameManager {
     public constructor() { };
 
     public setSocketManager(server: HTTPServer) {
-        this.socketManager = new ServerSocket(server, (m) => {console.log(m)});
+        this.socketManager = new ServerSocket(server, (m) => { console.log(m) });
     }
 
     public registerHost(config: GameConfig): { sessionID: SessionID, token: Hash } {
@@ -48,19 +48,22 @@ export class GameManager {
         return { sessionID: nextSessionID, token: token };
     }
 
-    public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): Hash | undefined {
+    public registerSocket(sessionID: SessionID, socketID: SocketID): void {
         assert(this.socketManager !== undefined);
         this.socketManager.addToSession(socketID, sessionID);
+    }
+
+    public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): Hash | undefined {
         const game = this.mapping.get(sessionID);
         if (game === undefined) return undefined;
         const playerToken = getRandomHash();
         game.users.set(playerID, playerToken);
+        this.registerSocket(sessionID, socketID);
         return playerToken;
     }
 
     private announceAction(sessionID: SessionID, action: Action): void {
         assert(this.socketManager !== undefined);
-        console.log(action);
         this.socketManager.broadcast(sessionID, action);
     }
 

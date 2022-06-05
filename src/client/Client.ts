@@ -1,4 +1,4 @@
-import { Hash, PlayerID, SessionID } from "../types";
+import { Action, Hash, PlayerID, SessionID } from "../types";
 import { makeConnectedSocket, ClientSocket } from "./ClientSocket";
 import { url } from "./FuizClient";
 
@@ -10,17 +10,21 @@ export class Client {
     public constructor() { }
 
     public async registerGame(playerID: PlayerID, sessionID: SessionID) {
-        this.socket = await makeConnectedSocket(sessionID, (m) => console.log(m));
-        console.log({socketID: this.socket.id, sessionID: sessionID, playerID: playerID});
+        this.socket = await makeConnectedSocket(sessionID, (sessionID, message) => this.onReciveAction(sessionID, message));
+        console.log({ socketID: this.socket.id, sessionID: sessionID, playerID: playerID });
         const request = fetch(url + '/registerPlayer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({socketID: this.socket.id, sessionID: sessionID, playerID: playerID})
+            body: JSON.stringify({ socketID: this.socket.id, sessionID: sessionID, playerID: playerID })
         });
         const json = await (await request).json();
         this.sessionID = sessionID;
         this.token = json["token"];
+    }
+
+    private onReciveAction(sessionID: SessionID, action: Action): void {
+        console.log(action);
     }
 }

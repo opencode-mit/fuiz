@@ -55,6 +55,21 @@ export class WebServer {
             }
         });
 
+        this.app.post('/watchSocket', (request, response) => {
+            try {
+                const { sessionID, socketID } = request.body;
+                assert(sessionID && socketID);
+                this.gameManager.registerSocket(sessionID, socketID);
+                response
+                    .status(HttpStatus.ACCEPTED)
+                    .send();
+            } catch (error) {
+                response
+                    .status(HttpStatus.BAD_REQUEST)
+                    .send();
+            }
+        });
+
         this.app.post('/registerPlayer', (request, response) => {
             try {
                 const { sessionID, playerID, socketID } = request.body;
