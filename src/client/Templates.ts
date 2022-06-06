@@ -7,7 +7,7 @@ const templates = {
         <div class="gap"><button id="resolve#${actionID}">Next</button></div>
         <div class="answer-container" id="question#${questionID}">
             ${question.answers.map((answer, i) => `
-            <button class="answer pushable" id="answer#${i}">
+            <button class="answer pushable">
                 <span class="front">${answer.content}</span>
             </button>`
             ).join("")}
