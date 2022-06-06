@@ -4,7 +4,10 @@ const templates = {
     hostQuestion: (question: Question, actionID: number, questionID: number) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
-        <div class="gap"><button id="resolve#${actionID}">Next</button></div>
+        <div class="gap">
+            <div class="image"></div>
+            <button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>
+        </div>
         <div class="answer-container" id="question#${questionID}">
             ${question.answers.map((answer, i) => `
             <button class="answer pushable">
@@ -16,7 +19,9 @@ const templates = {
     question: (question: Question, questionID: number) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
-        <div class="gap"></div>
+        <div class="gap">
+            <div class="image"></div>
+        </div>
         <div class="answer-container" id="question#${questionID}">
             ${question.answers.map((answer, i) => `
             <button class="answer pushable" id="answer#${i}">
@@ -38,7 +43,7 @@ const templates = {
     </div>`,
     hostLeaderboard: (leaderboard: Leaderboard, actionID: number) => `
     <div class="leaderboard">
-        <div class="title">Leaderboard</div>
+        <div class="title">Leaderboard<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button></div>
         <div class="record-container">
             ${leaderboard.map((record, i) => `
             <div class="record" id="${record.playerID}">
@@ -46,7 +51,6 @@ const templates = {
                 <span class="score">${record.score}</span>
             </div>`).join("")}
         </div>
-        <button id="resolve#${actionID}">Next</button>
     </div>`,
     questionOnly: (content: string) => `
     <div class="questiononly-container">

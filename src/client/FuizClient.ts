@@ -4,7 +4,7 @@ import { Host } from "./Host";
 
 export const url = "http://localhost:8888";
 
-// drawing.showQuestion({
+// drawing.showHostQuestion({
 //     content: 'How will you answer for your actions?',
 //     answers: [
 //         {
@@ -17,14 +17,14 @@ export const url = "http://localhost:8888";
 //             content: 'I\'m behind you'
 //         }
 //     ]
-// }, 0);
+// }, 0, 0);
 
-// showLeaderboard([
+// drawing.showHostLeaderboard([
 //     {playerID: "minecraft", score: 600},
 //     {playerID: "barish", score: 400},
 //     {playerID: "hannah", score: 300},
 //     {playerID: "adhami", score: 100}
-// ]);
+// ], 0);
 
 // showQuestionOnly("Am I behind you? (Hint: Yes)");
 

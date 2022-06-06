@@ -41,6 +41,17 @@ body {
 
 .question-container .gap {
     flex: 3;
+    display: flex;
+    align-items: center;
+}
+
+.question-container .gap .image {
+    background: url("https://cdn150.picsart.com/upscale-253923466012212.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    flex: 1;
+    height: 100%;
 }
 
 :is(.question-container, .players-question-container) .answer-container {
@@ -189,6 +200,17 @@ body {
     background-size: auto 50%;
 }
 
+.question-container .gap .pushable {
+    position: absolute;
+    right: 1em;
+    color: white;
+    font-weight: bold;
+}
+
+.question-container .gap .pushable .front {
+    padding: 1em 2em;
+}
+
 .leaderboard {
     background: var(--answer-orange);
     display: flex;
@@ -202,6 +224,19 @@ body {
     font-size: 2em;
     font-weight: bolder;
     padding: 0.6em 0;
+    display: flex;
+    justify-content: center;
+}
+
+.leaderboard .title button {
+    position: absolute;
+    right: 1em;
+    color: white;
+    font-weight: bold;
+}
+
+.leaderboard .title button .front {
+    padding: 1em 2em;
 }
 
 .leaderboard .record-container {
