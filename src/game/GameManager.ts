@@ -59,6 +59,7 @@ export class GameManager {
         if (game.users.get(playerID) !== undefined) return undefined;
         const playerToken = getRandomHash();
         game.users.set(playerID, playerToken);
+        game.game.registerPlayer(playerID);
         this.registerSocket(sessionID, socketID);
         return playerToken;
     }

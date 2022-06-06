@@ -29,10 +29,17 @@ export interface Gamemode {
      * @param actionID index of the action (0-indexed)
      */
     resolveAction(actionID: number): void;
+
+    /**
+     * Registers a new player to the game.
+     * 
+     * @param playerID thew new PlayerID
+     */
+    registerPlayer(playerID: PlayerID): void;
 }
 
 export class Quiz implements Gamemode {
-    
+
     // Abstraction Function
     // AF(toBeResolved, answers, currentQuestion, acceptingResponses, questionTimes) =
     //      A quiz game last displayed the question #currentQuestion and is accepting
@@ -40,10 +47,11 @@ export class Quiz implements Gamemode {
     //      questions were announced in questionTimes, and stores players answers for 
     //      each question in answers, it has a list of promises to be resolved for the
     //      quiz to progress
-    
+
 
     private readonly toBeResolved: Array<{ resolved: boolean, deferred: Deferred<void> }> = [];
     private readonly answers: Array<Map<PlayerID, Answer>> = [];
+    private readonly players: Set<PlayerID> = new Set();
     private currentQuestion = -1;
     private acceptingResponses = false;
     private readonly questionTimes: number[] = [];
@@ -69,8 +77,11 @@ export class Quiz implements Gamemode {
      */
     public submitAnswer(questionID: number, playerID: string, answerID: number): void {
         const questionAnswers = this.answers[questionID];
-        if (this.acceptingResponses && questionAnswers !== undefined && this.currentQuestion === questionID && questionAnswers.get(playerID) === undefined) {
-            questionAnswers.set(playerID, {answerID: answerID, timeSubmitted: Date.now()});
+        if (this.players.has(playerID) && this.acceptingResponses && questionAnswers !== undefined && this.currentQuestion === questionID && questionAnswers.get(playerID) === undefined) {
+            questionAnswers.set(playerID, { answerID: answerID, timeSubmitted: Date.now() });
+            if (questionAnswers.size === this.players.size) {
+                this.resolveAction(this.toBeResolved.length - 1);
+            }
         } else {
             // do something D:
         }
@@ -108,7 +119,7 @@ export class Quiz implements Gamemode {
             answers: question.answers.map((answer) => {
                 return { content: answer.content };
             }),
-            actionID:  deferredID
+            actionID: deferredID
         });
     }
 
@@ -117,25 +128,28 @@ export class Quiz implements Gamemode {
      * 
      * @returns playerIDs and their associated score
      */
-    private calculateLeaderboard(): Array<{playerID: PlayerID, score: number}> {
+    private calculateLeaderboard(): Array<{ playerID: PlayerID, score: number }> {
         const scores = new Map<PlayerID, number>();
-        for(let questionID = 0; questionID < this.questionTimes.length; questionID++) {
+        for (const playerID of this.players) {
+            scores.set(playerID, 0);
+        }
+        for (let questionID = 0; questionID < this.questionTimes.length; questionID++) {
             const playerAnswers = this.answers[questionID];
             const question = this.config.questions[questionID];
             if (question === undefined) continue;
             const questionAnswers = question.answers;
-            if(playerAnswers === undefined || questionAnswers === undefined) continue; //TODO: should be assert
-            for(const [playerID, playerAnswer] of playerAnswers) {
+            if (playerAnswers === undefined || questionAnswers === undefined) continue; //TODO: should be assert
+            for (const [playerID, playerAnswer] of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];
-                if(currentAnswer !== undefined && currentAnswer.correct === true){
+                if (currentAnswer !== undefined && currentAnswer.correct === true) {
                     const currentScore = scores.get(playerID) ?? 0;
                     scores.set(playerID, currentScore + 1);
                 }
             }
         }
-        const leaderboard = new Array<{playerID: PlayerID, score: number}>();
-        for(const [playerID, score] of scores.entries()) {
-            leaderboard.push({playerID: playerID, score: score});
+        const leaderboard = new Array<{ playerID: PlayerID, score: number }>();
+        for (const [playerID, score] of scores.entries()) {
+            leaderboard.push({ playerID: playerID, score: score });
         }
         leaderboard.sort((a, b) => b.score - a.score);
         return leaderboard;
@@ -144,7 +158,7 @@ export class Quiz implements Gamemode {
     /**
      * Stops accepting responses and shows the leaderboard.
      * In addition, it adds an action once resolved will show next question if available.
-     */ 
+     */
     private stopQuestion(): void {
         this.acceptingResponses = false;
         if (this.currentQuestion < this.config.questions.length - 1) {
@@ -182,6 +196,12 @@ export class Quiz implements Gamemode {
         }
     }
 
+    /** 
+     * @inheritdoc 
+     */
+    public registerPlayer(playerID: string): void {
+        this.players.add(playerID);
+    }
 }
 
 /**
