@@ -8,7 +8,7 @@ export const ALPHABET = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ123
 /**
  * Represents an answer and if it's correct or not.
  */
-type AnswerSolved = {
+export type AnswerSolved = {
     content: string,
     correct: boolean
 }
@@ -71,8 +71,12 @@ export type Action = {
 } | {
     type: 'statistics',
     time: number,
-    questionID: number,
-    content: string,
+    question: {
+        questionID: number,
+        content: string,
+        imageURL?: string,
+        answers: Array<Answer>    
+    },
     answers: Array<{answer: AnswerSolved, voted: number}>,
     total: number,
     actionID?: number

@@ -36,6 +36,8 @@ export class Client {
             drawing.showQuestion(action, action.questionID);
         } else if(action.type === 'leaderboard') {
             drawing.showLeaderboard(action.results, this.playerID);
+        } else if (action.type === 'join') {
+            drawing.showStartingScreen(this.sessionID, action.people);
         }
     }
 

@@ -62,6 +62,8 @@ export class Host {
             } else {
                 drawing.showLeaderboard(action.results);
             }
+        } else if (action.type === 'join') {
+            drawing.showStartingScreen(this.sessionID, action.people);
         }
     }
 }

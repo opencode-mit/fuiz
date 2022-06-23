@@ -121,11 +121,11 @@ body {
     padding: 0 0.3em;
 }
 
-.pushable.answer:where(:nth-child(1)) {
+.pushable:where(.answer:where(:nth-child(1)), .red) {
     background: var(--answer-dark-red);
 }
 
-.pushable.answer:where(:nth-child(1)) .front {
+.pushable:where(.answer:where(:nth-child(1)), .red) .front {
     background: var(--answer-red);
 }
 
@@ -137,11 +137,11 @@ body {
     background-image: url('../media/fuiz_circle.svg');
 }
 
-.pushable.answer:where(:nth-child(2)) {
+.pushable:where(.answer:where(:nth-child(2)), .orange) {
     background: var(--answer-dark-orange);
 }
 
-.pushable.answer:where(:nth-child(2)) .front {
+.pushable:where(.answer:where(:nth-child(2)), .orange) .front {
     background: var(--answer-orange);
 }
 
@@ -153,11 +153,11 @@ body {
     background-image: url('../media/fuiz_square.svg');
 }
 
-.pushable.answer:where(:nth-child(3)) {
+.pushable:where(.answer:where(:nth-child(3)), .green) {
     background: var(--answer-dark-green);
 }
 
-.pushable.answer:where(:nth-child(3)) .front {
+.pushable:where(.answer:where(:nth-child(3)), .green) .front {
     background: var(--answer-green);
 }
 
@@ -183,6 +183,40 @@ body {
 
 .players-question-container .answer:nth-child(4) .front {
     background-image: url('../media/fuiz_tilted.svg');
+}
+
+.pushable.correct {
+    background: var(--answer-dark-correct);
+}
+
+.pushable.correct .front {
+    background: var(--answer-correct);
+}
+
+.pushable.answer.check .front::after {
+    margin-left: auto;
+    background: center / contain no-repeat url('../media/fuiz_check.svg');
+    content: ' ';
+    height: 1em;
+    width: 1em;
+    padding: 0 0.3em;
+}
+
+.pushable.answer.cross .front::after {
+    margin-left: auto;
+    background: center / contain no-repeat url('../media/fuiz_cross.svg');
+    content: ' ';
+    height: 1em;
+    width: 1em;
+    padding: 0 0.3em;
+}
+
+.pushable.wrong {
+    background: var(--answer-dark-wrong);
+}
+
+.pushable.wrong .front {
+    background: var(--answer-wrong);
 }
 
 .pushable.disabled {
