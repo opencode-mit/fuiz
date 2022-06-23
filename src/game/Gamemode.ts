@@ -92,35 +92,86 @@ export class Quiz implements Gamemode {
      */
     private startGame(): void {
         this.currentQuestion = -1;
-        this.announceNextQuestion();
+        this.announceQuestion();
     }
 
     /**
-     * Announces the next available question and receives answers immediately.
-     * Adds an action once resolved it will stop receiving answers and will show leaderboard.
+     * Announces the next available question.
+     * Adds an action once resolved it will start receiving answers.
      */
-    private announceNextQuestion(): void {
+    private announceQuestion(): void {
         this.currentQuestion++;
         const question = this.config.questions[this.currentQuestion];
         if (question === undefined) return;
         const questionDeferred = new Deferred<void>();
         const self = this;
-        questionDeferred.promise.then(() => self.stopQuestion());
+        questionDeferred.promise.then(() => self.receiveAnswers());
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        setTimeout(() => this.resolveAction(deferredID), this.config.delay);
+        setTimeout(() => this.resolveAction(deferredID), this.config.questionDelay);
+        this.announceCallback({
+            type: 'question_only',
+            duration: this.config.questionDelay,
+            time: Date.now(),
+            questionID: this.currentQuestion,
+            content: question.content,
+            actionID: deferredID
+        });
+    }
+
+    /**
+     * Announces the answers and starts admitting answers immediately.
+     * Adds an action once resolved it will stop admitting answers and shows statistics.
+     */
+    private receiveAnswers(): void {
+        const question = this.config.questions[this.currentQuestion];
+        if (question === undefined) return;
+        const questionDeferred = new Deferred<void>();
+        const self = this;
+        questionDeferred.promise.then(() => self.announceStatistics());
+        const deferredID = this.toBeResolved.length;
+        this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
+        setTimeout(() => this.resolveAction(deferredID), this.config.answersDelay);
         this.acceptingResponses = true;
         this.answers.push(new Map());
         this.questionTimes.push(Date.now());
         this.announceCallback({
             type: 'question',
-            duration: this.config.delay,
+            duration: this.config.answersDelay,
             time: Date.now(),
             questionID: this.currentQuestion,
             content: question.content,
             answers: question.answers.map((answer) => {
                 return { content: answer.content };
             }),
+            actionID: deferredID
+        });
+    }
+
+    /**
+     * Announces the statistics of the answers and how many voted for each.
+     * Adds an action once resolved it will show the leaderboard.
+     */
+    private announceStatistics(): void {
+        this.acceptingResponses = false;
+        const question = this.config.questions[this.currentQuestion];
+        if (question === undefined) return;
+        const questionDeferred = new Deferred<void>();
+        const self = this;
+        questionDeferred.promise.then(() => self.announceLeaderboard());
+        const deferredID = this.toBeResolved.length;
+        this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
+        const lastAnswers = this.answers[this.currentQuestion];
+        if (lastAnswers === undefined) return;
+        this.announceCallback({
+            type: 'statistics',
+            time: Date.now(),
+            questionID: this.currentQuestion,
+            content: question.content,
+            answers: question.answers.map((answer, answerID) => {
+                return {answer: { content: answer.content, correct: answer.correct }, voted: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
+            }),
+            total: lastAnswers.size,
             actionID: deferredID
         });
     }
@@ -158,16 +209,15 @@ export class Quiz implements Gamemode {
     }
 
     /**
-     * Stops accepting responses and shows the leaderboard.
-     * In addition, it adds an action once resolved will show next question if available.
+     * Shows the leaderboard.
+     * It also adds an action once resolved will show next question if available.
      */
-    private stopQuestion(): void {
-        this.acceptingResponses = false;
+    private announceLeaderboard(): void {
         if (this.currentQuestion < this.config.questions.length - 1) {
             const leaderboardDeferred = new Deferred<void>();
             const self = this;
             const deferredID = this.toBeResolved.length;
-            leaderboardDeferred.promise.then(() => self.announceNextQuestion());
+            leaderboardDeferred.promise.then(() => self.announceQuestion());
             this.toBeResolved.push({ resolved: false, deferred: leaderboardDeferred });
             this.announceCallback({
                 type: 'leaderboard',
@@ -205,6 +255,13 @@ export class Quiz implements Gamemode {
      */
     public registerPlayer(playerID: string): void {
         this.players.add(playerID);
+        if (this.currentQuestion === -1) {
+            this.announceCallback({
+                type: 'join',
+                time: Date.now(),
+                people: [...this.players]
+            });
+        }
     }
 }
 

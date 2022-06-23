@@ -41,7 +41,8 @@ export type Question = {
  */
 export type GameConfig = {
     gamemode: 'quiz',
-    delay: number,
+    questionDelay: number,
+    answersDelay: number,
     questions: Array<QuestionSolved>
 };
 
@@ -67,15 +68,22 @@ export type Action = {
 } | {
     type: 'statistics',
     time: number,
+    questionID: number,
     content: string,
-    answers: Array<Answer>
+    answers: Array<{answer: AnswerSolved, voted: number}>,
+    total: number,
     actionID?: number
 } | {
     type: 'question_only',
     duration?: number,
     time: number,
+    questionID: number,
     content: string
     actionID?: number
+} | {
+    type: 'join',
+    time: number,
+    people: Array<PlayerID>
 };
 
 export type ClientAnswer = {
