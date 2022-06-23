@@ -114,6 +114,8 @@ export class Quiz implements Gamemode {
         this.questionTimes.push(Date.now());
         this.announceCallback({
             type: 'question',
+            duration: this.config.delay,
+            time: Date.now(),
             questionID: this.currentQuestion,
             content: question.content,
             answers: question.answers.map((answer) => {
@@ -169,6 +171,7 @@ export class Quiz implements Gamemode {
             this.toBeResolved.push({ resolved: false, deferred: leaderboardDeferred });
             this.announceCallback({
                 type: 'leaderboard',
+                time: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
                 results: this.calculateLeaderboard(),
                 actionID: deferredID
@@ -176,6 +179,7 @@ export class Quiz implements Gamemode {
         } else {
             this.announceCallback({
                 type: 'leaderboard',
+                time: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
                 results: this.calculateLeaderboard()
             });

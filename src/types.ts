@@ -52,22 +52,28 @@ export type Leaderboard = Array<{ playerID: PlayerID, score: number }>;
  */
 export type Action = {
     type: 'question',
+    duration?: number,
+    time: number,
     questionID: number,
     content: string,
     answers: Array<Answer>,
     actionID?: number
 } | {
     type: 'leaderboard',
+    time: number,
     final: boolean,
     results: Leaderboard
     actionID?: number
 } | {
     type: 'statistics',
+    time: number,
     content: string,
     answers: Array<Answer>
     actionID?: number
 } | {
     type: 'question_only',
+    duration?: number,
+    time: number,
     content: string
     actionID?: number
 };
