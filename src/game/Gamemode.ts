@@ -166,9 +166,12 @@ export class Quiz implements Gamemode {
         this.announceCallback({
             type: 'statistics',
             time: Date.now(),
-            questionID: this.currentQuestion,
-            ...(question.imageURL) && {imageURL: question.imageURL},
-            content: question.content,
+            question: {
+                questionID: this.currentQuestion,
+                content: question.content,
+                ...(question.imageURL) && {imageURL: question.imageURL},
+                answers: question.answers
+            },
             answers: question.answers.map((answer, answerID) => {
                 return {answer: { content: answer.content, correct: answer.correct }, voted: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
             }),
