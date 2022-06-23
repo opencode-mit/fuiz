@@ -25,6 +25,7 @@ type Answer = {
  */
 type QuestionSolved = {
     content: string,
+    imageURL?: string,
     answers: Array<AnswerSolved>
 }
 
@@ -33,6 +34,7 @@ type QuestionSolved = {
  */
 export type Question = {
     content: string,
+    imageURL?: string,
     answers: Array<Answer>
 }
 
@@ -57,6 +59,7 @@ export type Action = {
     time: number,
     questionID: number,
     content: string,
+    imageURL?: string,
     answers: Array<Answer>,
     actionID?: number
 } | {

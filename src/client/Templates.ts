@@ -5,7 +5,7 @@ const templates = {
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
-            <div class="image"></div>
+            <div class="image" style="background: url(${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"})"></div>
             <button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>
         </div>
         <div class="answer-container" id="question#${questionID}">
@@ -20,7 +20,7 @@ const templates = {
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
-            <div class="image"></div>
+            <div class="image" style="background: url(${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"})"></div>
         </div>
         <div class="answer-container" id="question#${questionID}">
             ${question.answers.map((answer, i) => `
