@@ -67,15 +67,16 @@ body {
     border-radius: 0.2em;
     cursor: pointer;
     outline-offset: 4px;
-    transition: 100ms;
+    /* transition: 100ms; */
     user-select: none;
+    transform: translateY(0); /* very important */
 }
 
 .pushable .front {
     display: block;
     position: relative;
     border-radius: 0.2em;
-    will-change: transform;
+    /* will-change: transform; */
     transform: translateY(-4px);
     height: 100%;
 }
