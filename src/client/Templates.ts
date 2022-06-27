@@ -19,7 +19,7 @@ const templates = {
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
-            <div class="image" style="background: url(${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"})"></div>
+            <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
         </div>
         <div class="answer-container" id="question#${questionID}">
             ${question.answers.map((answer, i) => `
@@ -62,7 +62,12 @@ const templates = {
             </div>`).join("")}
         </div>
     </div>`,
-    questionOnly: (content: string) => `
+    questionOnlyHost: (content: string, actionID?: number) => `
+    <div class="questiononly-container">
+        ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
+        <div class="question">${content}</div>
+    </div>`,
+    questionOnlyPlayer: (content: string) => `
     <div class="questiononly-container">
         <div class="question">${content}</div>
     </div>`,

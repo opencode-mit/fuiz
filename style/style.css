@@ -314,6 +314,19 @@ body {
     box-shadow: 0 0 4px 2px rgba(0 0 0 / 20%);
 }
 
+
+.questiononly-container .pushable {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    color: white;
+    font-weight: bold;
+}
+
+.questiononly-container .pushable .front {
+    padding: 1em 2em;
+}
+
 .menu {
     height: 100%;
     background: var(--answer-orange);

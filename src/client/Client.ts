@@ -33,7 +33,7 @@ export class Client {
     private onReciveAction(sessionID: SessionID, action: Action): void {
         if (sessionID !== this.sessionID) return;
         if (action.type === 'question_only') {
-            drawing.showQuestionOnly(action.content);
+            drawing.showQuestionOnlyPlayer(action.content);
         } else if(action.type === 'question') {
             drawing.showQuestionPlayer(action, action.questionID);
         } else if(action.type === 'leaderboard') {

@@ -26,7 +26,7 @@ export const url = "http://localhost:8888";
 //     {playerID: "adhami", score: 100}
 // ], 0);
 
-// showQuestionOnly("Am I behind you? (Hint: Yes)");
+// drawing.showQuestionOnlyHost("Am I behind you? (Hint: Yes)", 0);
 
 export const host = new Host();
 export const client = new Client();

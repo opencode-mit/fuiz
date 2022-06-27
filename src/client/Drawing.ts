@@ -52,8 +52,12 @@ export function showLeaderboardHost(leaderboard: Leaderboard, actionID?: number)
     document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
 }
 
-export function showQuestionOnly(content: string) {
-    document.body.innerHTML = templates.questionOnly(content);
+export function showQuestionOnlyHost(content: string, actionID?: number) {
+    document.body.innerHTML = templates.questionOnlyHost(content, actionID);
+}
+
+export function showQuestionOnlyPlayer(content: string) {
+    document.body.innerHTML = templates.questionOnlyPlayer(content);
 }
 
 export function showQuestionMobile(question: Question, questionID: number) {
