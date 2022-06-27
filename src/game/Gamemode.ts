@@ -140,10 +140,7 @@ export class Quiz implements Gamemode {
             duration: this.config.answersDelay,
             time: Date.now(),
             questionID: this.currentQuestion,
-            content: question.content,
-            answers: question.answers.map((answer) => {
-                return { content: answer.content };
-            }),
+            question: question,
             actionID: deferredID
         });
     }
@@ -166,12 +163,8 @@ export class Quiz implements Gamemode {
         this.announceCallback({
             type: 'statistics',
             time: Date.now(),
-            question: {
-                questionID: this.currentQuestion,
-                content: question.content,
-                ...(question.imageURL) && {imageURL: question.imageURL},
-                answers: question.answers
-            },
+            questionID: this.currentQuestion,
+            question: question,
             answers: question.answers.map((answer, answerID) => {
                 return {answer: { content: answer.content, correct: answer.correct }, voted: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
             }),

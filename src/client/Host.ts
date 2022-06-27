@@ -49,13 +49,13 @@ export class Host {
         if (action.type === 'question_only') {
             drawing.showQuestionOnlyHost(action.content, action.actionID);
         } else if(action.type === 'question') {
-            drawing.showQuestionHost(action, action.questionID, action.actionID);
+            drawing.showQuestionHost(action.question, action.questionID, action.actionID);
         } else if(action.type === 'leaderboard') {
             drawing.showLeaderboardHost(action.results, action.actionID);
         } else if (action.type === 'join') {
             drawing.showJoinWaitingHost(this.sessionID, action.people, 0);
         } else if (action.type === 'statistics') {
-            drawing.showStatisticsHost(action.question, action.answers, action.question.questionID, action.actionID);
+            drawing.showStatisticsHost(action.question, action.answers, action.questionID, action.actionID);
         }
     }
 }

@@ -55,12 +55,10 @@ export type Leaderboard = Array<{ playerID: PlayerID, score: number }>;
  */
 export type Action = {
     type: 'question',
-    duration?: number,
     time: number,
+    duration?: number,
+    question: Question,
     questionID: number,
-    content: string,
-    imageURL?: string,
-    answers: Array<Answer>,
     actionID?: number
 } | {
     type: 'leaderboard',
@@ -71,21 +69,17 @@ export type Action = {
 } | {
     type: 'statistics',
     time: number,
-    question: {
-        questionID: number,
-        content: string,
-        imageURL?: string,
-        answers: Array<Answer>    
-    },
+    question: Question,
+    questionID: number,
     answers: Array<{answer: AnswerSolved, voted: number}>,
     total: number,
     actionID?: number
 } | {
     type: 'question_only',
-    duration?: number,
     time: number,
-    questionID: number,
     content: string
+    duration?: number,
+    questionID: number,
     actionID?: number
 } | {
     type: 'join',

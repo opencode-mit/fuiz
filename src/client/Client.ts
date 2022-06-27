@@ -35,13 +35,13 @@ export class Client {
         if (action.type === 'question_only') {
             drawing.showQuestionOnlyPlayer(action.content);
         } else if(action.type === 'question') {
-            drawing.showQuestionPlayer(action, action.questionID);
+            drawing.showQuestionPlayer(action.question, action.questionID);
         } else if(action.type === 'leaderboard') {
             drawing.showLeaderboardPlayer(action.results, this.playerID);
         } else if (action.type === 'join') {
             drawing.showJoinWaitingPlyaer(this.sessionID, action.people);
         } else if (action.type === 'statistics') {
-            drawing.showStatisticsPlayer(action.question, action.answers, action.question.questionID, this.answers.get(action.question.questionID));
+            drawing.showStatisticsPlayer(action.question, action.answers, action.questionID, this.answers.get(action.questionID));
         }
     }
 
