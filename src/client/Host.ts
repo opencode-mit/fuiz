@@ -47,7 +47,8 @@ export class Host {
     private onReciveAction(sessionID: SessionID, action: Action): void {
         if (sessionID != this.sessionID) return;
         if (action.type === 'question_only') {
-            drawing.showQuestionOnlyHost(action.content, action.actionID);
+            const timeLeft = action.duration;
+            drawing.showQuestionOnlyHost(action.content, action.actionID, timeLeft);
         } else if(action.type === 'question') {
             drawing.showQuestionHost(action.question, action.questionID, action.actionID);
         } else if(action.type === 'leaderboard') {

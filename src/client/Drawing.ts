@@ -3,6 +3,7 @@ import { AnswerSolved, Leaderboard, PlayerID, Question, SessionID } from '../typ
 import { Client } from './Client';
 import { client, host } from './FuizClient';
 import { Host } from './Host';
+import SecondsLeftCountdown from './SecondsLeftCountdown';
 import templates from './Templates';
 
 export function setUpResolve(host: Host) {
@@ -39,7 +40,7 @@ export function setUpAnswer(client: Client) {
     });
 }
 
-export function showQuestionPlayer(question: Question, questionID: number) {
+export function showQuestionPlayer(question: Question, questionID: number, timeLeft?: number) {
     document.body.innerHTML = templates.questionPlayer(question, questionID);
 }
 
@@ -52,19 +53,22 @@ export function showLeaderboardHost(leaderboard: Leaderboard, actionID?: number)
     document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
 }
 
-export function showQuestionOnlyHost(content: string, actionID?: number) {
+export function showQuestionOnlyHost(content: string, actionID?: number, timeLeft?: number) {
     document.body.innerHTML = templates.questionOnlyHost(content, actionID);
+    if (timeLeft !== undefined) {
+        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
+    }
 }
 
-export function showQuestionOnlyPlayer(content: string) {
+export function showQuestionOnlyPlayer(content: string, timeLeft?: number) {
     document.body.innerHTML = templates.questionOnlyPlayer(content);
 }
 
-export function showQuestionMobile(question: Question, questionID: number) {
+export function showQuestionMobile(question: Question, questionID: number, timeLeft?: number) {
     document.body.innerHTML = templates.questionMobile(question, questionID);
 }
 
-export function showQuestionHost(question: Question, questionID: number, actionID?: number) {
+export function showQuestionHost(question: Question, questionID: number, actionID?: number, timeLeft?: number) {
     document.body.innerHTML = templates.questionHost(question, questionID, actionID);
 }
 
