@@ -85,38 +85,6 @@ export class WebServer {
                     .send();
             }
         });
-
-        this.app.post('/resolve', (request, response) => {
-            const { sessionID, token, actionID } = request.body;
-            if (sessionID === undefined || sessionID === undefined || actionID === undefined) {
-                response
-                    .status(HttpStatus.BAD_REQUEST)
-                    .type('json')
-                    .send({ status: "fail", message: "bad parameters" });
-                return;
-            }
-            try {
-                this.gameManager.resolveAction(sessionID, Number.parseInt(actionID), token);
-                response
-                    .status(HttpStatus.ACCEPTED)
-                    .type('json')
-                    .send({ status: "success" });
-            } catch (error) {
-                if (error instanceof AuthenticationError) {
-                    response
-                        .status(HttpStatus.BAD_REQUEST)
-                        .type('json')
-                        .send({ status: "fail", message: error.getReason() });
-                    return;
-                } else {
-                    response
-                        .status(HttpStatus.BAD_REQUEST)
-                        .type('json')
-                        .send({ status: "fail", message: "something went wrong" });
-                    return;
-                }
-            }
-        });
     }
 
     public start(): Promise<void> {

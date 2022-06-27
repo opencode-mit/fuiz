@@ -1,5 +1,5 @@
 import assert from "assert";
-import { GameConfig, SessionID, Hash, Action } from "../types";
+import { GameConfig, SessionID, Hash, Action, Announcement } from "../types";
 import { ClientSocket, makeConnectedSocket } from "./ClientSocket";
 import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
@@ -34,7 +34,6 @@ export class Host {
     }
 
     public resolveAction(actionID: number): void {
-        //TODO: USE WEBSOCKETS
         assert(this.token !== undefined && this.sessionID !== undefined);
         this.socket?.sendMessage({
             type: 'resolve',
@@ -44,7 +43,8 @@ export class Host {
         })
     }
 
-    private onReciveAction(sessionID: SessionID, action: Action): void {
+    private onReciveAction(sessionID: SessionID, announcement: Announcement): void {
+        const action = announcement.action;
         if (sessionID != this.sessionID) return;
         if (action.type === 'question_only') {
             const timeLeft = action.duration;

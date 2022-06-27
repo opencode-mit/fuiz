@@ -87,6 +87,11 @@ export type Action = {
     people: Array<PlayerID>
 };
 
+export type Announcement = {
+    action: Action,
+    serverTime: number
+}
+
 export type ClientAnswer = {
     type: 'answer',
     sessionID: SessionID,

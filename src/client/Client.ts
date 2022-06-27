@@ -1,4 +1,4 @@
-import { Action, Hash, PlayerID, Question, SessionID } from "../types";
+import { Action, Announcement, Hash, PlayerID, Question, SessionID } from "../types";
 import { makeConnectedSocket, ClientSocket } from "./ClientSocket";
 import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
@@ -30,7 +30,8 @@ export class Client {
         drawing.showJoinWaitingPlyaer(sessionID, [playerID]);
     }
 
-    private onReciveAction(sessionID: SessionID, action: Action): void {
+    private onReciveAction(sessionID: SessionID, announcement: Announcement): void {
+        const action = announcement.action;
         if (sessionID !== this.sessionID) return;
         if (action.type === 'question_only') {
             drawing.showQuestionOnlyPlayer(action.content);

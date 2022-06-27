@@ -42,6 +42,6 @@ export class ServerSocket {
 
     public broadcast(session: SessionID, message: any) {
         console.log(message);
-        this.io.to(session).emit("action", message);
+        this.io.to(session).emit("action", {action: message, serverTime: Date.now()});
     }
 }
