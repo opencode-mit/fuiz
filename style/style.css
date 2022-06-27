@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -57,6 +58,7 @@ body {
     flex: 1;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    padding: 0.5em 0;
 }
 
 .pushable {
@@ -192,7 +194,7 @@ body {
     background: var(--answer-correct);
 }
 
-.pushable.answer.check .front::after {
+.question-container .pushable.answer.check .front::after {
     margin-left: auto;
     background: center / contain no-repeat url('../media/fuiz_check.svg');
     content: ' ';
@@ -201,7 +203,7 @@ body {
     padding: 0 0.3em;
 }
 
-.pushable.answer.cross .front::after {
+.question-container .pushable.answer.cross .front::after {
     margin-left: auto;
     background: center / contain no-repeat url('../media/fuiz_cross.svg');
     content: ' ';
@@ -224,6 +226,14 @@ body {
 
 .pushable.disabled .front {
     background: var(--answer-gray);
+}
+
+.players-question-container .answer.cross .front {
+    background-image: url('../media/fuiz_cross.svg');
+}
+
+.players-question-container .answer.check .front {
+    background-image: url('../media/fuiz_check.svg');
 }
 
 .players-question-container .answer .front {
@@ -435,4 +445,20 @@ label, input, textarea, button {
 
 .questiononly-container .seconds-timer {
     top: 1em;
+}
+
+.main-seconds-timer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100%;
+    font-size: 3em;
+    width: 3em;
+    height: 3em;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
 }

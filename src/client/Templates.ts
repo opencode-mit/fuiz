@@ -5,7 +5,7 @@ const templates = {
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
-            ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
+            ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
             ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
@@ -20,7 +20,7 @@ const templates = {
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
-            ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
+            ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
         </div>
         <div class="answer-container" id="question#${questionID}">
@@ -66,14 +66,18 @@ const templates = {
     </div>`,
     questionOnlyHost: (content: string, actionID?: number, timeLeft?: number) => `
     <div class="questiononly-container">
-        ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
+        ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
         ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         <div class="question">${content}</div>
     </div>`,
     questionOnlyPlayer: (content: string, timeLeft?: number) => `
     <div class="questiononly-container">
-        ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
+        ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
         <div class="question">${content}</div>
+    </div>`,
+    questionOnlyMobile: (timeLeft?: number) => `
+    <div class="questiononly-container">
+        ${timeLeft !== undefined ? `<div class="main-seconds-timer timer"></div>` : ``}
     </div>`,
     mainScreen: () => `
     <main class="menu">

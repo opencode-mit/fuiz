@@ -115,6 +115,7 @@ export class Quiz implements Gamemode {
             time: Date.now(),
             questionID: this.currentQuestion,
             content: question.content,
+            mode: this.config.mode,
             actionID: deferredID
         });
     }
@@ -141,6 +142,7 @@ export class Quiz implements Gamemode {
             time: Date.now(),
             questionID: this.currentQuestion,
             question: question,
+            mode: this.config.mode,
             actionID: deferredID
         });
     }
@@ -169,6 +171,7 @@ export class Quiz implements Gamemode {
                 return {answer: { content: answer.content, correct: answer.correct }, voted: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
             }),
             total: lastAnswers.size,
+            mode: this.config.mode,
             actionID: deferredID
         });
     }
@@ -221,6 +224,7 @@ export class Quiz implements Gamemode {
                 time: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
                 results: this.calculateLeaderboard(),
+                mode: this.config.mode,
                 actionID: deferredID
             });
         } else {
@@ -228,6 +232,7 @@ export class Quiz implements Gamemode {
                 type: 'leaderboard',
                 time: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
+                mode: this.config.mode,
                 results: this.calculateLeaderboard()
             });
         }
@@ -256,6 +261,7 @@ export class Quiz implements Gamemode {
             this.announceCallback({
                 type: 'join',
                 time: Date.now(),
+                mode: this.config.mode,
                 people: [...this.players]
             });
         }

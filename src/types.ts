@@ -45,6 +45,7 @@ export type GameConfig = {
     gamemode: 'quiz',
     questionDelay: number,
     answersDelay: number,
+    mode: 'player' | 'mobile',
     questions: Array<QuestionSolved>
 };
 
@@ -59,12 +60,14 @@ export type Action = {
     duration?: number,
     question: Question,
     questionID: number,
+    mode: 'player' | 'mobile',
     actionID?: number
 } | {
     type: 'leaderboard',
     time: number,
     final: boolean,
     results: Leaderboard
+    mode: 'player' | 'mobile',
     actionID?: number
 } | {
     type: 'statistics',
@@ -73,6 +76,7 @@ export type Action = {
     questionID: number,
     answers: Array<{answer: AnswerSolved, voted: number}>,
     total: number,
+    mode: 'player' | 'mobile',
     actionID?: number
 } | {
     type: 'question_only',
@@ -80,10 +84,12 @@ export type Action = {
     content: string
     duration?: number,
     questionID: number,
+    mode: 'player' | 'mobile',
     actionID?: number
 } | {
     type: 'join',
     time: number,
+    mode: 'player' | 'mobile',
     people: Array<PlayerID>
 };
 

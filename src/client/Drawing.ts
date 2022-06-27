@@ -15,7 +15,7 @@ function clearCounters(): void {
 }
 
 function setupTimer(timeLeft: number): void {
-    const timers = document.querySelectorAll(".seconds-timer");
+    const timers = document.querySelectorAll(".timer");
     function updateTimers(secondsLeft: number) {
         timers.forEach(timer => timer.innerHTML = secondsLeft.toString());
     }
@@ -58,15 +58,21 @@ export function setUpAnswer(client: Client): void {
     });
 }
 
+export function showLeaderboardHost(leaderboard: Leaderboard, actionID?: number): void {
+    clearCounters();
+    document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
+}
+
 export function showLeaderboardPlayer(leaderboard: Leaderboard, playerID?: PlayerID): void {
     clearCounters();
     document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
     if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
 }
 
-export function showLeaderboardHost(leaderboard: Leaderboard, actionID?: number): void {
+export function showLeaderboardMobile(leaderboard: Leaderboard, playerID?: PlayerID): void {
     clearCounters();
-    document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
+    document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
+    if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
 }
 
 export function showQuestionOnlyHost(content: string, actionID?: number, timeLeft?: number): void {
@@ -81,6 +87,18 @@ export function showQuestionOnlyPlayer(content: string, timeLeft?: number): void
     if (timeLeft !== undefined) setupTimer(timeLeft);
 }
 
+export function showQuestionOnlyMobile(timeLeft?: number): void {
+    clearCounters();
+    document.body.innerHTML = templates.questionOnlyMobile(timeLeft);
+    if (timeLeft !== undefined) setupTimer(timeLeft);
+}
+
+export function showQuestionHost(question: Question, questionID: number, actionID?: number, timeLeft?: number): void {
+    clearCounters();
+    document.body.innerHTML = templates.questionHost(question, questionID, actionID, timeLeft);
+    if (timeLeft !== undefined) setupTimer(timeLeft);
+}
+
 export function showQuestionPlayer(question: Question, questionID: number, timeLeft?: number): void {
     clearCounters();
     document.body.innerHTML = templates.questionPlayer(question, questionID, timeLeft);
@@ -90,12 +108,6 @@ export function showQuestionPlayer(question: Question, questionID: number, timeL
 export function showQuestionMobile(question: Question, questionID: number, timeLeft?: number): void {
     clearCounters();
     document.body.innerHTML = templates.questionMobile(question, questionID, timeLeft);
-    if (timeLeft !== undefined) setupTimer(timeLeft);
-}
-
-export function showQuestionHost(question: Question, questionID: number, actionID?: number, timeLeft?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.questionHost(question, questionID, actionID, timeLeft);
     if (timeLeft !== undefined) setupTimer(timeLeft);
 }
 
@@ -122,14 +134,19 @@ export function showMainControls(client: Client, host: Host) {
     });
 }
 
+export function showJoinWaitingHost(sessionID: SessionID, players: PlayerID[], actionID?: number): void {
+    clearCounters();
+    document.body.innerHTML = templates.joinWaitingHost(sessionID, players, actionID);
+}
+
 export function showJoinWaitingPlyaer(sessionID: SessionID, players: PlayerID[]): void {
     clearCounters();
     document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
 }
 
-export function showJoinWaitingHost(sessionID: SessionID, players: PlayerID[], actionID?: number): void {
+export function showJoinWaitingMobile(sessionID: SessionID, players: PlayerID[]): void {
     clearCounters();
-    document.body.innerHTML = templates.joinWaitingHost(sessionID, players, actionID);
+    document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
 }
 
 export function showStatisticsHost(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, actionID?: number): void {
