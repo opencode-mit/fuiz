@@ -30,7 +30,7 @@ export class Host {
             },
             body: JSON.stringify({ sessionID: json["sessionID"], socketID: this.socket.id })
         });
-        drawing.showHostStartingScreen(json["sessionID"], [], 0);
+        drawing.showJoinWaitingHost(json["sessionID"], [], 0);
     }
 
     public resolveAction(actionID: number): void {
@@ -49,28 +49,13 @@ export class Host {
         if (action.type === 'question_only') {
             drawing.showQuestionOnly(action.content);
         } else if(action.type === 'question') {
-            const id = action.actionID;
-            if(id !== undefined) {
-                drawing.showHostQuestion(action, id, action.questionID);
-            } else {
-                drawing.showQuestion(action, action.questionID);
-            }
+            drawing.showQuestionHost(action, action.questionID, action.actionID);
         } else if(action.type === 'leaderboard') {
-            const id = action.actionID;
-            if(id !== undefined) {
-                drawing.showHostLeaderboard(action.results, id);
-            } else {
-                drawing.showLeaderboard(action.results);
-            }
+            drawing.showLeaderboardHost(action.results, action.actionID);
         } else if (action.type === 'join') {
-            drawing.showHostStartingScreen(this.sessionID, action.people, 0);
+            drawing.showJoinWaitingHost(this.sessionID, action.people, 0);
         } else if (action.type === 'statistics') {
-            const id = action.actionID;
-            if(id !== undefined) {
-                drawing.showHostStatistics(action.question, action.answers, id, action.question.questionID);
-            } else {
-                drawing.showStatistics(action.question, action.answers, action.question.questionID, 0); //TODO: REMOVE THIS
-            }
+            drawing.showStatisticsHost(action.question, action.answers, action.question.questionID, action.actionID);
         }
     }
 }
