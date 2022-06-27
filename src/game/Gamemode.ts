@@ -36,6 +36,11 @@ export interface Gamemode {
      * @param playerID thew new PlayerID
      */
     registerPlayer(playerID: PlayerID): void;
+    
+    /**
+     * @returns last action that was broadcasted.
+     */
+    lastAction(): Action;
 }
 
 export class Quiz implements Gamemode {
@@ -55,6 +60,7 @@ export class Quiz implements Gamemode {
     private currentQuestion = -1;
     private acceptingResponses = false;
     private readonly questionTimes: number[] = [];
+    private lastAnnouncedAction: Action;
 
     /**
      * Creates a Quiz with the given configuration.
@@ -70,6 +76,14 @@ export class Quiz implements Gamemode {
         const self = this;
         startGameDeferred.promise.then(() => self.startGame());
         this.toBeResolved.push({ resolved: false, deferred: startGameDeferred });
+        const firstAction: Action = {
+            type: 'join',
+            time: Date.now(),
+            mode: this.config.mode,
+            people: [...this.players]
+        };
+        this.lastAnnouncedAction = firstAction;
+        this.announceCallback(firstAction);
     }
 
     /**
@@ -109,7 +123,7 @@ export class Quiz implements Gamemode {
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
         setTimeout(() => this.resolveAction(deferredID), this.config.questionDelay);
-        this.announceCallback({
+        const questionOnlyAction: Action = {
             type: 'question_only',
             duration: this.config.questionDelay,
             time: Date.now(),
@@ -117,7 +131,9 @@ export class Quiz implements Gamemode {
             content: question.content,
             mode: this.config.mode,
             actionID: deferredID
-        });
+        };
+        this.lastAnnouncedAction = questionOnlyAction;
+        this.announceCallback(questionOnlyAction);
     }
 
     /**
@@ -136,7 +152,7 @@ export class Quiz implements Gamemode {
         this.acceptingResponses = true;
         this.answers.push(new Map());
         this.questionTimes.push(Date.now());
-        this.announceCallback({
+        const questionAction: Action = {
             type: 'question',
             duration: this.config.answersDelay,
             time: Date.now(),
@@ -144,7 +160,9 @@ export class Quiz implements Gamemode {
             question: question,
             mode: this.config.mode,
             actionID: deferredID
-        });
+        };
+        this.lastAnnouncedAction = questionAction;
+        this.announceCallback(questionAction);
     }
 
     /**
@@ -162,7 +180,7 @@ export class Quiz implements Gamemode {
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
         const lastAnswers = this.answers[this.currentQuestion];
         if (lastAnswers === undefined) return;
-        this.announceCallback({
+        const statisticsAction: Action = {
             type: 'statistics',
             time: Date.now(),
             questionID: this.currentQuestion,
@@ -173,7 +191,9 @@ export class Quiz implements Gamemode {
             total: lastAnswers.size,
             mode: this.config.mode,
             actionID: deferredID
-        });
+        };
+        this.lastAnnouncedAction = statisticsAction;
+        this.announceCallback(statisticsAction);
     }
 
     /**
@@ -219,22 +239,26 @@ export class Quiz implements Gamemode {
             const deferredID = this.toBeResolved.length;
             leaderboardDeferred.promise.then(() => self.announceQuestion());
             this.toBeResolved.push({ resolved: false, deferred: leaderboardDeferred });
-            this.announceCallback({
+            const leaderboardAction: Action = {
                 type: 'leaderboard',
                 time: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
                 results: this.calculateLeaderboard(),
                 mode: this.config.mode,
                 actionID: deferredID
-            });
+            };
+            this.lastAnnouncedAction = leaderboardAction;
+            this.announceCallback(leaderboardAction);
         } else {
-            this.announceCallback({
+            const leaderboardAction: Action = {
                 type: 'leaderboard',
                 time: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
                 mode: this.config.mode,
                 results: this.calculateLeaderboard()
-            });
+            };
+            this.lastAnnouncedAction = leaderboardAction;
+            this.announceCallback(leaderboardAction);
         }
     }
 
@@ -258,13 +282,22 @@ export class Quiz implements Gamemode {
     public registerPlayer(playerID: string): void {
         this.players.add(playerID);
         if (this.currentQuestion === -1) {
-            this.announceCallback({
+            const joinAction: Action = {
                 type: 'join',
                 time: Date.now(),
                 mode: this.config.mode,
                 people: [...this.players]
-            });
+            };
+            this.lastAnnouncedAction = joinAction;
+            this.announceCallback(joinAction);
         }
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public lastAction(): Action {
+        return this.lastAnnouncedAction;
     }
 }
 

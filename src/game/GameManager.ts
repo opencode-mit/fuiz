@@ -53,7 +53,7 @@ export class GameManager {
         this.socketManager.addToSession(socketID, sessionID);
     }
 
-    public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): Hash | undefined {
+    public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): { token: Hash, lastAction: Action } | undefined {
         const game = this.mapping.get(sessionID);
         if (game === undefined) return undefined;
         if (game.users.get(playerID) !== undefined) return undefined;
@@ -61,7 +61,7 @@ export class GameManager {
         game.users.set(playerID, playerToken);
         game.game.registerPlayer(playerID);
         this.registerSocket(sessionID, socketID);
-        return playerToken;
+        return { token: playerToken, lastAction: game.game.lastAction() };
     }
 
     private announceAction(sessionID: SessionID, action: Action): void {
@@ -88,7 +88,7 @@ export class GameManager {
     public receiveResponse(sessionID: SessionID, message: ClientAnswer): void {
         if (message.type === 'answer') {
             this.submitAnswer(message.sessionID, message.playerID, message.playerToken, message.questionID, message.answerID);
-        } else if(message.type === 'resolve') {
+        } else if (message.type === 'resolve') {
             this.resolveAction(message.sessionID, message.actionID, message.token);
         }
     }

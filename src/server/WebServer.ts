@@ -74,11 +74,12 @@ export class WebServer {
             try {
                 const { sessionID, playerID, socketID } = request.body;
                 assert(sessionID && playerID);
-                const token = this.gameManager.registerPlayer(socketID, sessionID, playerID);
+                const data = this.gameManager.registerPlayer(socketID, sessionID, playerID);
+                assert(data !== undefined);
                 response
                     .status(HttpStatus.ACCEPTED)
                     .type('json')
-                    .send(JSON.stringify({ token: token }));
+                    .send(JSON.stringify({ token: data.token, announcement: { action: data.lastAction, serverTime: Date.now() } }));
             } catch (error) {
                 response
                     .status(HttpStatus.BAD_REQUEST)

@@ -27,12 +27,13 @@ export class Client {
         this.sessionID = sessionID;
         this.token = json["token"];
         this.playerID = playerID;
-        drawing.showJoinWaitingPlyaer(sessionID, [playerID]);
+        this.onReciveAction(sessionID, json["announcement"]);
     }
 
     private onReciveAction(sessionID: SessionID, announcement: Announcement): void {
         const action = announcement.action;
         if (sessionID !== this.sessionID) return;
+        if (this.playerID === undefined) return;
         if (action.mode === 'player') {
             if (action.type === 'question_only') {
                 const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
@@ -43,7 +44,7 @@ export class Client {
             } else if (action.type === 'leaderboard') {
                 drawing.showLeaderboardPlayer(action.results, this.playerID);
             } else if (action.type === 'join') {
-                drawing.showJoinWaitingPlyaer(this.sessionID, action.people);
+                drawing.showJoinWaitingPlyaer(this.sessionID, [...action.people, this.playerID]);
             } else if (action.type === 'statistics') {
                 drawing.showStatisticsPlayer(action.question, action.answers, action.questionID, this.answers.get(action.questionID));
             }
