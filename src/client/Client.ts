@@ -34,10 +34,12 @@ export class Client {
         const action = announcement.action;
         if (sessionID !== this.sessionID) return;
         if (action.type === 'question_only') {
-            drawing.showQuestionOnlyPlayer(action.content);
-        } else if(action.type === 'question') {
-            drawing.showQuestionPlayer(action.question, action.questionID);
-        } else if(action.type === 'leaderboard') {
+            const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
+            drawing.showQuestionOnlyPlayer(action.content, timeLeft);
+        } else if (action.type === 'question') {
+            const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
+            drawing.showQuestionPlayer(action.question, action.questionID, timeLeft);
+        } else if (action.type === 'leaderboard') {
             drawing.showLeaderboardPlayer(action.results, this.playerID);
         } else if (action.type === 'join') {
             drawing.showJoinWaitingPlyaer(this.sessionID, action.people);

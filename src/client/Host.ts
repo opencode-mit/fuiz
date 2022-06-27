@@ -47,11 +47,12 @@ export class Host {
         const action = announcement.action;
         if (sessionID != this.sessionID) return;
         if (action.type === 'question_only') {
-            const timeLeft = action.duration;
+            const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
             drawing.showQuestionOnlyHost(action.content, action.actionID, timeLeft);
-        } else if(action.type === 'question') {
-            drawing.showQuestionHost(action.question, action.questionID, action.actionID);
-        } else if(action.type === 'leaderboard') {
+        } else if (action.type === 'question') {
+            const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
+            drawing.showQuestionHost(action.question, action.questionID, action.actionID, timeLeft);
+        } else if (action.type === 'leaderboard') {
             drawing.showLeaderboardHost(action.results, action.actionID);
         } else if (action.type === 'join') {
             drawing.showJoinWaitingHost(this.sessionID, action.people, 0);

@@ -42,6 +42,9 @@ export function setUpAnswer(client: Client) {
 
 export function showQuestionPlayer(question: Question, questionID: number, timeLeft?: number) {
     document.body.innerHTML = templates.questionPlayer(question, questionID);
+    if (timeLeft !== undefined) {
+        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
+    }
 }
 
 export function showLeaderboardPlayer(leaderboard: Leaderboard, playerID?: PlayerID) {
@@ -62,14 +65,23 @@ export function showQuestionOnlyHost(content: string, actionID?: number, timeLef
 
 export function showQuestionOnlyPlayer(content: string, timeLeft?: number) {
     document.body.innerHTML = templates.questionOnlyPlayer(content);
+    if (timeLeft !== undefined) {
+        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
+    }
 }
 
 export function showQuestionMobile(question: Question, questionID: number, timeLeft?: number) {
     document.body.innerHTML = templates.questionMobile(question, questionID);
+    if (timeLeft !== undefined) {
+        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
+    }
 }
 
 export function showQuestionHost(question: Question, questionID: number, actionID?: number, timeLeft?: number) {
     document.body.innerHTML = templates.questionHost(question, questionID, actionID);
+    if (timeLeft !== undefined) {
+        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
+    }
 }
 
 export function showMainControls() {
