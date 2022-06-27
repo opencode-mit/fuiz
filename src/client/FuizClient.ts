@@ -31,6 +31,6 @@ export const url = "http://localhost:8888";
 export const host = new Host();
 export const client = new Client();
 
-drawing.showMainControls();
-drawing.setUpResolve(host);
+drawing.showMainControls(client, host);
 drawing.setUpAnswer(client);
+drawing.setUpResolve(host);
