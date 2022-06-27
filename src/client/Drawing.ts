@@ -7,14 +7,24 @@ import templates from './Templates';
 
 const counters: Array<SecondsLeftCountdown> = [];
 
-function clearCounters() {
+function clearCounters(): void {
     while (counters.length) {
         const counter = counters.pop();
         counter?.clear();
     }
 }
 
-export function setUpResolve(host: Host) {
+function setupTimer(timeLeft: number): void {
+    const timers = document.querySelectorAll(".seconds-timer");
+    function updateTimers(secondsLeft: number) {
+        timers.forEach(timer => timer.innerHTML = secondsLeft.toString());
+    }
+    updateTimers(Math.round(timeLeft / 1000));
+    const counter = new SecondsLeftCountdown(timeLeft, updateTimers);
+    counters.push(counter);
+}
+
+export function setUpResolve(host: Host): void {
     document.body.addEventListener("click", (event) => {
         if (!event || !event.target) return;
         const element = event.target as HTMLElement;
@@ -27,7 +37,7 @@ export function setUpResolve(host: Host) {
     });
 }
 
-export function setUpAnswer(client: Client) {
+export function setUpAnswer(client: Client): void {
     document.body.addEventListener("click", (event) => {
         if (!event || !event.target) return;
         const element = event.target as HTMLElement;
@@ -48,60 +58,45 @@ export function setUpAnswer(client: Client) {
     });
 }
 
-export function showLeaderboardPlayer(leaderboard: Leaderboard, playerID?: PlayerID) {
+export function showLeaderboardPlayer(leaderboard: Leaderboard, playerID?: PlayerID): void {
     clearCounters();
     document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
     if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
 }
 
-export function showLeaderboardHost(leaderboard: Leaderboard, actionID?: number) {
+export function showLeaderboardHost(leaderboard: Leaderboard, actionID?: number): void {
     clearCounters();
     document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
 }
 
-export function showQuestionOnlyHost(content: string, actionID?: number, timeLeft?: number) {
+export function showQuestionOnlyHost(content: string, actionID?: number, timeLeft?: number): void {
     clearCounters();
-    document.body.innerHTML = templates.questionOnlyHost(content, actionID);
-    if (timeLeft !== undefined) {
-        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
-        counters.push(countdown);
-    }
+    document.body.innerHTML = templates.questionOnlyHost(content, actionID, timeLeft);
+    if (timeLeft !== undefined) setupTimer(timeLeft);
 }
 
-export function showQuestionOnlyPlayer(content: string, timeLeft?: number) {
+export function showQuestionOnlyPlayer(content: string, timeLeft?: number): void {
     clearCounters();
-    document.body.innerHTML = templates.questionOnlyPlayer(content);
-    if (timeLeft !== undefined) {
-        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
-        counters.push(countdown);
-    }
+    document.body.innerHTML = templates.questionOnlyPlayer(content, timeLeft);
+    if (timeLeft !== undefined) setupTimer(timeLeft);
 }
 
-export function showQuestionPlayer(question: Question, questionID: number, timeLeft?: number) {
+export function showQuestionPlayer(question: Question, questionID: number, timeLeft?: number): void {
     clearCounters();
-    document.body.innerHTML = templates.questionPlayer(question, questionID);
-    if (timeLeft !== undefined) {
-        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
-        counters.push(countdown);
-    }
+    document.body.innerHTML = templates.questionPlayer(question, questionID, timeLeft);
+    if (timeLeft !== undefined) setupTimer(timeLeft);
 }
 
-export function showQuestionMobile(question: Question, questionID: number, timeLeft?: number) {
+export function showQuestionMobile(question: Question, questionID: number, timeLeft?: number): void {
     clearCounters();
-    document.body.innerHTML = templates.questionMobile(question, questionID);
-    if (timeLeft !== undefined) {
-        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
-        counters.push(countdown);
-    }
+    document.body.innerHTML = templates.questionMobile(question, questionID, timeLeft);
+    if (timeLeft !== undefined) setupTimer(timeLeft);
 }
 
-export function showQuestionHost(question: Question, questionID: number, actionID?: number, timeLeft?: number) {
+export function showQuestionHost(question: Question, questionID: number, actionID?: number, timeLeft?: number): void {
     clearCounters();
-    document.body.innerHTML = templates.questionHost(question, questionID, actionID);
-    if (timeLeft !== undefined) {
-        const countdown = new SecondsLeftCountdown(timeLeft, (timeLeft) => console.log(timeLeft));
-        counters.push(countdown);
-    }
+    document.body.innerHTML = templates.questionHost(question, questionID, actionID, timeLeft);
+    if (timeLeft !== undefined) setupTimer(timeLeft);
 }
 
 export function showMainControls(client: Client, host: Host) {
@@ -137,17 +132,17 @@ export function showJoinWaitingHost(sessionID: SessionID, players: PlayerID[], a
     document.body.innerHTML = templates.joinWaitingHost(sessionID, players, actionID);
 }
 
-export function showStatisticsHost(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, actionID?: number) {
+export function showStatisticsHost(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, actionID?: number): void {
     clearCounters();
     document.body.innerHTML = templates.statisticsHost(question, answers, questionID, actionID);
 }
 
-export function showStatisticsPlayer(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined) {
+export function showStatisticsPlayer(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
     clearCounters();
     document.body.innerHTML = templates.statisticsPlayer(question, answers, questionID, answerID);
 }
 
-export function showStatisticsMobile(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined) {
+export function showStatisticsMobile(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
     clearCounters();
     document.body.innerHTML = templates.statisticsMobile(question, answers, questionID, answerID);
 }

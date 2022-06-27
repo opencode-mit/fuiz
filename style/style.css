@@ -419,3 +419,20 @@ label, input, textarea, button {
 .starting .front {
     padding: 1em 2em;
 }
+
+.seconds-timer {
+    position: absolute;
+    left: 1em;
+    border-radius: 2em;
+    width: 3em;
+    height: 3em;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+.questiononly-container .seconds-timer {
+    top: 1em;
+}

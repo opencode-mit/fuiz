@@ -1,10 +1,11 @@
 import { Question, Leaderboard, SessionID, PlayerID, AnswerSolved } from '../types';
 
 const templates = {
-    questionHost: (question: Question, questionID: number, actionID?: number) => `
+    questionHost: (question: Question, questionID: number, actionID?: number, timeLeft?: number) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
+            ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
             ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
@@ -15,10 +16,11 @@ const templates = {
             </button>`).join("")}
         </div>
     </div>`,
-    questionPlayer: (question: Question, questionID: number) => `
+    questionPlayer: (question: Question, questionID: number, timeLeft?: number) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
+            ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
         </div>
         <div class="answer-container" id="question#${questionID}">
@@ -28,7 +30,7 @@ const templates = {
             </button>`).join("")}
         </div>
     </div>`,
-    questionMobile: (question: Question, questionID: number) => `
+    questionMobile: (question: Question, questionID: number, timeLeft?: number) => `
     <div class="players-question-container">
         <div class="answer-container" id="question#${questionID}">
             ${question.answers.map((answer, i) => `
@@ -62,13 +64,15 @@ const templates = {
             </div>`).join("")}
         </div>
     </div>`,
-    questionOnlyHost: (content: string, actionID?: number) => `
+    questionOnlyHost: (content: string, actionID?: number, timeLeft?: number) => `
     <div class="questiononly-container">
+        ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
         ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         <div class="question">${content}</div>
     </div>`,
-    questionOnlyPlayer: (content: string) => `
+    questionOnlyPlayer: (content: string, timeLeft?: number) => `
     <div class="questiononly-container">
+        ${timeLeft !== undefined ? `<div class="seconds-timer"></div>` : ``}
         <div class="question">${content}</div>
     </div>`,
     mainScreen: () => `
