@@ -1,4 +1,4 @@
-import { Action, Hash, PlayerID, SessionID } from "../types";
+import { Action, Hash, PlayerID, Question, SessionID } from "../types";
 import { makeConnectedSocket, ClientSocket } from "./ClientSocket";
 import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
@@ -8,10 +8,12 @@ export class Client {
     private sessionID: SessionID | undefined;
     private token: Hash | undefined;
     private socket: ClientSocket | undefined;
+    private answers = new Map<number, number>();
 
     public constructor() { }
 
     public async registerGame(playerID: PlayerID, sessionID: SessionID) {
+        this.answers = new Map();
         this.socket = await makeConnectedSocket(sessionID, (sessionID, message) => this.onReciveAction(sessionID, message));
         console.log({ socketID: this.socket.id, sessionID: sessionID, playerID: playerID });
         const request = fetch(url + '/registerPlayer', {
@@ -38,11 +40,14 @@ export class Client {
             drawing.showLeaderboard(action.results, this.playerID);
         } else if (action.type === 'join') {
             drawing.showStartingScreen(this.sessionID, action.people);
+        } else if (action.type === 'statistics') {
+            drawing.showStatistics(action.question, action.answers, action.question.questionID, this.answers.get(action.question.questionID));
         }
     }
 
     public submitAnswer(questionID: number, answerID: number): void {
         if (this.sessionID && this.playerID && this.token) {
+            this.answers.set(questionID, answerID);
             this.socket?.sendMessage({
                 type: 'answer',
                 sessionID: this.sessionID,

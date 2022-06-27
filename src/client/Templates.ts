@@ -124,21 +124,30 @@ const templates = {
             ).join("")}
         </div>
     </div>`,
-    statistics: (question: Question, answers: Array<{answer: AnswerSolved, voted: number}>, actionID: number, questionID: number, answerID: number) => `
+    statistics: (question: Question, answers: Array<{answer: AnswerSolved, voted: number}>, questionID: number, answerID: number = -1) => `
     <div class="question-container">
         <div class="question">${question.content}</div>
         <div class="gap">
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
-            <button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>
         </div>
         <div class="answer-container" id="question#${questionID}">
             ${answers.map((answer, i) => `
-            <button class="answer pushable ${answer.answer.correct? "check correct": (i === answerID? "cross disabled" : "cross wrong")}">
+            <button class="answer pushable ${answer.answer.correct? "check correct": (i === answerID? "cross wrong" : "cross disabled")}">
                 <span class="front">${answer.answer.content}</span>
             </button>`
             ).join("")}
         </div>
-    </div>`
+    </div>`,
+    mobileStatistics: (question: Question, answers: Array<{answer: AnswerSolved, voted: number}>, questionID: number, answerID: number = -1) => `
+    <div class="players-question-container">
+        <div class="answer-container" id="question#${questionID}">
+            ${answers.map((answer, i) => `
+            <button class="answer pushable ${answer.answer.correct? "check correct": (i === answerID? "cross wrong" : "cross disabled")}">
+                <span class="front"></span>
+            </button>`
+            ).join("")}
+        </div>
+    </div>`,
 }
 
 export default templates;

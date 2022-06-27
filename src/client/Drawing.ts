@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Leaderboard, PlayerID, Question, SessionID } from '../types';
+import { AnswerSolved, Leaderboard, PlayerID, Question, SessionID } from '../types';
 import { Client } from './Client';
 import { client, host } from './FuizClient';
 import { Host } from './Host';
@@ -93,4 +93,16 @@ export function showStartingScreen(sessionID: SessionID, players: PlayerID[]): v
 
 export function showHostStartingScreen(sessionID: SessionID, players: PlayerID[], actionID: number): void {
     document.body.innerHTML = templates.hostStartingScreen(sessionID, players, actionID);
+}
+
+export function showHostStatistics(question: Question, answers: Array<{answer: AnswerSolved, voted: number}>, actionID: number, questionID: number) {
+    document.body.innerHTML = templates.statisticsHost(question, answers, actionID, questionID);
+}
+
+export function showStatistics(question: Question, answers: Array<{answer: AnswerSolved, voted: number}>, questionID: number, answerID: number | undefined) {
+    document.body.innerHTML = templates.statistics(question, answers, questionID, answerID);
+}
+
+export function showMobileStatistics(question: Question, answers: Array<{answer: AnswerSolved, voted: number}>, questionID: number, answerID: number | undefined) {
+    document.body.innerHTML = templates.mobileStatistics(question, answers, questionID, answerID);
 }

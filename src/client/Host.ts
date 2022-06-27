@@ -63,7 +63,14 @@ export class Host {
                 drawing.showLeaderboard(action.results);
             }
         } else if (action.type === 'join') {
-            drawing.showStartingScreen(this.sessionID, action.people);
+            drawing.showHostStartingScreen(this.sessionID, action.people, 0);
+        } else if (action.type === 'statistics') {
+            const id = action.actionID;
+            if(id !== undefined) {
+                drawing.showHostStatistics(action.question, action.answers, id, action.question.questionID);
+            } else {
+                drawing.showStatistics(action.question, action.answers, action.question.questionID, 0); //TODO: REMOVE THIS
+            }
         }
     }
 }
