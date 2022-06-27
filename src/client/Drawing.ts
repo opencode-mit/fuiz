@@ -58,59 +58,6 @@ export function setUpAnswer(client: Client): void {
     });
 }
 
-export function showLeaderboardHost(leaderboard: Leaderboard, actionID?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
-}
-
-export function showLeaderboardPlayer(leaderboard: Leaderboard, playerID?: PlayerID): void {
-    clearCounters();
-    document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
-    if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
-}
-
-export function showLeaderboardMobile(leaderboard: Leaderboard, playerID?: PlayerID): void {
-    clearCounters();
-    document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
-    if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
-}
-
-export function showQuestionOnlyHost(content: string, actionID?: number, timeLeft?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.questionOnlyHost(content, actionID, timeLeft);
-    if (timeLeft !== undefined) setupTimer(timeLeft);
-}
-
-export function showQuestionOnlyPlayer(content: string, timeLeft?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.questionOnlyPlayer(content, timeLeft);
-    if (timeLeft !== undefined) setupTimer(timeLeft);
-}
-
-export function showQuestionOnlyMobile(timeLeft?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.questionOnlyMobile(timeLeft);
-    if (timeLeft !== undefined) setupTimer(timeLeft);
-}
-
-export function showQuestionHost(question: Question, questionID: number, actionID?: number, timeLeft?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.questionHost(question, questionID, actionID, timeLeft);
-    if (timeLeft !== undefined) setupTimer(timeLeft);
-}
-
-export function showQuestionPlayer(question: Question, questionID: number, timeLeft?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.questionPlayer(question, questionID, timeLeft);
-    if (timeLeft !== undefined) setupTimer(timeLeft);
-}
-
-export function showQuestionMobile(question: Question, questionID: number, timeLeft?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.questionMobile(question, questionID, timeLeft);
-    if (timeLeft !== undefined) setupTimer(timeLeft);
-}
-
 export function showMainControls(client: Client, host: Host) {
     clearCounters();
     document.body.innerHTML = templates.mainScreen();
@@ -134,32 +81,95 @@ export function showMainControls(client: Client, host: Host) {
     });
 }
 
-export function showJoinWaitingHost(sessionID: SessionID, players: PlayerID[], actionID?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.joinWaitingHost(sessionID, players, actionID);
+export class StatisticsDrawing {
+    public static onHost(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, actionID?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.statisticsHost(question, answers, questionID, actionID);    
+    }
+
+    public static onPlayer(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
+        clearCounters();
+        document.body.innerHTML = templates.statisticsPlayer(question, answers, questionID, answerID);    
+    }
+
+    public static onMobile(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
+        clearCounters();
+        document.body.innerHTML = templates.statisticsMobile(question, answers, questionID, answerID);    
+    }
 }
 
-export function showJoinWaitingPlyaer(sessionID: SessionID, players: PlayerID[]): void {
-    clearCounters();
-    document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
+export class LeaderboardDrawing {
+    public static onHost(leaderboard: Leaderboard, actionID?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
+    }
+    
+    public static onPlayer(leaderboard: Leaderboard, playerID?: PlayerID): void {
+        clearCounters();
+        document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
+        if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
+    }
+    
+    public static onMobile(leaderboard: Leaderboard, playerID?: PlayerID): void {
+        clearCounters();
+        document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
+        if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
+    }
 }
 
-export function showJoinWaitingMobile(sessionID: SessionID, players: PlayerID[]): void {
-    clearCounters();
-    document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
+export class OnlyQuestionDrawing {
+    public static onHost(content: string, actionID?: number, timeLeft?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.questionOnlyHost(content, actionID, timeLeft);
+        if (timeLeft !== undefined) setupTimer(timeLeft);
+    }
+    
+    public static onPlayer(content: string, timeLeft?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.questionOnlyPlayer(content, timeLeft);
+        if (timeLeft !== undefined) setupTimer(timeLeft);
+    }
+    
+    public static onMobile(timeLeft?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.questionOnlyMobile(timeLeft);
+        if (timeLeft !== undefined) setupTimer(timeLeft);
+    }
 }
 
-export function showStatisticsHost(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, actionID?: number): void {
-    clearCounters();
-    document.body.innerHTML = templates.statisticsHost(question, answers, questionID, actionID);
+export class QuestionDrawing {
+    public static onHost(question: Question, questionID: number, actionID?: number, timeLeft?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.questionHost(question, questionID, actionID, timeLeft);
+        if (timeLeft !== undefined) setupTimer(timeLeft);
+    }
+    
+    public static onPlayer(question: Question, questionID: number, timeLeft?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.questionPlayer(question, questionID, timeLeft);
+        if (timeLeft !== undefined) setupTimer(timeLeft);
+    }
+    
+    public static onMobile(question: Question, questionID: number, timeLeft?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.questionMobile(question, questionID, timeLeft);
+        if (timeLeft !== undefined) setupTimer(timeLeft);
+    }
 }
 
-export function showStatisticsPlayer(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
-    clearCounters();
-    document.body.innerHTML = templates.statisticsPlayer(question, answers, questionID, answerID);
-}
-
-export function showStatisticsMobile(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
-    clearCounters();
-    document.body.innerHTML = templates.statisticsMobile(question, answers, questionID, answerID);
+export class JoinWatchingDrawing {
+    public static onHost(sessionID: SessionID, players: PlayerID[], actionID?: number): void {
+        clearCounters();
+        document.body.innerHTML = templates.joinWaitingHost(sessionID, players, actionID);
+    }
+    
+    public static onPlayer(sessionID: SessionID, players: PlayerID[]): void {
+        clearCounters();
+        document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
+    }
+    
+    public static onMobile(sessionID: SessionID, players: PlayerID[]): void {
+        clearCounters();
+        document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
+    }
 }

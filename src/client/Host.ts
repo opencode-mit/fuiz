@@ -22,7 +22,7 @@ export class Host {
         const json = await (await request).json();
         this.sessionID = json["sessionID"];
         this.token = json["token"];
-        this.socket = await makeConnectedSocket(json["sessionID"], (sessionID, message) => this.onReciveAction(sessionID, message));
+        this.socket = await makeConnectedSocket(json["sessionID"], (sessionID, message) => this.onReceiveAction(sessionID, message));
         const watchRequest = fetch(url + '/watchSocket', {
             method: 'POST',
             headers: {
@@ -30,7 +30,7 @@ export class Host {
             },
             body: JSON.stringify({ sessionID: json["sessionID"], socketID: this.socket.id })
         });
-        drawing.showJoinWaitingHost(json["sessionID"], [], 0);
+        drawing.JoinWatchingDrawing.onHost(json["sessionID"], [], 0);
     }
 
     public resolveAction(actionID: number): void {
@@ -43,21 +43,21 @@ export class Host {
         })
     }
 
-    private onReciveAction(sessionID: SessionID, announcement: Announcement): void {
+    private onReceiveAction(sessionID: SessionID, announcement: Announcement): void {
         const action = announcement.action;
         if (sessionID != this.sessionID) return;
         if (action.type === 'question_only') {
             const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-            drawing.showQuestionOnlyHost(action.content, action.actionID, timeLeft);
+            drawing.OnlyQuestionDrawing.onHost(action.content, action.actionID, timeLeft);
         } else if (action.type === 'question') {
             const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-            drawing.showQuestionHost(action.question, action.questionID, action.actionID, timeLeft);
+            drawing.QuestionDrawing.onHost(action.question, action.questionID, action.actionID, timeLeft);
         } else if (action.type === 'leaderboard') {
-            drawing.showLeaderboardHost(action.results, action.actionID);
+            drawing.LeaderboardDrawing.onHost(action.results, action.actionID);
         } else if (action.type === 'join') {
-            drawing.showJoinWaitingHost(this.sessionID, action.people, 0);
+            drawing.JoinWatchingDrawing.onHost(this.sessionID, action.people, 0);
         } else if (action.type === 'statistics') {
-            drawing.showStatisticsHost(action.question, action.answers, action.questionID, action.actionID);
+            drawing.StatisticsDrawing.onHost(action.question, action.answers, action.questionID, action.actionID);
         }
     }
 }
