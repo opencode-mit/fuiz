@@ -1,5 +1,11 @@
 import { GameConfig, Action, PlayerID } from "../types";
+import sanitizeHtml from 'sanitize-html';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 import { Deferred } from "./Deferred";
+
+function sanitize(dirty: string): string {
+    return sanitizeHtml(dirty);
+}
 
 /**
  * Represents an answer by a Player at a certain time.
@@ -128,7 +134,7 @@ export class Quiz implements Gamemode {
             duration: this.config.questionDelay,
             time: Date.now(),
             questionID: this.currentQuestion,
-            content: question.content,
+            content: sanitize(question.content),
             mode: this.config.mode,
             actionID: deferredID
         };
@@ -157,7 +163,13 @@ export class Quiz implements Gamemode {
             duration: this.config.answersDelay,
             time: Date.now(),
             questionID: this.currentQuestion,
-            question: question,
+            question: {
+                content: sanitize(question.content),
+                ...(question.imageURL) && {imageURL: sanitizeUrl(question.imageURL)},
+                answers: question.answers.map((answer) => {
+                    return {content: sanitize(answer.content)}
+                })
+            },
             mode: this.config.mode,
             actionID: deferredID
         };
@@ -184,9 +196,15 @@ export class Quiz implements Gamemode {
             type: 'statistics',
             time: Date.now(),
             questionID: this.currentQuestion,
-            question: question,
+            question: {
+                content: sanitize(question.content),
+                ...(question.imageURL) && {imageURL: sanitizeUrl(question.imageURL)},
+                answers: question.answers.map((answer) => {
+                    return {content: sanitize(answer.content)}
+                })
+            },
             answers: question.answers.map((answer, answerID) => {
-                return {answer: { content: answer.content, correct: answer.correct }, voted: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
+                return {answer: { content: sanitize(answer.content), correct: answer.correct }, voted: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
             }),
             total: lastAnswers.size,
             mode: this.config.mode,
@@ -222,7 +240,7 @@ export class Quiz implements Gamemode {
         }
         const leaderboard = new Array<{ playerID: PlayerID, score: number }>();
         for (const [playerID, score] of scores.entries()) {
-            leaderboard.push({ playerID: playerID, score: score });
+            leaderboard.push({ playerID: sanitize(playerID), score: score });
         }
         leaderboard.sort((a, b) => b.score - a.score);
         return leaderboard;
