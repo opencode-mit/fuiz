@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { AnswerSolved, Leaderboard, PlayerID, Question, SessionID } from '../types';
+import { AnswerChoiceSolved, AnswerChoiceStatistics, Leaderboard, PlayerID, Question, SessionID } from '../types';
 import { Client } from './Client';
 import { Host } from './Host';
 import SecondsLeftCountdown from './SecondsLeftCountdown';
@@ -82,17 +82,17 @@ export function showMainControls(client: Client, host: Host) {
 }
 
 export class StatisticsDrawing {
-    public static onHost(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, actionID?: number): void {
+    public static onHost(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, actionID?: number): void {
         clearCounters();
         document.body.innerHTML = templates.statisticsHost(question, answers, questionID, actionID);    
     }
 
-    public static onPlayer(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
+    public static onDesktop(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number | undefined): void {
         clearCounters();
-        document.body.innerHTML = templates.statisticsPlayer(question, answers, questionID, answerID);    
+        document.body.innerHTML = templates.statisticsDesktop(question, answers, questionID, answerID);    
     }
 
-    public static onMobile(question: Question, answers: Array<{ answer: AnswerSolved, voted: number }>, questionID: number, answerID: number | undefined): void {
+    public static onMobile(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number | undefined): void {
         clearCounters();
         document.body.innerHTML = templates.statisticsMobile(question, answers, questionID, answerID);    
     }
@@ -104,15 +104,15 @@ export class LeaderboardDrawing {
         document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
     }
     
-    public static onPlayer(leaderboard: Leaderboard, playerID?: PlayerID): void {
+    public static onDesktop(leaderboard: Leaderboard, playerID?: PlayerID): void {
         clearCounters();
-        document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
+        document.body.innerHTML = templates.leaderboardDesktop(leaderboard);
         if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
     }
     
     public static onMobile(leaderboard: Leaderboard, playerID?: PlayerID): void {
         clearCounters();
-        document.body.innerHTML = templates.leaderboardPlayer(leaderboard);
+        document.body.innerHTML = templates.leaderboardDesktop(leaderboard);
         if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
     }
 }
@@ -124,9 +124,9 @@ export class OnlyQuestionDrawing {
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
     
-    public static onPlayer(content: string, timeLeft?: number): void {
+    public static onDesktop(content: string, timeLeft?: number): void {
         clearCounters();
-        document.body.innerHTML = templates.questionOnlyPlayer(content, timeLeft);
+        document.body.innerHTML = templates.questionOnlyDesktop(content, timeLeft);
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
     
@@ -144,9 +144,9 @@ export class QuestionDrawing {
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
     
-    public static onPlayer(question: Question, questionID: number, timeLeft?: number): void {
+    public static onDesktop(question: Question, questionID: number, timeLeft?: number): void {
         clearCounters();
-        document.body.innerHTML = templates.questionPlayer(question, questionID, timeLeft);
+        document.body.innerHTML = templates.questionDesktop(question, questionID, timeLeft);
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
     
@@ -163,13 +163,13 @@ export class JoinWatchingDrawing {
         document.body.innerHTML = templates.joinWaitingHost(sessionID, players, actionID);
     }
     
-    public static onPlayer(sessionID: SessionID, players: PlayerID[]): void {
+    public static onDesktop(sessionID: SessionID, players: PlayerID[]): void {
         clearCounters();
-        document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
+        document.body.innerHTML = templates.joinWaitingDesktop(sessionID, players);
     }
     
     public static onMobile(sessionID: SessionID, players: PlayerID[]): void {
         clearCounters();
-        document.body.innerHTML = templates.joinWaitingPlayer(sessionID, players);
+        document.body.innerHTML = templates.joinWaitingDesktop(sessionID, players);
     }
 }

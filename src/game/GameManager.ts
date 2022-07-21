@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { Server as HTTPServer } from 'http';
 import { ServerSocket } from "../server/ServerSocket";
-import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET, ClientAnswer } from "../types";
+import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET, GameResponse, GameResponseType } from "../types";
 import { Gamemode, createQuiz } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
@@ -85,11 +85,14 @@ export class GameManager {
         game.game.submitAnswer(questionID, playerID, answerID);
     }
 
-    public receiveResponse(sessionID: SessionID, message: ClientAnswer): void {
-        if (message.type === 'answer') {
-            this.submitAnswer(message.sessionID, message.playerID, message.playerToken, message.questionID, message.answerID);
-        } else if (message.type === 'resolve') {
-            this.resolveAction(message.sessionID, message.actionID, message.token);
+    public receiveResponse(sessionID: SessionID, message: GameResponse): void {
+        switch (message.type) {
+            case GameResponseType.Answer:
+                this.submitAnswer(message.sessionID, message.playerID, message.playerToken, message.questionID, message.answerID);
+                break;
+            case GameResponseType.Resolve:
+                this.resolveAction(message.sessionID, message.actionID, message.token);
+                break;
         }
     }
 }

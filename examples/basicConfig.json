@@ -1,0 +1,29 @@
+{
+    "gamemode": "Quiz",
+    "questionDelaySeconds": 5,
+    "answersDelaySeconds": 30,
+    "mode": "Desktop",
+    "questions": [
+        {
+            "content": "2+2=",
+            "answerChoices": [
+                {
+                    "content": "4",
+                    "correct": true
+                },
+                {
+                    "content": "5",
+                    "correct": false
+                },
+                {
+                    "content": "8/2",
+                    "correct": true
+                },
+                {
+                    "content": "9",
+                    "correct": false
+                }
+            ]
+        }
+    ]
+}

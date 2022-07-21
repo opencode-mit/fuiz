@@ -1,5 +1,5 @@
 import assert from "assert";
-import { GameConfig, SessionID, Hash, Action, Announcement } from "../types";
+import { GameConfig, SessionID, Hash, Action, Announcement, GameResponseType, ActionType } from "../types";
 import { ClientSocket, makeConnectedSocket } from "./ClientSocket";
 import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
@@ -36,7 +36,7 @@ export class Host {
     public resolveAction(actionID: number): void {
         assert(this.token !== undefined && this.sessionID !== undefined);
         this.socket?.sendMessage({
-            type: 'resolve',
+            type: GameResponseType.Resolve,
             sessionID: this.sessionID,
             actionID: actionID,
             token: this.token
@@ -46,18 +46,29 @@ export class Host {
     private onReceiveAction(sessionID: SessionID, announcement: Announcement): void {
         const action = announcement.action;
         if (sessionID != this.sessionID) return;
-        if (action.type === 'question_only') {
-            const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-            drawing.OnlyQuestionDrawing.onHost(action.content, action.actionID, timeLeft);
-        } else if (action.type === 'question') {
-            const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-            drawing.QuestionDrawing.onHost(action.question, action.questionID, action.actionID, timeLeft);
-        } else if (action.type === 'leaderboard') {
-            drawing.LeaderboardDrawing.onHost(action.results, action.actionID);
-        } else if (action.type === 'join') {
-            drawing.JoinWatchingDrawing.onHost(this.sessionID, action.people, 0);
-        } else if (action.type === 'statistics') {
-            drawing.StatisticsDrawing.onHost(action.question, action.answers, action.questionID, action.actionID);
+        switch (action.type) {
+            case ActionType.QuestionOnly: {
+                const timeLeft = action.durationSeconds ? action.durationSeconds * 1000 - (announcement.serverTime - action.timeOfAnnouncement) : undefined;
+                drawing.OnlyQuestionDrawing.onHost(action.textContent, action.actionID, timeLeft);
+                break;
+            }
+            case ActionType.Question: {
+                const timeLeft = action.durationSeconds ? action.durationSeconds * 1000 - (announcement.serverTime - action.timeOfAnnouncement) : undefined;
+                drawing.QuestionDrawing.onHost(action.question, action.questionID, action.actionID, timeLeft);
+                break;
+            }
+            case ActionType.Leaderboard: {
+                drawing.LeaderboardDrawing.onHost(action.results, action.actionID);
+                break;
+            }
+            case ActionType.Join: {
+                drawing.JoinWatchingDrawing.onHost(this.sessionID, action.people, 0);
+                break;
+            }
+            case ActionType.Statistics: {
+                drawing.StatisticsDrawing.onHost(action.question, action.answerStatistics, action.questionID, action.actionID);
+                break;
+            }
         }
     }
 }

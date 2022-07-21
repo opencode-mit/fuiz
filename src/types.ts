@@ -5,10 +5,18 @@ export type Hash = string;
 export const HASH_LENGTH = 32;
 export const ALPHABET = "abcdefghijklmnopqrstufwxyzABCDEFGHIJKLMNOPQRSTUFWXYZ1234567890";
 
+export enum ActionType {Question, QuestionOnly, Leaderboard, Statistics, Join};
+
+export enum PlayingMode {Desktop, Mobile};
+
+export enum GamemodeName {Quiz};
+
+export enum GameResponseType {Answer, Resolve};
+
 /**
  * Represents an answer and if it's correct or not.
  */
-export type AnswerSolved = {
+export type AnswerChoiceSolved = {
     content: string,
     correct: boolean
 }
@@ -16,8 +24,13 @@ export type AnswerSolved = {
 /**
  * Represents answer.
  */
-type Answer = {
+type AnswerChoice = {
     content: string
+}
+
+export type AnswerChoiceStatistics = {
+    answerChoice: AnswerChoiceSolved,
+    votedCount: number
 }
 
 /**
@@ -26,7 +39,7 @@ type Answer = {
 type QuestionSolved = {
     content: string,
     imageURL?: string,
-    answers: Array<AnswerSolved>
+    answerChoices: Array<AnswerChoiceSolved>
 }
 
 /**
@@ -35,17 +48,17 @@ type QuestionSolved = {
 export type Question = {
     content: string,
     imageURL?: string,
-    answers: Array<Answer>
+    answerChoices: Array<AnswerChoice>
 }
 
 /**
  * Represents a game configuration.
  */
 export type GameConfig = {
-    gamemode: 'quiz',
-    questionDelay: number,
-    answersDelay: number,
-    mode: 'player' | 'mobile',
+    gamemode: GamemodeName.Quiz,
+    questionDelaySeconds: number,
+    answersDelaySeconds: number,
+    mode: PlayingMode,
     questions: Array<QuestionSolved>
 };
 
@@ -55,41 +68,41 @@ export type Leaderboard = Array<{ playerID: PlayerID, score: number }>;
  * Represents an action announced to players/hosts/watchers.
  */
 export type Action = {
-    type: 'question',
-    time: number,
-    duration?: number,
+    type: ActionType.Question,
+    timeOfAnnouncement: number,
+    durationSeconds?: number,
     question: Question,
     questionID: number,
-    mode: 'player' | 'mobile',
+    mode: PlayingMode,
     actionID?: number
 } | {
-    type: 'leaderboard',
-    time: number,
+    type: ActionType.Leaderboard,
+    timeOfAnnouncement: number,
     final: boolean,
     results: Leaderboard
-    mode: 'player' | 'mobile',
+    mode: PlayingMode,
     actionID?: number
 } | {
-    type: 'statistics',
-    time: number,
+    type: ActionType.Statistics,
+    timeOfAnnouncement: number,
     question: Question,
     questionID: number,
-    answers: Array<{answer: AnswerSolved, voted: number}>,
-    total: number,
-    mode: 'player' | 'mobile',
+    answerStatistics: Array<AnswerChoiceStatistics>,
+    totalVoted: number,
+    mode: PlayingMode,
     actionID?: number
 } | {
-    type: 'question_only',
-    time: number,
-    content: string
-    duration?: number,
+    type: ActionType.QuestionOnly,
+    timeOfAnnouncement: number,
+    textContent: string
+    durationSeconds?: number,
     questionID: number,
-    mode: 'player' | 'mobile',
+    mode: PlayingMode,
     actionID?: number
 } | {
-    type: 'join',
-    time: number,
-    mode: 'player' | 'mobile',
+    type: ActionType.Join,
+    timeOfAnnouncement: number,
+    mode: PlayingMode,
     people: Array<PlayerID>
 };
 
@@ -98,15 +111,15 @@ export type Announcement = {
     serverTime: number
 }
 
-export type ClientAnswer = {
-    type: 'answer',
+export type GameResponse = {
+    type: GameResponseType.Answer,
     sessionID: SessionID,
     playerID: PlayerID,
     playerToken: Hash,
     questionID: number,
     answerID: number
 } | {
-    type: 'resolve',
+    type: GameResponseType.Resolve,
     sessionID: SessionID,
     actionID: number,
     token: Hash

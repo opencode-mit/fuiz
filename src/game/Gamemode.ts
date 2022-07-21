@@ -1,4 +1,4 @@
-import { GameConfig, Action, PlayerID } from "../types";
+import { GameConfig, Action, PlayerID, ActionType } from "../types";
 import sanitizeHtml from 'sanitize-html';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 import { Deferred } from "./Deferred";
@@ -83,8 +83,8 @@ export class Quiz implements Gamemode {
         startGameDeferred.promise.then(() => self.startGame());
         this.toBeResolved.push({ resolved: false, deferred: startGameDeferred });
         const firstAction: Action = {
-            type: 'join',
-            time: Date.now(),
+            type: ActionType.Join,
+            timeOfAnnouncement: Date.now(),
             mode: this.config.mode,
             people: [...this.players]
         };
@@ -128,13 +128,13 @@ export class Quiz implements Gamemode {
         questionDeferred.promise.then(() => self.receiveAnswers());
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        setTimeout(() => this.resolveAction(deferredID), this.config.questionDelay);
+        setTimeout(() => this.resolveAction(deferredID), this.config.questionDelaySeconds * 1000);
         const questionOnlyAction: Action = {
-            type: 'question_only',
-            duration: this.config.questionDelay,
-            time: Date.now(),
+            type: ActionType.QuestionOnly,
+            durationSeconds: this.config.questionDelaySeconds,
+            timeOfAnnouncement: Date.now(),
             questionID: this.currentQuestion,
-            content: sanitize(question.content),
+            textContent: sanitize(question.content),
             mode: this.config.mode,
             actionID: deferredID
         };
@@ -154,19 +154,19 @@ export class Quiz implements Gamemode {
         questionDeferred.promise.then(() => self.announceStatistics());
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        setTimeout(() => this.resolveAction(deferredID), this.config.answersDelay);
+        setTimeout(() => this.resolveAction(deferredID), this.config.answersDelaySeconds * 1000);
         this.acceptingResponses = true;
         this.answers.push(new Map());
         this.questionTimes.push(Date.now());
         const questionAction: Action = {
-            type: 'question',
-            duration: this.config.answersDelay,
-            time: Date.now(),
+            type: ActionType.Question,
+            durationSeconds: this.config.answersDelaySeconds,
+            timeOfAnnouncement: Date.now(),
             questionID: this.currentQuestion,
             question: {
                 content: sanitize(question.content),
                 ...(question.imageURL) && {imageURL: sanitizeUrl(question.imageURL)},
-                answers: question.answers.map((answer) => {
+                answerChoices: question.answerChoices.map((answer) => {
                     return {content: sanitize(answer.content)}
                 })
             },
@@ -193,20 +193,20 @@ export class Quiz implements Gamemode {
         const lastAnswers = this.answers[this.currentQuestion];
         if (lastAnswers === undefined) return;
         const statisticsAction: Action = {
-            type: 'statistics',
-            time: Date.now(),
+            type: ActionType.Statistics,
+            timeOfAnnouncement: Date.now(),
             questionID: this.currentQuestion,
             question: {
                 content: sanitize(question.content),
                 ...(question.imageURL) && {imageURL: sanitizeUrl(question.imageURL)},
-                answers: question.answers.map((answer) => {
+                answerChoices: question.answerChoices.map((answer) => {
                     return {content: sanitize(answer.content)}
                 })
             },
-            answers: question.answers.map((answer, answerID) => {
-                return {answer: { content: sanitize(answer.content), correct: answer.correct }, voted: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
+            answerStatistics: question.answerChoices.map((answer, answerID) => {
+                return {answerChoice: { content: sanitize(answer.content), correct: answer.correct }, votedCount: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
             }),
-            total: lastAnswers.size,
+            totalVoted: lastAnswers.size,
             mode: this.config.mode,
             actionID: deferredID
         };
@@ -228,7 +228,7 @@ export class Quiz implements Gamemode {
             const playerAnswers = this.answers[questionID];
             const question = this.config.questions[questionID];
             if (question === undefined) continue;
-            const questionAnswers = question.answers;
+            const questionAnswers = question.answerChoices;
             if (playerAnswers === undefined || questionAnswers === undefined) continue; //TODO: should be assert
             for (const [playerID, playerAnswer] of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];
@@ -258,8 +258,8 @@ export class Quiz implements Gamemode {
             leaderboardDeferred.promise.then(() => self.announceQuestion());
             this.toBeResolved.push({ resolved: false, deferred: leaderboardDeferred });
             const leaderboardAction: Action = {
-                type: 'leaderboard',
-                time: Date.now(),
+                type: ActionType.Leaderboard,
+                timeOfAnnouncement: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
                 results: this.calculateLeaderboard(),
                 mode: this.config.mode,
@@ -269,8 +269,8 @@ export class Quiz implements Gamemode {
             this.announceCallback(leaderboardAction);
         } else {
             const leaderboardAction: Action = {
-                type: 'leaderboard',
-                time: Date.now(),
+                type: ActionType.Leaderboard,
+                timeOfAnnouncement: Date.now(),
                 final: this.currentQuestion === this.config.questions.length - 1,
                 mode: this.config.mode,
                 results: this.calculateLeaderboard()
@@ -301,8 +301,8 @@ export class Quiz implements Gamemode {
         this.players.add(playerID);
         if (this.currentQuestion === -1) {
             const joinAction: Action = {
-                type: 'join',
-                time: Date.now(),
+                type: ActionType.Join,
+                timeOfAnnouncement: Date.now(),
                 mode: this.config.mode,
                 people: [...this.players]
             };

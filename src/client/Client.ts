@@ -1,4 +1,4 @@
-import { Action, Announcement, Hash, PlayerID, Question, SessionID } from "../types";
+import { Action, ActionType, Announcement, GameResponseType, Hash, PlayerID, PlayingMode, Question, SessionID } from "../types";
 import { makeConnectedSocket, ClientSocket } from "./ClientSocket";
 import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
@@ -34,33 +34,55 @@ export class Client {
         const action = announcement.action;
         if (sessionID !== this.sessionID) return;
         if (this.playerID === undefined) return;
-        if (action.mode === 'player') {
-            if (action.type === 'question_only') {
-                const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-                drawing.OnlyQuestionDrawing.onPlayer(action.content, timeLeft);
-            } else if (action.type === 'question') {
-                const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-                drawing.QuestionDrawing.onPlayer(action.question, action.questionID, timeLeft);
-            } else if (action.type === 'leaderboard') {
-                drawing.LeaderboardDrawing.onPlayer(action.results, this.playerID);
-            } else if (action.type === 'join') {
-                drawing.JoinWatchingDrawing.onPlayer(this.sessionID, [...action.people, this.playerID]);
-            } else if (action.type === 'statistics') {
-                drawing.StatisticsDrawing.onPlayer(action.question, action.answers, action.questionID, this.answers.get(action.questionID));
+        if (action.mode === PlayingMode.Desktop) {
+            switch (action.type) {
+                case ActionType.QuestionOnly: {
+                    const timeLeft = action.durationSeconds ? action.durationSeconds * 1000 - (announcement.serverTime - action.timeOfAnnouncement) : undefined;
+                    drawing.OnlyQuestionDrawing.onDesktop(action.textContent, timeLeft);
+                    break;
+                }
+                case ActionType.Question: {
+                    const timeLeft = action.durationSeconds ? action.durationSeconds * 1000 - (announcement.serverTime - action.timeOfAnnouncement) : undefined;
+                    drawing.QuestionDrawing.onDesktop(action.question, action.questionID, timeLeft);
+                    break;
+                }
+                case ActionType.Leaderboard: {
+                    drawing.LeaderboardDrawing.onDesktop(action.results, this.playerID);
+                    break;
+                }
+                case ActionType.Join: {
+                    drawing.JoinWatchingDrawing.onDesktop(this.sessionID, [...action.people, this.playerID]);
+                    break;
+                }
+                case ActionType.Statistics: {
+                    drawing.StatisticsDrawing.onDesktop(action.question, action.answerStatistics, action.questionID, this.answers.get(action.questionID));
+                    break;
+                }
             }
         } else {
-            if (action.type === 'question_only') {
-                const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-                drawing.OnlyQuestionDrawing.onMobile(timeLeft);
-            } else if (action.type === 'question') {
-                const timeLeft = action.duration ? action.duration - (announcement.serverTime - action.time) : undefined;
-                drawing.QuestionDrawing.onMobile(action.question, action.questionID, timeLeft);
-            } else if (action.type === 'leaderboard') {
-                drawing.LeaderboardDrawing.onMobile(action.results, this.playerID);
-            } else if (action.type === 'join') {
-                drawing.JoinWatchingDrawing.onMobile(this.sessionID, action.people);
-            } else if (action.type === 'statistics') {
-                drawing.StatisticsDrawing.onMobile(action.question, action.answers, action.questionID, this.answers.get(action.questionID));
+            switch (action.type) {
+                case ActionType.QuestionOnly: {
+                    const timeLeft = action.durationSeconds ? action.durationSeconds * 1000 - (announcement.serverTime - action.timeOfAnnouncement) : undefined;
+                    drawing.OnlyQuestionDrawing.onMobile(timeLeft);
+                    break;
+                }
+                case ActionType.Question: {
+                    const timeLeft = action.durationSeconds ? action.durationSeconds * 1000 - (announcement.serverTime - action.timeOfAnnouncement) : undefined;
+                    drawing.QuestionDrawing.onMobile(action.question, action.questionID, timeLeft);
+                    break;
+                }
+                case ActionType.Leaderboard: {
+                    drawing.LeaderboardDrawing.onMobile(action.results, this.playerID);
+                    break;
+                }
+                case ActionType.Join: {
+                    drawing.JoinWatchingDrawing.onMobile(this.sessionID, action.people);
+                    break;
+                }
+                case ActionType.Statistics: {
+                    drawing.StatisticsDrawing.onMobile(action.question, action.answerStatistics, action.questionID, this.answers.get(action.questionID));
+                    break;
+                }
             }
         }
     }
@@ -69,7 +91,7 @@ export class Client {
         if (this.sessionID && this.playerID && this.token) {
             this.answers.set(questionID, answerID);
             this.socket?.sendMessage({
-                type: 'answer',
+                type: GameResponseType.Answer,
                 sessionID: this.sessionID,
                 playerID: this.playerID,
                 playerToken: this.token,
