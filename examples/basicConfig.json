@@ -2,7 +2,7 @@
     "gamemode": "Quiz",
     "questionDelaySeconds": 5,
     "answersDelaySeconds": 30,
-    "mode": "Desktop",
+    "mode": 0,
     "questions": [
         {
             "content": "2+2=",

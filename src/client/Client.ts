@@ -51,7 +51,7 @@ export class Client {
                     break;
                 }
                 case ActionType.Join: {
-                    drawing.JoinWatchingDrawing.onDesktop(this.sessionID, [...action.people, this.playerID]);
+                    drawing.JoinWatchingDrawing.onDesktop(this.sessionID, [...new Set([...action.people, this.playerID])]);
                     break;
                 }
                 case ActionType.Statistics: {
@@ -76,7 +76,7 @@ export class Client {
                     break;
                 }
                 case ActionType.Join: {
-                    drawing.JoinWatchingDrawing.onMobile(this.sessionID, action.people);
+                    drawing.JoinWatchingDrawing.onMobile(this.sessionID, [...new Set([...action.people, this.playerID])]);
                     break;
                 }
                 case ActionType.Statistics: {
