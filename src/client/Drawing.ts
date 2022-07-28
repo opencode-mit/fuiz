@@ -44,8 +44,8 @@ export function setUpAnswer(client: Client): void {
         const button = element.closest("button");
         if (!button) return;
         if (!button.id.match(/answer\#[0-9]+/)) return;
-        if (button.classList.contains("disabled")) return;
-        const answerCotnainer = button.closest(".answer-container");
+        if (button.classList.contains("off")) return;
+        const answerCotnainer = button.closest(".answer-choice-container");
         if (!answerCotnainer) return;
         const answerID = Number.parseInt(button.id.slice(7));
         const questionID = Number.parseInt(answerCotnainer.id.slice(9));
@@ -54,6 +54,9 @@ export function setUpAnswer(client: Client): void {
         console.log(answerCotnainer.querySelectorAll(".answer"));
         answerCotnainer.querySelectorAll(".answer").forEach(oneAnswer => {
             if (oneAnswer.id !== button.id) oneAnswer.classList.add("disabled");
+        });
+        answerCotnainer.querySelectorAll(".answer").forEach(oneAnswer => {
+            oneAnswer.classList.add("off");
         });
     });
 }
@@ -160,16 +163,16 @@ export class QuestionDrawing {
 export class JoinWatchingDrawing {
     public static onHost(sessionID: SessionID, players: PlayerID[], actionID?: number): void {
         clearCounters();
-        document.body.innerHTML = templates.joinWaitingHost(sessionID, players, actionID);
+        document.body.innerHTML = templates.joinWatchingHost(sessionID, players, actionID);
     }
     
     public static onDesktop(sessionID: SessionID, players: PlayerID[]): void {
         clearCounters();
-        document.body.innerHTML = templates.joinWaitingDesktop(sessionID, players);
+        document.body.innerHTML = templates.joinWatchingDesktop(sessionID, players);
     }
     
     public static onMobile(sessionID: SessionID, players: PlayerID[]): void {
         clearCounters();
-        document.body.innerHTML = templates.joinWaitingDesktop(sessionID, players);
+        document.body.innerHTML = templates.joinWatchingDesktop(sessionID, players);
     }
 }

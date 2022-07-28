@@ -2,14 +2,14 @@ import { Question, Leaderboard, SessionID, PlayerID, AnswerChoiceSolved, AnswerC
 
 const templates = {
     questionHost: (question: Question, questionID: number, actionID?: number, timeLeft?: number) => `
-    <div class="question-container">
-        <div class="question">${question.content}</div>
-        <div class="gap">
+    <div class="question-display desktop">
+        <div class="question-text">${question.content}</div>
+        <div class="middle">
             ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
             ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
-        <div class="answer-container" id="question#${questionID}">
+        <div class="answer-choice-container" id="question#${questionID}">
             ${question.answerChoices.map((answer, i) => `
             <button class="answer pushable">
                 <span class="front">${answer.content}</span>
@@ -17,13 +17,13 @@ const templates = {
         </div>
     </div>`,
     questionDesktop: (question: Question, questionID: number, timeLeft?: number) => `
-    <div class="question-container">
-        <div class="question">${question.content}</div>
-        <div class="gap">
+    <div class="question-display desktop">
+        <div class="question-text">${question.content}</div>
+        <div class="middle">
             ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
         </div>
-        <div class="answer-container" id="question#${questionID}">
+        <div class="answer-choice-container" id="question#${questionID}">
             ${question.answerChoices.map((answer, i) => `
             <button class="answer pushable" id="answer#${i}">
                 <span class="front">${answer.content}</span>
@@ -31,8 +31,8 @@ const templates = {
         </div>
     </div>`,
     questionMobile: (question: Question, questionID: number, timeLeft?: number) => `
-    <div class="players-question-container">
-        <div class="answer-container" id="question#${questionID}">
+    <div class="question-display mobile">
+        <div class="answer-choice-container" id="question#${questionID}">
             ${question.answerChoices.map((answer, i) => `
             <button class="answer pushable" id="answer#${i}">
                 <span class="front"></span>
@@ -65,18 +65,18 @@ const templates = {
         </div>
     </div>`,
     questionOnlyHost: (content: string, actionID?: number, timeLeft?: number) => `
-    <div class="questiononly-container">
+    <div class="question-only-container">
         ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
         ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
-        <div class="question">${content}</div>
+        <div class="question-text">${content}</div>
     </div>`,
     questionOnlyDesktop: (content: string, timeLeft?: number) => `
-    <div class="questiononly-container">
+    <div class="question-only-container">
         ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
-        <div class="question">${content}</div>
+        <div class="question-text">${content}</div>
     </div>`,
     questionOnlyMobile: (timeLeft?: number) => `
-    <div class="questiononly-container">
+    <div class="question-only-container">
         ${timeLeft !== undefined ? `<div class="main-seconds-timer timer"></div>` : ``}
     </div>`,
     mainScreen: () => `
@@ -108,8 +108,8 @@ const templates = {
             </form>
         <div>
     </main>`,
-    joinWaitingHost: (sessionID: SessionID, players: PlayerID[], actionID?: number) => `
-    <main class="starting">
+    joinWatchingHost: (sessionID: SessionID, players: PlayerID[], actionID?: number) => `
+    <main class="join-watching">
         <div class="title">
             ${sessionID}
             ${actionID !== undefined ? `<button id="resolve#${actionID}" class="pushable blue"><div class="front">Start</div></button>` : ``}
@@ -118,45 +118,45 @@ const templates = {
             ${players.map((player) => `<span class="name">${player}</span>`).join("")}
         </div>
     </main>`,
-    joinWaitingDesktop: (sessionID: SessionID, players: PlayerID[]) => `
-    <main class="starting">
+    joinWatchingDesktop: (sessionID: SessionID, players: PlayerID[]) => `
+    <main class="join-watching">
         <div class="title">${sessionID}</div>
         <div class="players">
             ${players.map((player) => `<span class="name">${player}</span>`).join("")}
         </div>
     </main>`,
     statisticsHost: (question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, actionID?: number) => `
-    <div class="question-container">
-        <div class="question">${question.content}</div>
-        <div class="gap">
+    <div class="question-display desktop">
+        <div class="question-text">${question.content}</div>
+        <div class="middle">
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
             ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
-        <div class="answer-container" id="question#${questionID}">
+        <div class="answer-choice-container" id="question#${questionID}">
             ${answers.map((answer, i) => `
-            <button class="answer pushable ${answer.answerChoice.correct ? "check" : "cross disabled"}">
+            <button class="answer off pushable ${answer.answerChoice.correct ? "check" : "cross disabled"}">
                 <span class="front">${answer.answerChoice.content}</span>
             </button>`).join("")}
         </div>
     </div>`,
     statisticsDesktop: (question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number = -1) => `
-    <div class="question-container">
-        <div class="question">${question.content}</div>
-        <div class="gap">
+    <div class="question-display desktop">
+        <div class="question-text">${question.content}</div>
+        <div class="middle">
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
         </div>
-        <div class="answer-container" id="question#${questionID}">
+        <div class="answer-choice-container" id="question#${questionID}">
             ${answers.map((answer, i) => `
-            <button class="answer pushable ${answer.answerChoice.correct ? "check correct" : (i === answerID ? "cross wrong" : "cross disabled")}">
+            <button class="answer off pushable ${answer.answerChoice.correct ? "check correct" : (i === answerID ? "cross wrong" : "cross disabled")}">
                 <span class="front">${answer.answerChoice.content}</span>
             </button>`).join("")}
         </div>
     </div>`,
     statisticsMobile: (question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number = -1) => `
-    <div class="players-question-container">
-        <div class="answer-container" id="question#${questionID}">
+    <div class="question-display mobile">
+        <div class="answer-choice-container" id="question#${questionID}">
             ${answers.map((answer, i) => `
-            <button class="answer pushable ${answer.answerChoice.correct ? "check correct" : (i === answerID ? "cross wrong" : "cross disabled")}">
+            <button class="answer off pushable ${answer.answerChoice.correct ? "check correct" : (i === answerID ? "cross wrong" : "cross disabled")}">
                 <span class="front"></span>
             </button>`).join("")}
         </div>
