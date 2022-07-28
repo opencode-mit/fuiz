@@ -261,8 +261,8 @@ body {
     margin-left: auto;
     background: center / contain no-repeat url('../media/fuiz_cross.svg');
     content: ' ';
-    height: 1em;
-    width: 1em;
+    height: 0.8em;
+    width: 0.8em;
     padding: 0 0.3em;
 }
 
@@ -387,6 +387,7 @@ body {
     font-weight: bold;
     width: 100%;
     margin: 0.5em 0;
+    font-size: 1.5em;
 }
 
 .menu textarea {
@@ -406,6 +407,8 @@ input[type=text] {
 
 .menu .form-container {
     padding: 1em;
+    max-width: 40ch;
+    margin: 0 auto;
 }
 
 .menu form {
@@ -413,14 +416,19 @@ input[type=text] {
     border-radius: 0.2em;
     margin: 1em auto 1em auto;
     padding: 1em;
-    min-width: 60vw;
-    width: 60ch;
+}
+
+.menu .go-back-icon {
+    content: ' ';
+    background: center / contain no-repeat url('../media/black_arrow_back.svg');
+    height: 0.8em;
+    width: 0.8em;
+    padding: 0.3em;
 }
 
 .menu .go-back {
     background: none;
     border: none;
-    color: var(--answer-blue);
     font-weight: bold;
     cursor: pointer;
     padding: 0.5em;
@@ -435,12 +443,17 @@ input[type=text] {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+    font-size: 1.5em;
+}
+
+.menu form input {
+    text-align: center;
 }
 
 .menu .logo {
     display: block;
     max-height: 10em;
-    margin: 0 auto;
+    margin: 2em auto 3em auto;
 }
 
 label,
@@ -448,6 +461,8 @@ input,
 textarea,
 button {
     display: block;
+    font-size: inherit;
+    font-family: inherit;
 }
 
 .join-watching {

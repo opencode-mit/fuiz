@@ -97,13 +97,11 @@ const templates = {
             </form>
             <form id="register" style="display: none">
                 <button class="go-back">
-                    <span class="material-icons">
-                    arrow_back
-                    </span>
+                    <span class="go-back-icon"></span>
                     Go Back
                 </button>
                 <div class="input">
-                <label for="jsonConfig">JSON Config</label>
+                    <label for="jsonConfig">JSON Config</label>
                     <textarea id="jsonConfig" name="jsonConfig"></textarea>
                 </div>
                 <button class="pushable blue">
@@ -114,16 +112,12 @@ const templates = {
             </form>
             <form id="join" style="display: none">
                 <button class="go-back">
-                    <span class="material-icons">
-                    arrow_back
-                    </span>
+                    <span class="go-back-icon"></span>
                     Go Back
                 </button>
                 <div class="input">
-                    <label for="playerID">Name</label>
-                    <input type="text" id="playerID" name="playerID">
-                    <label for="sessionID">Session ID</label>
-                    <input type="text" id="sessionID" name="sessionID">
+                    <input type="text" id="playerID" name="playerID" placeholder="Name">
+                    <input type="text" id="sessionID" name="sessionID" placeholder="Game PID">
                 </div>
                 <button class="pushable blue">
                     <span class="front">
@@ -131,7 +125,7 @@ const templates = {
                     </span>
                 </button>
             </form>
-        <div>
+        </div>
     </main>`,
     joinWatchingHost: (sessionID: SessionID, players: PlayerID[], actionID?: number) => `
     <main class="join-watching">
