@@ -385,6 +385,8 @@ body {
     margin-bottom: auto;
     color: white;
     font-weight: bold;
+    width: 100%;
+    margin: 0.5em 0;
 }
 
 .menu textarea {
@@ -411,17 +413,34 @@ input[type=text] {
     border-radius: 0.2em;
     margin: 1em auto 1em auto;
     padding: 1em;
-    display: flex;
     min-width: 60vw;
     width: 60ch;
-    gap: 0.5em;
+}
+
+.menu .go-back {
+    background: none;
+    border: none;
+    color: var(--answer-blue);
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5em;
+    text-align: center;
+    margin-bottom: 1em;
+    display: flex;
+    align-items: center;
+    font-size: 1.125em;
 }
 
 .menu form .input {
     display: flex;
     flex-direction: column;
-    flex: 1;
     gap: 0.5em;
+}
+
+.menu .logo {
+    display: block;
+    max-height: 10em;
+    margin: 0 auto;
 }
 
 label,

@@ -24,6 +24,27 @@
                     "correct": false
                 }
             ]
+        },
+        {
+            "content": "What is the capital of Amman?",
+            "answerChoices": [
+                {
+                    "content": "Aqaba",
+                    "correct": false
+                },
+                {
+                    "content": "Amman",
+                    "correct": true
+                },
+                {
+                    "content": "Irbid",
+                    "correct": false
+                },
+                {
+                    "content": "Zarq",
+                    "correct": false
+                }
+            ]
         }
     ]
 }

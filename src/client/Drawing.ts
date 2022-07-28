@@ -82,6 +82,35 @@ export function showMainControls(client: Client, host: Host) {
         assert(playerID && sessionID);
         client.registerGame(playerID, sessionID);
     });
+    document.querySelector("#show-host")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        const registerForm = document.querySelector("#register") as HTMLFormElement;
+        const joinForm = document.querySelector("#join") as HTMLFormElement;
+        const chooseForm = document.querySelector("#choose") as HTMLFormElement;
+        registerForm.style.display = "block";
+        joinForm.style.display = "none";
+        chooseForm.style.display = "none";
+    });
+    document.querySelector("#show-join")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        const registerForm = document.querySelector("#register") as HTMLFormElement;
+        const joinForm = document.querySelector("#join") as HTMLFormElement;
+        const chooseForm = document.querySelector("#choose") as HTMLFormElement;
+        registerForm.style.display = "none";
+        joinForm.style.display = "block";
+        chooseForm.style.display = "none";
+    });
+    document.querySelectorAll(".go-back").forEach(goBack => {
+        goBack.addEventListener("click", (event) => {
+            event.preventDefault();
+            const registerForm = document.querySelector("#register") as HTMLFormElement;
+            const joinForm = document.querySelector("#join") as HTMLFormElement;
+            const chooseForm = document.querySelector("#choose") as HTMLFormElement;
+            registerForm.style.display = "none";
+            joinForm.style.display = "none";
+            chooseForm.style.display = "block";
+        });
+    });
 }
 
 export class StatisticsDrawing {

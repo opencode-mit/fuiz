@@ -82,18 +82,43 @@ const templates = {
     mainScreen: () => `
     <main class="menu">
         <div class="form-container">
-            <form id="register">
+            <form id="choose">
+                <img class="logo" src="media/logo_black.svg" />
+                <button class="pushable blue" id="show-host">
+                    <span class="front">
+                        Host
+                    </span>
+                </button>
+                <button class="pushable blue" id="show-join">
+                    <span class="front">
+                        Join
+                    </span>
+                </button>
+            </form>
+            <form id="register" style="display: none">
+                <button class="go-back">
+                    <span class="material-icons">
+                    arrow_back
+                    </span>
+                    Go Back
+                </button>
                 <div class="input">
-                    <label for="jsonConfig">JSON Config</label>
+                <label for="jsonConfig">JSON Config</label>
                     <textarea id="jsonConfig" name="jsonConfig"></textarea>
                 </div>
                 <button class="pushable blue">
                     <span class="front">
-                        Start
+                        Host
                     </span>
                 </button>
             </form>
-            <form id="join">
+            <form id="join" style="display: none">
+                <button class="go-back">
+                    <span class="material-icons">
+                    arrow_back
+                    </span>
+                    Go Back
+                </button>
                 <div class="input">
                     <label for="playerID">Name</label>
                     <input type="text" id="playerID" name="playerID">
