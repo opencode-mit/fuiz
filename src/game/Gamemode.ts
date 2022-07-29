@@ -71,13 +71,14 @@ export class Quiz implements Gamemode {
 
     private static checkArraySolvedChoices(answerChoices: any): answerChoices is Array<AnswerChoiceSolved> {
         return Array.isArray(answerChoices) && answerChoices.every((choice) => {
-            typeof choice.content === "string" && typeof choice.correct === "boolean"
+            return typeof choice.content === "string" && typeof choice.correct === "boolean"
         });
     }
 
     private static checkArrayQuestionSolved(questions: any): questions is Array<QuestionSolved> {
         return Array.isArray(questions) && questions.every((question) => {
-            typeof question.content === "string" && this.checkArraySolvedChoices(question.answerChoices);
+            return typeof question.content === "string"
+                && this.checkArraySolvedChoices(question.answerChoices);
         });
     }
 
