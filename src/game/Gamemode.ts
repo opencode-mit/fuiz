@@ -69,12 +69,24 @@ export class Quiz implements Gamemode {
     private readonly questionTimes: number[] = [];
     private lastAnnouncedAction: Action;
 
+    /**
+     * checks if object is an array of solved answer choices (check types.ts)
+     * 
+     * @param answerChoices an object set for check
+     * @returns true iff the object represents an array of solved answer choices
+     */
     private static checkArraySolvedChoices(answerChoices: any): answerChoices is Array<AnswerChoiceSolved> {
         return Array.isArray(answerChoices) && answerChoices.every((choice) => {
             return typeof choice.content === "string" && typeof choice.correct === "boolean"
         });
     }
 
+    /**
+     * checks if object is an array of solved questions (check types.ts)
+     * 
+     * @param questions an object set for check
+     * @returns true iff the object represents an array of solved questions
+     */
     private static checkArrayQuestionSolved(questions: any): questions is Array<QuestionSolved> {
         return Array.isArray(questions) && questions.every((question) => {
             return typeof question.content === "string"
@@ -82,6 +94,12 @@ export class Quiz implements Gamemode {
         });
     }
 
+    /**
+     * checks if given config is a valid QuizConfig (check types.ts)
+     * 
+     * @param config given configuration object
+     * @returns true iff config is a valid QuizConfig
+     */
     public static checkConfig(config: any): config is QuizConfig {
         return config.gamemode === 0
             && typeof config.questionDelaySeconds === "number"
@@ -135,6 +153,10 @@ export class Quiz implements Gamemode {
      */
     private startGame(): void {
         this.currentQuestion = -1;
+        this.acceptingResponses = false;
+        this.questionTimes.splice(0, this.questionTimes.length);
+        this.players.clear();
+        this.answers.splice(0, this.answers.length);
         this.announceQuestion();
     }
 
@@ -250,9 +272,9 @@ export class Quiz implements Gamemode {
         for (let questionID = 0; questionID < this.questionTimes.length; questionID++) {
             const playerAnswers = this.answers[questionID];
             const question = this.config.questions[questionID];
-            if (question === undefined) continue;
+            assert(question && playerAnswers);
             const questionAnswers = question.answerChoices;
-            if (playerAnswers === undefined || questionAnswers === undefined) continue; //TODO: should be assert
+            assert(questionAnswers);
             for (const [playerID, playerAnswer] of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];
                 if (currentAnswer !== undefined && currentAnswer.correct === true) {
