@@ -96,13 +96,13 @@ const templates = {
                 </button>
             </form>
             <form id="register" style="display: none">
+                <img class="logo" src="media/logo_black.svg" />
                 <button class="go-back">
                     <span class="go-back-icon"></span>
                     Go Back
                 </button>
                 <div class="input">
-                    <label for="jsonConfig">JSON Config</label>
-                    <textarea id="jsonConfig" name="jsonConfig"></textarea>
+                    <textarea id="jsonConfig" name="jsonConfig" placeholder="JSON Config"></textarea>
                 </div>
                 <button class="pushable blue">
                     <span class="front">
@@ -111,6 +111,7 @@ const templates = {
                 </button>
             </form>
             <form id="join" style="display: none">
+                <img class="logo" src="media/logo_black.svg" />
                 <button class="go-back">
                     <span class="go-back-icon"></span>
                     Go Back

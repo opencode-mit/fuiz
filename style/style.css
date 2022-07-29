@@ -387,7 +387,6 @@ body {
     font-weight: bold;
     width: 100%;
     margin: 0.5em 0;
-    font-size: 1.5em;
 }
 
 .menu textarea {
@@ -409,6 +408,7 @@ input[type=text] {
     padding: 1em;
     max-width: 40ch;
     margin: 0 auto;
+    font-size: 1.5em;
 }
 
 .menu form {
@@ -436,14 +436,13 @@ input[type=text] {
     margin-bottom: 1em;
     display: flex;
     align-items: center;
-    font-size: 1.125em;
+    font-size: 0.8em;
 }
 
 .menu form .input {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    font-size: 1.5em;
 }
 
 .menu form input {
