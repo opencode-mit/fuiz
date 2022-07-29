@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { Server as HTTPServer } from 'http';
 import { ServerSocket } from "../server/ServerSocket";
-import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET, GameResponse, GameResponseType } from "../types";
-import { Gamemode, createQuiz } from "./Gamemode";
+import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET, GameResponse, GameResponseType, JoiningError } from "../types";
+import { Gamemode, createGame } from "./Gamemode";
 type UserTokens = Map<PlayerID, Hash>;
 
 const randInt = (n: number) => Math.floor(Math.random() * n);
@@ -44,7 +44,8 @@ export class GameManager {
         const nextSessionID = getRandomSessionID(Array.from(this.mapping.keys()));
         const token = getRandomHash();
         const announceFunc = (action: Action) => this.announceAction(nextSessionID, action);
-        this.mapping.set(nextSessionID, { token: token, game: createQuiz(config, announceFunc), users: new Map() });
+        const game = createGame(config, announceFunc);
+        this.mapping.set(nextSessionID, { token: token, game: game, users: new Map() });
         return { sessionID: nextSessionID, token: token };
     }
 
@@ -53,10 +54,10 @@ export class GameManager {
         this.socketManager.addToSession(socketID, sessionID);
     }
 
-    public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): { token: Hash, lastAction: Action } | undefined {
+    public registerPlayer(socketID: SocketID, sessionID: SessionID, playerID: PlayerID): { token: Hash, lastAction: Action } {
         const game = this.mapping.get(sessionID);
-        if (game === undefined) return undefined;
-        if (game.users.get(playerID) !== undefined) return undefined;
+        if (game === undefined) throw new JoiningError("Game PID not found");
+        if (game.users.get(playerID) !== undefined) throw new JoiningError("Name is already used");
         const playerToken = getRandomHash();
         game.users.set(playerID, playerToken);
         game.game.registerPlayer(playerID);

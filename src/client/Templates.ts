@@ -104,6 +104,10 @@ const templates = {
                 <div class="input">
                     <textarea id="jsonConfig" name="jsonConfig" placeholder="JSON Config"></textarea>
                 </div>
+                <div class="error" style="display:none">
+                    <span class="error-icon"></span>
+                    <span class="error-message"></span>
+                </div>
                 <button class="pushable blue">
                     <span class="front">
                         Host
@@ -119,6 +123,10 @@ const templates = {
                 <div class="input">
                     <input type="text" id="playerID" name="playerID" placeholder="Name">
                     <input type="text" id="sessionID" name="sessionID" placeholder="Game PID">
+                </div>
+                <div class="error" style="display:none">
+                    <span class="error-icon"></span>
+                    <span class="error-message"></span>
                 </div>
                 <button class="pushable blue">
                     <span class="front">

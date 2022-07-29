@@ -61,29 +61,69 @@ export function setUpAnswer(client: Client): void {
     });
 }
 
+function clearError() {
+    document.querySelectorAll(".error").forEach((element) => {
+        const div = element as HTMLDivElement;
+        div.style.display = "none";
+        const span = div.querySelector(".error-message");
+        if (span) {
+            span.innerHTML = "";
+        }
+    });
+}
+
+export function showError(message: string) {
+    document.querySelectorAll(".error").forEach((element) => {
+        const div = element as HTMLDivElement;
+        div.style.display = "flex";
+        const span = div.querySelector(".error-message");
+        if (span) {
+            span.innerHTML = message;
+        }
+    });
+}
+
 export function showMainControls(client: Client, host: Host) {
     clearCounters();
     document.body.innerHTML = templates.mainScreen();
     document.querySelector("#register")?.addEventListener("submit", async function (event) {
         event.preventDefault();
+        clearError();
         const form = event.target as HTMLFormElement;
         const formData = new FormData(form);
         const jsonConfig = formData.get("jsonConfig")?.toString();
-        assert(jsonConfig);
-        const gameConfig = JSON.parse(jsonConfig);
-        await host.startGame(gameConfig);
+        if (jsonConfig === undefined) {
+            showError("Config cannot be empty");
+            return;
+        }
+        try {
+            const gameConfig = JSON.parse(jsonConfig);
+            await host.startGame(gameConfig);
+        } catch (error) {
+            showError("Cannot parse config");
+            return;
+        }
     });
     document.querySelector("#join")?.addEventListener("submit", (event) => {
         event.preventDefault();
+        clearError();
         const form = event.target as HTMLFormElement;
         const formData = new FormData(form);
         const playerID = formData.get("playerID")?.toString();
         const sessionID = formData.get("sessionID")?.toString();
-        assert(playerID && sessionID);
+        if (playerID === undefined) {
+            showError("Name cannot be empty");
+            return;
+        }
+        if (sessionID === undefined) {
+            showError("Game PID cannot be empty");
+            return;
+        }
         client.registerGame(playerID, sessionID);
     });
     document.querySelector("#show-host")?.addEventListener("click", (event) => {
         event.preventDefault();
+        clearError();
         const registerForm = document.querySelector("#register") as HTMLFormElement;
         const joinForm = document.querySelector("#join") as HTMLFormElement;
         const chooseForm = document.querySelector("#choose") as HTMLFormElement;
@@ -93,6 +133,7 @@ export function showMainControls(client: Client, host: Host) {
     });
     document.querySelector("#show-join")?.addEventListener("click", (event) => {
         event.preventDefault();
+        clearError();
         const registerForm = document.querySelector("#register") as HTMLFormElement;
         const joinForm = document.querySelector("#join") as HTMLFormElement;
         const chooseForm = document.querySelector("#choose") as HTMLFormElement;
@@ -103,6 +144,7 @@ export function showMainControls(client: Client, host: Host) {
     document.querySelectorAll(".go-back").forEach(goBack => {
         goBack.addEventListener("click", (event) => {
             event.preventDefault();
+            clearError();
             const registerForm = document.querySelector("#register") as HTMLFormElement;
             const joinForm = document.querySelector("#join") as HTMLFormElement;
             const chooseForm = document.querySelector("#choose") as HTMLFormElement;
@@ -116,17 +158,17 @@ export function showMainControls(client: Client, host: Host) {
 export class StatisticsDrawing {
     public static onHost(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, actionID?: number): void {
         clearCounters();
-        document.body.innerHTML = templates.statisticsHost(question, answers, questionID, actionID);    
+        document.body.innerHTML = templates.statisticsHost(question, answers, questionID, actionID);
     }
 
     public static onDesktop(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number | undefined): void {
         clearCounters();
-        document.body.innerHTML = templates.statisticsDesktop(question, answers, questionID, answerID);    
+        document.body.innerHTML = templates.statisticsDesktop(question, answers, questionID, answerID);
     }
 
     public static onMobile(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number | undefined): void {
         clearCounters();
-        document.body.innerHTML = templates.statisticsMobile(question, answers, questionID, answerID);    
+        document.body.innerHTML = templates.statisticsMobile(question, answers, questionID, answerID);
     }
 }
 
@@ -135,13 +177,13 @@ export class LeaderboardDrawing {
         clearCounters();
         document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
     }
-    
+
     public static onDesktop(leaderboard: Leaderboard, playerID?: PlayerID): void {
         clearCounters();
         document.body.innerHTML = templates.leaderboardDesktop(leaderboard);
         if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
     }
-    
+
     public static onMobile(leaderboard: Leaderboard, playerID?: PlayerID): void {
         clearCounters();
         document.body.innerHTML = templates.leaderboardDesktop(leaderboard);
@@ -155,13 +197,13 @@ export class OnlyQuestionDrawing {
         document.body.innerHTML = templates.questionOnlyHost(content, actionID, timeLeft);
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
-    
+
     public static onDesktop(content: string, timeLeft?: number): void {
         clearCounters();
         document.body.innerHTML = templates.questionOnlyDesktop(content, timeLeft);
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
-    
+
     public static onMobile(timeLeft?: number): void {
         clearCounters();
         document.body.innerHTML = templates.questionOnlyMobile(timeLeft);
@@ -175,13 +217,13 @@ export class QuestionDrawing {
         document.body.innerHTML = templates.questionHost(question, questionID, actionID, timeLeft);
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
-    
+
     public static onDesktop(question: Question, questionID: number, timeLeft?: number): void {
         clearCounters();
         document.body.innerHTML = templates.questionDesktop(question, questionID, timeLeft);
         if (timeLeft !== undefined) setupTimer(timeLeft);
     }
-    
+
     public static onMobile(question: Question, questionID: number, timeLeft?: number): void {
         clearCounters();
         document.body.innerHTML = templates.questionMobile(question, questionID, timeLeft);
@@ -194,12 +236,12 @@ export class JoinWatchingDrawing {
         clearCounters();
         document.body.innerHTML = templates.joinWatchingHost(sessionID, players, actionID);
     }
-    
+
     public static onDesktop(sessionID: SessionID, players: PlayerID[]): void {
         clearCounters();
         document.body.innerHTML = templates.joinWatchingDesktop(sessionID, players);
     }
-    
+
     public static onMobile(sessionID: SessionID, players: PlayerID[]): void {
         clearCounters();
         document.body.innerHTML = templates.joinWatchingDesktop(sessionID, players);

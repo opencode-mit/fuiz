@@ -36,7 +36,7 @@ export type AnswerChoiceStatistics = {
 /**
  * Represnts a question and its possible answers.
  */
-type QuestionSolved = {
+export type QuestionSolved = {
     content: string,
     imageURL?: string,
     answerChoices: Array<AnswerChoiceSolved>
@@ -54,7 +54,9 @@ export type Question = {
 /**
  * Represents a game configuration.
  */
-export type GameConfig = {
+export type GameConfig = QuizConfig;
+
+export type QuizConfig = {
     gamemode: GamemodeName.Quiz,
     questionDelaySeconds: number,
     answersDelaySeconds: number,
@@ -141,6 +143,17 @@ export class AuthenticationError extends Error {
     public constructor(message: string) {
         super(message);
         Object.setPrototypeOf(this, AuthenticationError.prototype)
+    }
+
+    getReason() {
+        return this.message;
+    }
+}
+
+export class JoiningError extends Error {
+    public constructor(message: string) {
+        super(message);
+        Object.setPrototypeOf(this, JoiningError.prototype);
     }
 
     getReason() {

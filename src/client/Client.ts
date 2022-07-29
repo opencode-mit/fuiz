@@ -13,6 +13,14 @@ export class Client {
     public constructor() { }
 
     public async registerGame(playerID: PlayerID, sessionID: SessionID) {
+        if (playerID.trim() === '') {
+            drawing.showError("Name cannot be empty");
+            return;
+        }
+        if(sessionID.trim() === '') {
+            drawing.showError("Game PID cannot be empty");
+            return;
+        }
         this.answers = new Map();
         this.socket = await makeConnectedSocket(sessionID, (sessionID, message) => this.onReceiveAction(sessionID, message));
         console.log({ socketID: this.socket.id, sessionID: sessionID, playerID: playerID });
@@ -23,7 +31,12 @@ export class Client {
             },
             body: JSON.stringify({ socketID: this.socket.id, sessionID: sessionID, playerID: playerID })
         });
-        const json = await (await request).json();
+        const response = await request;
+        if (response.status !== 200 && response.status !== 202) {
+            drawing.showError(await response.text());
+            return;
+        }
+        const json = await response.json();
         this.sessionID = sessionID;
         this.token = json["token"];
         this.playerID = playerID;

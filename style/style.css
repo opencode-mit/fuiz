@@ -376,7 +376,7 @@ body {
 }
 
 .menu {
-    height: 100%;
+    height: inherit;
     background: var(--website-main);
 }
 
@@ -387,6 +387,7 @@ body {
     font-weight: bold;
     width: 100%;
     margin: 0.5em 0;
+    margin-top: calc(0.5em + 4px);
 }
 
 .menu textarea {
@@ -421,8 +422,27 @@ input[type=text] {
 .menu .go-back-icon {
     content: ' ';
     background: center / contain no-repeat url('../media/black_arrow_back.svg');
-    height: 0.8em;
-    width: 0.8em;
+    height: 0.6em;
+    width: 0.6em;
+    padding: 0.3em;
+}
+
+.menu {
+    align-items: center;
+}
+
+.menu .error {
+    margin: 0.5em;
+    color: var(--answer-wrong);
+    font-weight: bold;
+    align-items: center;
+}
+
+.menu .error-icon {
+    content: ' ';
+    background: center / contain no-repeat url('../media/error.svg');
+    height: 0.6em;
+    width: 0.6em;
     padding: 0.3em;
 }
 

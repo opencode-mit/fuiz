@@ -19,7 +19,13 @@ export class Host {
             },
             body: JSON.stringify({ jsonConfig: config })
         });
-        const json = await (await request).json();
+        const response = await request;
+        console.log(response.status);
+        if (response.status !== 200 && response.status !== 202) {
+            drawing.showError(await response.text());
+            return;
+        }
+        const json = await response.json();
         this.sessionID = json["sessionID"];
         this.token = json["token"];
         this.socket = await makeConnectedSocket(json["sessionID"], (sessionID, message) => this.onReceiveAction(sessionID, message));

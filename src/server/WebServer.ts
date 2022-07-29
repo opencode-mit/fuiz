@@ -4,7 +4,7 @@ import express, { Application, json } from 'express';
 import HttpStatus from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
 import { GameManager } from '../game/GameManager';
-import { AuthenticationError } from '../types';
+import { AuthenticationError, JoiningError } from '../types';
 import path from 'path';
 
 export class WebServer {
@@ -51,7 +51,8 @@ export class WebServer {
             } catch (error) {
                 response
                     .status(HttpStatus.BAD_REQUEST)
-                    .send();
+                    .type('text')
+                    .send('Config failed to parse');
             }
         });
 
@@ -81,9 +82,17 @@ export class WebServer {
                     .type('json')
                     .send(JSON.stringify({ token: data.token, announcement: { action: data.lastAction, serverTime: Date.now() } }));
             } catch (error) {
-                response
-                    .status(HttpStatus.BAD_REQUEST)
-                    .send();
+                if (error instanceof JoiningError) {
+                    response
+                        .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .type('text')
+                        .send(error.getReason());
+                } else {
+                    response
+                        .status(HttpStatus.BAD_REQUEST)
+                        .type('text')
+                        .send('Something went wrong');
+                }
             }
         });
     }

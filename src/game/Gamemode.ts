@@ -1,7 +1,8 @@
-import { GameConfig, Action, PlayerID, ActionType } from "../types";
+import { GameConfig, Action, PlayerID, ActionType, PlayingMode, QuizConfig, QuestionSolved, AnswerChoiceSolved, GamemodeName } from "../types";
 import sanitizeHtml from 'sanitize-html';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 import { Deferred } from "./Deferred";
+import assert from "assert";
 
 function sanitize(dirty: string): string {
     return sanitizeHtml(dirty);
@@ -42,7 +43,7 @@ export interface Gamemode {
      * @param playerID thew new PlayerID
      */
     registerPlayer(playerID: PlayerID): void;
-    
+
     /**
      * @returns last action that was broadcasted.
      */
@@ -67,6 +68,27 @@ export class Quiz implements Gamemode {
     private acceptingResponses = false;
     private readonly questionTimes: number[] = [];
     private lastAnnouncedAction: Action;
+
+    private static checkArraySolvedChoices(answerChoices: any): answerChoices is Array<AnswerChoiceSolved> {
+        return Array.isArray(answerChoices) && answerChoices.every((choice) => {
+            typeof choice.content === "string" && typeof choice.correct === "boolean"
+        });
+    }
+
+    private static checkArrayQuestionSolved(questions: any): questions is Array<QuestionSolved> {
+        return Array.isArray(questions) && questions.every((question) => {
+            typeof question.content === "string" && this.checkArraySolvedChoices(question.answerChoices);
+        });
+    }
+
+    public static checkConfig(config: any): config is QuizConfig {
+        return config.gamemode === 0
+            && typeof config.questionDelaySeconds === "number"
+            && typeof config.answersDelaySeconds === "number"
+            && typeof config.mode === "number"
+            && config.mode in PlayingMode
+            && this.checkArrayQuestionSolved(config.questions);
+    }
 
     /**
      * Creates a Quiz with the given configuration.
@@ -165,9 +187,9 @@ export class Quiz implements Gamemode {
             questionID: this.currentQuestion,
             question: {
                 content: sanitize(question.content),
-                ...(question.imageURL) && {imageURL: sanitizeUrl(question.imageURL)},
+                ...(question.imageURL) && { imageURL: sanitizeUrl(question.imageURL) },
                 answerChoices: question.answerChoices.map((answer) => {
-                    return {content: sanitize(answer.content)}
+                    return { content: sanitize(answer.content) }
                 })
             },
             mode: this.config.mode,
@@ -198,13 +220,13 @@ export class Quiz implements Gamemode {
             questionID: this.currentQuestion,
             question: {
                 content: sanitize(question.content),
-                ...(question.imageURL) && {imageURL: sanitizeUrl(question.imageURL)},
+                ...(question.imageURL) && { imageURL: sanitizeUrl(question.imageURL) },
                 answerChoices: question.answerChoices.map((answer) => {
-                    return {content: sanitize(answer.content)}
+                    return { content: sanitize(answer.content) }
                 })
             },
             answerStatistics: question.answerChoices.map((answer, answerID) => {
-                return {answerChoice: { content: sanitize(answer.content), correct: answer.correct }, votedCount: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length};
+                return { answerChoice: { content: sanitize(answer.content), correct: answer.correct }, votedCount: [...lastAnswers.values()].filter(playerAnswer => playerAnswer.answerID === answerID).length };
             }),
             totalVoted: lastAnswers.size,
             mode: this.config.mode,
@@ -310,7 +332,7 @@ export class Quiz implements Gamemode {
             this.announceCallback(joinAction);
         }
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -320,12 +342,19 @@ export class Quiz implements Gamemode {
 }
 
 /**
- * Creates a Quiz game with the given configuration.
+ * Creates a game with the given configuration.
  * 
  * @param config the game configuration
  * @param announceCallback the function to call to announce actions
  * @returns a gamemode instance depending on the game configuration
  */
-export function createQuiz(config: GameConfig, announceCallback: (action: Action) => void): Gamemode {
-    return new Quiz(config, announceCallback);
+export function createGame(config: GameConfig, announceCallback: (action: Action) => void): Gamemode {
+    if (config.gamemode === GamemodeName.Quiz) {
+        if (!Quiz.checkConfig(config)) {
+            throw new SyntaxError("Failed to parse config");
+        }
+        return new Quiz(config, announceCallback);
+    } else {
+        throw new SyntaxError("Failed to parse config");
+    }
 }
