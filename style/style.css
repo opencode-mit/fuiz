@@ -306,6 +306,7 @@ body {
     padding: 0.6em 0;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .leaderboard .title .pushable {
@@ -313,6 +314,7 @@ body {
     right: 1em;
     color: white;
     font-weight: bold;
+    font-size: 0.5em;
 }
 
 .leaderboard .title .pushable .front {
@@ -497,6 +499,7 @@ button {
     padding: 0.6em 0;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .join-watching .players {
@@ -519,6 +522,7 @@ button {
     right: 1em;
     color: white;
     font-weight: bold;
+    font-size: 0.5em;
 }
 
 .join-watching .front {
