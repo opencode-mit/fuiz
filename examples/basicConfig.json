@@ -26,7 +26,8 @@
             ]
         },
         {
-            "content": "What is the capital of Amman?",
+            "content": "What is the capital of Jordan?",
+            "imageURL": "https://images.memphistours.com/large/9522c852e5ccb2145550bc271184ca3f.jpg",
             "answerChoices": [
                 {
                     "content": "Aqaba",

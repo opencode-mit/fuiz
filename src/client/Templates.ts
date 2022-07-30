@@ -11,7 +11,7 @@ const templates = {
         </div>
         <div class="answer-choice-container" id="question#${questionID}">
             ${question.answerChoices.map((answer, i) => `
-            <button class="answer pushable">
+            <button class="answer pushable off">
                 <span class="front">${answer.content}</span>
             </button>`).join("")}
         </div>

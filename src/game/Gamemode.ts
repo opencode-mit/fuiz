@@ -8,6 +8,8 @@ function sanitize(dirty: string): string {
     return sanitizeHtml(dirty);
 }
 
+const QUESTION_SCORE = 1000;
+
 /**
  * Represents an answer by a Player at a certain time.
  */
@@ -155,7 +157,6 @@ export class Quiz implements Gamemode {
         this.currentQuestion = -1;
         this.acceptingResponses = false;
         this.questionTimes.splice(0, this.questionTimes.length);
-        this.players.clear();
         this.answers.splice(0, this.answers.length);
         this.announceQuestion();
     }
@@ -272,14 +273,16 @@ export class Quiz implements Gamemode {
         for (let questionID = 0; questionID < this.questionTimes.length; questionID++) {
             const playerAnswers = this.answers[questionID];
             const question = this.config.questions[questionID];
-            assert(question && playerAnswers);
+            const questionTime = this.questionTimes[questionID];
+            assert(question && playerAnswers && questionTime);
             const questionAnswers = question.answerChoices;
             assert(questionAnswers);
             for (const [playerID, playerAnswer] of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];
                 if (currentAnswer !== undefined && currentAnswer.correct === true) {
                     const currentScore = scores.get(playerID) ?? 0;
-                    scores.set(playerID, currentScore + 1);
+                    const additionalScore = Math.round(QUESTION_SCORE * (1 - ((playerAnswer.timeSubmitted - questionTime) / (this.config.answersDelaySeconds * 1000)) / 2))
+                    scores.set(playerID, currentScore + additionalScore);
                 }
             }
         }
