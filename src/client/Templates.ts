@@ -97,7 +97,7 @@ const templates = {
             </form>
             <form id="register" style="display: none">
                 <img class="logo" src="media/logo_black.svg" />
-                <button class="go-back">
+                <button type="button" class="go-back">
                     <span class="go-back-icon"></span>
                     Go Back
                 </button>
@@ -108,18 +108,20 @@ const templates = {
                     <span class="error-icon"></span>
                     <span class="error-message"></span>
                 </div>
-                <button class="pushable blue">
+                <button type="submit" class="pushable blue">
                     <span class="front">
                         Host
                     </span>
                 </button>
             </form>
             <form id="join" style="display: none">
-                <img class="logo" src="media/logo_black.svg" />
-                <button class="go-back">
-                    <span class="go-back-icon"></span>
-                    Go Back
-                </button>
+                <div>
+                    <img class="logo" src="media/logo_black.svg" />
+                    <button type="button" class="go-back">
+                        <span class="go-back-icon"></span>
+                        Go Back
+                    </button>
+                </div>
                 <div class="input">
                     <input type="text" id="playerID" name="playerID" placeholder="Name">
                     <input type="text" id="sessionID" name="sessionID" placeholder="Game PID">
@@ -128,7 +130,7 @@ const templates = {
                     <span class="error-icon"></span>
                     <span class="error-message"></span>
                 </div>
-                <button class="pushable blue">
+                <button type="submit" class="pushable blue">
                     <span class="front">
                         Join
                     </span>
