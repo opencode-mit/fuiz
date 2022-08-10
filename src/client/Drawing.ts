@@ -156,19 +156,19 @@ export function showMainControls(client: Client, host: Host) {
 }
 
 export class StatisticsDrawing {
-    public static onHost(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, actionID?: number): void {
+    public static onHost(question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted: number, questionID: number, actionID?: number): void {
         clearCounters();
-        document.body.innerHTML = templates.statisticsHost(question, answers, questionID, actionID);
+        document.body.innerHTML = templates.statisticsHost(question, answers, totalVoted, questionID, actionID);
     }
 
-    public static onDesktop(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number | undefined): void {
+    public static onDesktop(question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted: number, questionID: number, answerID: number | undefined): void {
         clearCounters();
-        document.body.innerHTML = templates.statisticsDesktop(question, answers, questionID, answerID);
+        document.body.innerHTML = templates.statisticsDesktop(question, answers, totalVoted, questionID, answerID);
     }
 
-    public static onMobile(question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number | undefined): void {
+    public static onMobile(question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted: number, questionID: number, answerID: number | undefined): void {
         clearCounters();
-        document.body.innerHTML = templates.statisticsMobile(question, answers, questionID, answerID);
+        document.body.innerHTML = templates.statisticsMobile(question, answers, totalVoted, questionID, answerID);
     }
 }
 

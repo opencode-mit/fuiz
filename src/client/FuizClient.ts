@@ -43,9 +43,9 @@ export const url = "http://localhost:8888";
 
 // drawing.showQuestionOnlyHost("Am I behind you? (Hint: Yes)", 0);
 
-// drawing.showStatisticsMobile({
+// drawing.StatisticsDrawing.onHost({
 //     content: 'How will you answer for your actions?',
-//     answers: [
+//     answerChoices: [
 //         {
 //             content: 'You cannot'
 //         }, {
@@ -57,11 +57,11 @@ export const url = "http://localhost:8888";
 //         }
 //     ]
 // }, [
-//     {answer: {content: 'You cannot', correct: true}, voted: 0},
-//     {answer: {content: 'You cannot', correct: false}, voted: 0},
-//     {answer: {content: 'You cannot', correct: false}, voted: 0},
-//     {answer: {content: 'You cannot', correct: false}, voted: 0}
-// ], 0, 0);
+//     {answerChoice: {content: 'You cannot', correct: true}, votedCount: 1},
+//     {answerChoice: {content: 'You cannot', correct: false}, votedCount: 4},
+//     {answerChoice: {content: 'You cannot', correct: true}, votedCount: 3},
+//     {answerChoice: {content: 'You cannot', correct: false}, votedCount: 0}
+// ], 8, 0, 0);
 
 export const host = new Host();
 export const client = new Client();

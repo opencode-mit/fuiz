@@ -17,7 +17,7 @@ export class Client {
             drawing.showError("Name cannot be empty");
             return;
         }
-        if(sessionID.trim() === '') {
+        if (sessionID.trim() === '') {
             drawing.showError("Game PID cannot be empty");
             return;
         }
@@ -68,7 +68,7 @@ export class Client {
                     break;
                 }
                 case ActionType.Statistics: {
-                    drawing.StatisticsDrawing.onDesktop(action.question, action.answerStatistics, action.questionID, this.answers.get(action.questionID));
+                    drawing.StatisticsDrawing.onDesktop(action.question, action.answerStatistics, action.totalVoted, action.questionID, this.answers.get(action.questionID));
                     break;
                 }
             }
@@ -93,7 +93,7 @@ export class Client {
                     break;
                 }
                 case ActionType.Statistics: {
-                    drawing.StatisticsDrawing.onMobile(action.question, action.answerStatistics, action.questionID, this.answers.get(action.questionID));
+                    drawing.StatisticsDrawing.onMobile(action.question, action.answerStatistics, action.totalVoted, action.questionID, this.answers.get(action.questionID));
                     break;
                 }
             }

@@ -153,11 +153,22 @@ const templates = {
             ${players.map((player) => `<span class="name">${player}</span>`).join("")}
         </div>
     </main>`,
-    statisticsHost: (question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, actionID?: number) => `
+    statisticsHost: (question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted: number, questionID: number, actionID?: number) => `
     <div class="question-display desktop">
         <div class="question-text">${question.content}</div>
         <div class="middle">
-            <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
+            <div class="bar-container">
+            ${answers.map((answer) => `
+            <div class="bar">
+                <div class="base"></div>
+                <div class="stem" style="height: calc(1em + ${15 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}em)"></div>
+                <div class="choice-info">
+                    <div class="count">${answer.votedCount}</div>
+                    ${answer.answerChoice.correct?`<div class="correct-checkmark"></div>`:``}
+                </div>
+            </div>
+            `).join("")}
+            </div>
             ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
         <div class="answer-choice-container" id="question#${questionID}">
@@ -167,11 +178,22 @@ const templates = {
             </button>`).join("")}
         </div>
     </div>`,
-    statisticsDesktop: (question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number = -1) => `
+    statisticsDesktop: (question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted:number, questionID: number, answerID: number = -1) => `
     <div class="question-display desktop">
         <div class="question-text">${question.content}</div>
         <div class="middle">
-            <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
+            <div class="bar-container">
+            ${answers.map((answer) => `
+            <div class="bar">
+                <div class="base"></div>
+                <div class="stem" style="height: calc(1em + ${15 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}em)"></div>
+                <div class="choice-info">
+                    <div class="count">${answer.votedCount}</div>
+                    ${answer.answerChoice.correct?`<div class="correct-checkmark"></div>`:``}
+                </div>
+            </div>
+            `).join("")}
+            </div>
         </div>
         <div class="answer-choice-container" id="question#${questionID}">
             ${answers.map((answer, i) => `
@@ -180,7 +202,7 @@ const templates = {
             </button>`).join("")}
         </div>
     </div>`,
-    statisticsMobile: (question: Question, answers: Array<AnswerChoiceStatistics>, questionID: number, answerID: number = -1) => `
+    statisticsMobile: (question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted:number, questionID: number, answerID: number = -1) => `
     <div class="question-display mobile">
         <div class="answer-choice-container" id="question#${questionID}">
             ${answers.map((answer, i) => `

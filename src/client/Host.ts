@@ -72,7 +72,7 @@ export class Host {
                 break;
             }
             case ActionType.Statistics: {
-                drawing.StatisticsDrawing.onHost(action.question, action.answerStatistics, action.questionID, action.actionID);
+                drawing.StatisticsDrawing.onHost(action.question, action.answerStatistics, action.totalVoted, action.questionID, action.actionID);
                 break;
             }
         }
