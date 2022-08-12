@@ -174,10 +174,11 @@ export class Quiz implements Gamemode {
         questionDeferred.promise.then(() => self.receiveAnswers());
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        setTimeout(() => this.resolveAction(deferredID), this.config.questionDelaySeconds * 1000);
+        const delay = (question.questionDelaySeconds ?? this.config.questionDelaySeconds) * 1000;
+        setTimeout(() => this.resolveAction(deferredID), delay);
         const questionOnlyAction: Action = {
             type: ActionType.QuestionOnly,
-            durationSeconds: this.config.questionDelaySeconds,
+            durationSeconds: delay,
             timeOfAnnouncement: Date.now(),
             questionID: this.currentQuestion,
             textContent: sanitize(question.content),
@@ -200,13 +201,14 @@ export class Quiz implements Gamemode {
         questionDeferred.promise.then(() => self.announceStatistics());
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        setTimeout(() => this.resolveAction(deferredID), this.config.answersDelaySeconds * 1000);
+        const delay = (question.answersDelaySeconds ?? this.config.answersDelaySeconds) * 1000;
+        setTimeout(() => this.resolveAction(deferredID), delay);
         this.acceptingResponses = true;
         this.answers.push(new Map());
         this.questionTimes.push(Date.now());
         const questionAction: Action = {
             type: ActionType.Question,
-            durationSeconds: this.config.answersDelaySeconds,
+            durationSeconds: delay,
             timeOfAnnouncement: Date.now(),
             questionID: this.currentQuestion,
             question: {
@@ -277,11 +279,12 @@ export class Quiz implements Gamemode {
             assert(question && playerAnswers && questionTime);
             const questionAnswers = question.answerChoices;
             assert(questionAnswers);
+            const maxScore = (question.score ?? this.config.score ?? QUESTION_SCORE);
             for (const [playerID, playerAnswer] of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];
                 if (currentAnswer !== undefined && currentAnswer.correct === true) {
                     const currentScore = scores.get(playerID) ?? 0;
-                    const additionalScore = Math.round(QUESTION_SCORE * (1 - ((playerAnswer.timeSubmitted - questionTime) / (this.config.answersDelaySeconds * 1000)) / 2))
+                    const additionalScore = Math.round(maxScore * (1 - ((playerAnswer.timeSubmitted - questionTime) / (this.config.answersDelaySeconds * 1000)) / 2))
                     scores.set(playerID, currentScore + additionalScore);
                 }
             }

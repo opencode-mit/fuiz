@@ -3,9 +3,12 @@
     "questionDelaySeconds": 5,
     "answersDelaySeconds": 30,
     "mode": 0,
+    "score": 1000,
     "questions": [
         {
             "content": "2+2=",
+            "questionDelaySeconds": 3,
+            "score": 2000,
             "answerChoices": [
                 {
                     "content": "4",

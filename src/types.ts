@@ -52,6 +52,18 @@ export type Question = {
 }
 
 /**
+ * Represents a configuration of a Question
+ */
+export type QuestionConfig = {
+    content: string,
+    imageURL?: string,
+    answerChoices: Array<AnswerChoiceSolved>,
+    score?: number,
+    questionDelaySeconds?: number,
+    answersDelaySeconds?: number,
+}
+
+/**
  * Represents a game configuration.
  */
 export type GameConfig = QuizConfig;
@@ -60,8 +72,9 @@ export type QuizConfig = {
     gamemode: GamemodeName.Quiz,
     questionDelaySeconds: number,
     answersDelaySeconds: number,
+    score?: number,
     mode: PlayingMode,
-    questions: Array<QuestionSolved>
+    questions: Array<QuestionConfig>
 };
 
 export type Leaderboard = Array<{ playerID: PlayerID, score: number }>;
