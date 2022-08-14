@@ -31,6 +31,7 @@
         {
             "content": "What is the capital of Jordan?",
             "imageURL": "https://images.memphistours.com/large/9522c852e5ccb2145550bc271184ca3f.jpg",
+            "answersDelaySeconds": 10,
             "answerChoices": [
                 {
                     "content": "Aqaba",
