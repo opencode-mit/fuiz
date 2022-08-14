@@ -1,6 +1,5 @@
 import { Action, ActionType, Announcement, GameResponseType, Hash, PlayerID, PlayingMode, Question, SessionID } from "../types";
 import { makeConnectedSocket, ClientSocket } from "./ClientSocket";
-import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
 
 export class Client {
@@ -24,7 +23,7 @@ export class Client {
         this.answers = new Map();
         this.socket = await makeConnectedSocket(sessionID, (sessionID, message) => this.onReceiveAction(sessionID, message));
         console.log({ socketID: this.socket.id, sessionID: sessionID, playerID: playerID });
-        const request = fetch(url + '/registerPlayer', {
+        const request = fetch('/registerPlayer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

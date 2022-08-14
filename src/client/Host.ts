@@ -1,7 +1,6 @@
 import assert from "assert";
 import { GameConfig, SessionID, Hash, Action, Announcement, GameResponseType, ActionType } from "../types";
 import { ClientSocket, makeConnectedSocket } from "./ClientSocket";
-import { url } from "./FuizClient";
 import * as drawing from "./Drawing";
 
 export class Host {
@@ -12,7 +11,7 @@ export class Host {
     public constructor() { }
 
     public async startGame(config: GameConfig): Promise<void> {
-        const request = fetch(url + '/register', {
+        const request = fetch('/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -29,7 +28,7 @@ export class Host {
         this.sessionID = json["sessionID"];
         this.token = json["token"];
         this.socket = await makeConnectedSocket(json["sessionID"], (sessionID, message) => this.onReceiveAction(sessionID, message));
-        const watchRequest = fetch(url + '/watchSocket', {
+        const watchRequest = fetch('/watchSocket', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

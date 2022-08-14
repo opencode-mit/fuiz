@@ -2,8 +2,6 @@ import { Client } from "./Client";
 import * as drawing from "./Drawing";
 import { Host } from "./Host";
 
-export const url = "http://localhost:8888";
-
 // drawing.showHostQuestion({
 //     content: 'How will you answer for your actions?',
 //     answers: [
