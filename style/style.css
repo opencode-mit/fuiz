@@ -163,6 +163,7 @@ body {
     flex-direction: column;
     background: var(--question-offwhite);
     height: 100%;
+    overflow: hidden;
 }
 
 .question-display .question-text {
@@ -495,6 +496,11 @@ body {
 .menu {
     height: inherit;
     background: var(--website-main);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .menu .pushable {
@@ -523,10 +529,9 @@ input[type=text] {
 }
 
 .menu .form-container {
-    padding: 1em;
+    width: 15em;
     max-width: 40ch;
-    margin: 0 auto;
-    font-size: 1.5em;
+    font-size: 1em;
 }
 
 .menu form {
@@ -589,7 +594,7 @@ input[type=text] {
 .menu .logo {
     display: block;
     max-height: 10em;
-    margin: 2em auto 3em auto;
+    margin: 1em auto 1.5em auto;
 }
 
 label,
