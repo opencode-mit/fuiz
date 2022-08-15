@@ -178,7 +178,7 @@ export class Quiz implements Gamemode {
         setTimeout(() => this.resolveAction(deferredID), delay);
         const questionOnlyAction: Action = {
             type: ActionType.QuestionOnly,
-            durationSeconds: delay,
+            durationSeconds: delay / 1000,
             timeOfAnnouncement: Date.now(),
             questionID: this.currentQuestion,
             textContent: sanitize(question.content),
@@ -208,7 +208,7 @@ export class Quiz implements Gamemode {
         this.questionTimes.push(Date.now());
         const questionAction: Action = {
             type: ActionType.Question,
-            durationSeconds: delay,
+            durationSeconds: delay / 1000,
             timeOfAnnouncement: Date.now(),
             questionID: this.currentQuestion,
             question: {
