@@ -2,7 +2,7 @@
 
 Interactive live-quiz self-hosted platform that is simple, extensible, easy-to-use, and has elegant design.
 
-## Installation
+## Get started
 
 To install the necassary dependancies run the following command in the root directory of the project:
 
