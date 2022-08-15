@@ -56,11 +56,11 @@ export type Question = {
  */
 export type QuestionConfig = {
     content: string,
-    imageURL?: string,
-    answerChoices: Array<AnswerChoiceSolved>,
-    score?: number,
     questionDelaySeconds?: number,
     answersDelaySeconds?: number,
+    score?: number,
+    imageURL?: string,
+    answerChoices: Array<AnswerChoiceSolved>,
 }
 
 /**
@@ -70,8 +70,8 @@ export type GameConfig = QuizConfig;
 
 export type QuizConfig = {
     gamemode: GamemodeName.Quiz,
-    questionDelaySeconds: number,
-    answersDelaySeconds: number,
+    questionDelaySeconds?: number,
+    answersDelaySeconds?: number,
     score?: number,
     mode: PlayingMode,
     questions: Array<QuestionConfig>

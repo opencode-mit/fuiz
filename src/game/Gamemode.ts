@@ -8,8 +8,6 @@ function sanitize(dirty: string): string {
     return sanitizeHtml(dirty);
 }
 
-const QUESTION_SCORE = 1000;
-
 /**
  * Represents an answer by a Player at a certain time.
  */
@@ -71,6 +69,10 @@ export class Quiz implements Gamemode {
     private readonly questionTimes: number[] = [];
     private lastAnnouncedAction: Action;
 
+    private static readonly QUESTION_SCORE = 1000;
+    private static readonly QUESTION_DELAY_SECONDS = 3;
+    private static readonly ANSWERS_DELAY_SECONDS = 30;
+
     /**
      * checks if object is an array of solved answer choices (check types.ts)
      * 
@@ -104,8 +106,6 @@ export class Quiz implements Gamemode {
      */
     public static checkConfig(config: any): config is QuizConfig {
         return config.gamemode === 0
-            && typeof config.questionDelaySeconds === "number"
-            && typeof config.answersDelaySeconds === "number"
             && typeof config.mode === "number"
             && config.mode in PlayingMode
             && this.checkArrayQuestionSolved(config.questions);
@@ -174,7 +174,7 @@ export class Quiz implements Gamemode {
         questionDeferred.promise.then(() => self.receiveAnswers());
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        const delay = (question.questionDelaySeconds ?? this.config.questionDelaySeconds) * 1000;
+        const delay = (question.questionDelaySeconds ?? this.config.questionDelaySeconds ?? Quiz.QUESTION_DELAY_SECONDS) * 1000;
         setTimeout(() => this.resolveAction(deferredID), delay);
         const questionOnlyAction: Action = {
             type: ActionType.QuestionOnly,
@@ -201,7 +201,7 @@ export class Quiz implements Gamemode {
         questionDeferred.promise.then(() => self.announceStatistics());
         const deferredID = this.toBeResolved.length;
         this.toBeResolved.push({ resolved: false, deferred: questionDeferred });
-        const delay = (question.answersDelaySeconds ?? this.config.answersDelaySeconds) * 1000;
+        const delay = (question.answersDelaySeconds ?? this.config.answersDelaySeconds ?? Quiz.ANSWERS_DELAY_SECONDS) * 1000;
         setTimeout(() => this.resolveAction(deferredID), delay);
         this.acceptingResponses = true;
         this.answers.push(new Map());
@@ -279,12 +279,13 @@ export class Quiz implements Gamemode {
             assert(question && playerAnswers && questionTime);
             const questionAnswers = question.answerChoices;
             assert(questionAnswers);
-            const maxScore = (question.score ?? this.config.score ?? QUESTION_SCORE);
+            const maxScore = (question.score ?? this.config.score ?? Quiz.QUESTION_SCORE);
             for (const [playerID, playerAnswer] of playerAnswers) {
                 const currentAnswer = questionAnswers[playerAnswer.answerID];
                 if (currentAnswer !== undefined && currentAnswer.correct === true) {
                     const currentScore = scores.get(playerID) ?? 0;
-                    const additionalScore = Math.round(maxScore * (1 - ((playerAnswer.timeSubmitted - questionTime) / (this.config.answersDelaySeconds * 1000)) / 2))
+                    const delay = (question.answersDelaySeconds ?? this.config.answersDelaySeconds ?? Quiz.ANSWERS_DELAY_SECONDS) * 1000;
+                    const additionalScore = Math.round(maxScore * (1 - ((playerAnswer.timeSubmitted - questionTime) / delay) / 2));
                     scores.set(playerID, currentScore + additionalScore);
                 }
             }

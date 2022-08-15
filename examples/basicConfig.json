@@ -1,7 +1,6 @@
 {
     "gamemode": 0,
     "questionDelaySeconds": 5,
-    "answersDelaySeconds": 30,
     "mode": 0,
     "score": 1000,
     "questions": [
