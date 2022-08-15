@@ -59,7 +59,7 @@ export class Client {
                     break;
                 }
                 case ActionType.Leaderboard: {
-                    drawing.LeaderboardDrawing.onDesktop(action.results, this.playerID);
+                    drawing.LeaderboardDrawing.onDesktop(action.results, action.final, this.playerID);
                     break;
                 }
                 case ActionType.Join: {
@@ -84,7 +84,7 @@ export class Client {
                     break;
                 }
                 case ActionType.Leaderboard: {
-                    drawing.LeaderboardDrawing.onMobile(action.results, this.playerID);
+                    drawing.LeaderboardDrawing.onMobile(action.results, action.final, this.playerID);
                     break;
                 }
                 case ActionType.Join: {

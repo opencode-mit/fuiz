@@ -173,20 +173,20 @@ export class StatisticsDrawing {
 }
 
 export class LeaderboardDrawing {
-    public static onHost(leaderboard: Leaderboard, actionID?: number): void {
+    public static onHost(leaderboard: Leaderboard, final: boolean, actionID?: number): void {
         clearCounters();
-        document.body.innerHTML = templates.leaderboardHost(leaderboard, actionID);
+        document.body.innerHTML = templates.leaderboardHost(leaderboard, final, actionID);
     }
 
-    public static onDesktop(leaderboard: Leaderboard, playerID?: PlayerID): void {
+    public static onDesktop(leaderboard: Leaderboard, final: boolean, playerID?: PlayerID): void {
         clearCounters();
-        document.body.innerHTML = templates.leaderboardDesktop(leaderboard);
+        document.body.innerHTML = templates.leaderboardDesktop(leaderboard, final);
         if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
     }
 
-    public static onMobile(leaderboard: Leaderboard, playerID?: PlayerID): void {
+    public static onMobile(leaderboard: Leaderboard, final: boolean, playerID?: PlayerID): void {
         clearCounters();
-        document.body.innerHTML = templates.leaderboardDesktop(leaderboard);
+        document.body.innerHTML = templates.leaderboardDesktop(leaderboard, final);
         if (playerID) document.querySelector(`#${playerID}`)?.classList.add("own");
     }
 }

@@ -63,7 +63,7 @@ export class Host {
                 break;
             }
             case ActionType.Leaderboard: {
-                drawing.LeaderboardDrawing.onHost(action.results, action.actionID);
+                drawing.LeaderboardDrawing.onHost(action.results, action.final, action.actionID);
                 break;
             }
             case ActionType.Join: {

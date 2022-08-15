@@ -34,6 +34,7 @@ body {
     --answer-disabled-choice-dark: var(--answer-dark-gray);
 
     --website-main: var(--answer-orange);
+    --website-dark: var(--answer-dark-orange);
 }
 
 .pushable {
@@ -445,15 +446,20 @@ body {
     margin: 0.2em 0;
     font-weight: bold;
     justify-content: space-between;
+    background-color: var(--website-dark);
 }
 
-.leaderboard .rank {
+.leaderboard .record-container .rank {
     padding-right: 1em;
 }
 
 .leaderboard .record.own {
     background: white;
     color: var(--website-main);
+}
+
+.leaderboard .final .record:nth-child(1) {
+    font-size: 2em;
 }
 
 .question-only-container {

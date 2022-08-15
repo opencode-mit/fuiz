@@ -39,27 +39,27 @@ const templates = {
             </button>`).join("")}
         </div>
     </div>`,
-    leaderboardHost: (leaderboard: Leaderboard, actionID?: number) => `
+    leaderboardHost: (leaderboard: Leaderboard, final: boolean, actionID?: number) => `
     <div class="leaderboard">
         <div class="title">
             Leaderboard
             ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
-        <div class="record-container">
+        <div class="record-container ${final ? `final` : ``}">
             ${leaderboard.map((record, i) => `
             <div class="record" id="${record.playerID}">
-                <span class="user"><span class="rank">${i + 1}</span>${record.playerID}</span>
+                <span class="user"><span class="rank">#${i + 1}</span>${record.playerID}</span>
                 <span class="score">${record.score}</span>
             </div>`).join("")}
         </div>
     </div>`,
-    leaderboardDesktop: (leaderboard: Leaderboard) => `
+    leaderboardDesktop: (leaderboard: Leaderboard, final: boolean) => `
     <div class="leaderboard">
         <div class="title">Leaderboard</div>
-        <div class="record-container">
+        <div class="record-container ${final ? `final` : ``}">
             ${leaderboard.map((record, i) => `
             <div class="record" id="${record.playerID}">
-                <span class="user"><span class="rank">${i + 1}</span>${record.playerID}</span>
+                <span class="user"><span class="rank">#${i + 1}</span>${record.playerID}</span>
                 <span class="score">${record.score}</span>
             </div>`).join("")}
         </div>
@@ -166,7 +166,7 @@ const templates = {
                 <div class="stem" style="height: calc(1em + ${15 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}em)"></div>
                 <div class="choice-info">
                     <div class="count">${answer.votedCount}</div>
-                    ${answer.answerChoice.correct?`<div class="correct-checkmark"></div>`:``}
+                    ${answer.answerChoice.correct ? `<div class="correct-checkmark"></div>` : ``}
                 </div>
             </div>
             `).join("")}
@@ -180,7 +180,7 @@ const templates = {
             </button>`).join("")}
         </div>
     </div>`,
-    statisticsDesktop: (question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted:number, questionID: number, answerID: number = -1) => `
+    statisticsDesktop: (question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted: number, questionID: number, answerID: number = -1) => `
     <div class="question-display desktop">
         <div class="question-text">${question.content}</div>
         <div class="middle">
@@ -191,7 +191,7 @@ const templates = {
                 <div class="stem" style="height: calc(1em + ${15 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}em)"></div>
                 <div class="choice-info">
                     <div class="count">${answer.votedCount}</div>
-                    ${answer.answerChoice.correct?`<div class="correct-checkmark"></div>`:``}
+                    ${answer.answerChoice.correct ? `<div class="correct-checkmark"></div>` : ``}
                 </div>
             </div>
             `).join("")}
@@ -204,7 +204,7 @@ const templates = {
             </button>`).join("")}
         </div>
     </div>`,
-    statisticsMobile: (question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted:number, questionID: number, answerID: number = -1) => `
+    statisticsMobile: (question: Question, answers: Array<AnswerChoiceStatistics>, totalVoted: number, questionID: number, answerID: number = -1) => `
     <div class="question-display mobile">
         <div class="answer-choice-container" id="question#${questionID}">
             ${answers.map((answer, i) => `

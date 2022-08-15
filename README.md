@@ -30,6 +30,4 @@ Defined in `src/types.ts`, you can also check out `examples/basicConfig.json` fo
 
 - [x] Graph of answer results
 
-- [ ] Podium
-
 - [ ] Music
