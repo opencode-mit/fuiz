@@ -137,9 +137,11 @@ export class GameManager {
     public receiveResponse(sessionID: SessionID, message: GameResponse): void {
         switch (message.type) {
             case GameResponseType.Answer:
+                assert(message.sessionID !== undefined && message.playerID !== undefined && message.playerID !== undefined && message.questionID !== undefined && message.answerID !== undefined);
                 this.submitAnswer(message.sessionID, message.playerID, message.playerToken, message.questionID, message.answerID);
                 break;
             case GameResponseType.Resolve:
+                assert(message.sessionID !== undefined && message.actionID !== undefined && message.token !== undefined);
                 this.resolveAction(message.sessionID, message.actionID, message.token);
                 break;
         }
