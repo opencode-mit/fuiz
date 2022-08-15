@@ -7,7 +7,6 @@
         {
             "content": "2+2=",
             "questionDelaySeconds": 3,
-            "score": 2000,
             "answerChoices": [
                 {
                     "content": "4",
@@ -31,6 +30,7 @@
             "content": "What is the capital of Jordan?",
             "imageURL": "https://images.memphistours.com/large/9522c852e5ccb2145550bc271184ca3f.jpg",
             "answersDelaySeconds": 10,
+            "score": 2000,
             "answerChoices": [
                 {
                     "content": "Aqaba",
