@@ -529,9 +529,9 @@ input[type=text] {
 }
 
 .menu .form-container {
-    width: 15em;
+    width: 18em;
     max-width: 40ch;
-    font-size: 1em;
+    font-size: 1.2em;
 }
 
 .menu form {
@@ -544,9 +544,9 @@ input[type=text] {
 .menu .go-back-icon {
     content: ' ';
     background: center / contain no-repeat url('../media/black_arrow_back.svg');
-    height: 0.6em;
-    width: 0.6em;
-    padding: 0.3em;
+    height: 1.2em;
+    width: 1.2em;
+    margin-right: 0.3em;
 }
 
 .menu {
@@ -563,9 +563,9 @@ input[type=text] {
 .menu .error-icon {
     content: ' ';
     background: center / contain no-repeat url('../media/error.svg');
-    height: 0.6em;
-    width: 0.6em;
-    padding: 0.3em;
+    height: 1.2em;
+    width: 1.2em;
+    margin-right: 0.3em;
 }
 
 .menu .go-back {

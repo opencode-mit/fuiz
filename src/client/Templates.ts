@@ -82,7 +82,7 @@ const templates = {
     mainScreen: () => `
     <main class="menu">
         <div class="form-container">
-            <form id="choose">
+            <form id="choose" autocomplete="off">
                 <img class="logo" src="media/logo_black.svg" />
                 <button class="pushable blue" id="show-host">
                     <span class="front">
@@ -95,7 +95,7 @@ const templates = {
                     </span>
                 </button>
             </form>
-            <form id="register" style="display: none">
+            <form id="register" style="display: none" autocomplete="off">
                 <img class="logo" src="media/logo_black.svg" />
                 <button type="button" class="go-back">
                     <span class="go-back-icon"></span>
@@ -114,7 +114,7 @@ const templates = {
                     </span>
                 </button>
             </form>
-            <form id="join" style="display: none">
+            <form id="join" style="display: none" autocomplete="off">
                 <div>
                     <img class="logo" src="media/logo_black.svg" />
                     <button type="button" class="go-back">
