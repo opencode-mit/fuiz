@@ -214,9 +214,9 @@ body {
 .question-display.desktop .answer .front::before {
     content: ' ';
     display: inline-block;
-    height: 1em;
-    width: 1em;
-    padding: 0 0.3em;
+    height: 100%;
+    width: 1.8em;
+    margin: 0 0.6em;
 }
 
 .question-display.desktop .answer:nth-child(1) .front::before {
