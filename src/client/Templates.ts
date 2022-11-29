@@ -163,7 +163,7 @@ const templates = {
             ${answers.map((answer) => `
             <div class="bar">
                 <div class="base"></div>
-                <div class="stem" style="height: calc(1em + ${15 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}em)"></div>
+                <div class="stem" style="height: max(1em, ${70 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}%)"></div>
                 <div class="choice-info">
                     <div class="count">${answer.votedCount}</div>
                     ${answer.answerChoice.correct ? `<div class="correct-checkmark"></div>` : ``}
@@ -188,7 +188,7 @@ const templates = {
             ${answers.map((answer) => `
             <div class="bar">
                 <div class="base"></div>
-                <div class="stem" style="height: calc(1em + ${15 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}em)"></div>
+                <div class="stem" style="height: max(1em, ${70 * answer.votedCount / Math.max(1, ...answers.map(answerChoice => answerChoice.votedCount))}%)"></div>
                 <div class="choice-info">
                     <div class="count">${answer.votedCount}</div>
                     ${answer.answerChoice.correct ? `<div class="correct-checkmark"></div>` : ``}
