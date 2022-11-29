@@ -12,6 +12,7 @@ export class Client {
     public constructor() { }
 
     public async registerGame(playerID: PlayerID, sessionID: SessionID) {
+        sessionID = sessionID.toUpperCase();
         if (playerID.trim() === '') {
             drawing.showError("Name cannot be empty");
             return;
@@ -28,7 +29,7 @@ export class Client {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ socketID: this.socket.id, sessionID: sessionID.toUpperCase(), playerID: playerID })
+            body: JSON.stringify({ socketID: this.socket.id, sessionID: sessionID, playerID: playerID })
         });
         const response = await request;
         if (response.status !== 200 && response.status !== 202) {

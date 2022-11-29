@@ -446,8 +446,10 @@ body {
 
 .leaderboard .record-container {
     font-size: min(1.5em, 3vh);
-    padding: 0 2em;
-    margin: 1em 0;
+    width: -webkit-fill-available;
+    max-width: 60ch;
+    padding: 0 0.5em;
+    margin: 0.5em auto;
     overflow: hidden;
 }
 
@@ -471,8 +473,52 @@ body {
     color: var(--website-main);
 }
 
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 .leaderboard .final .record:nth-child(1) {
-    font-size: 1.2em;
+    font-size: min(2em, 9vw);
+    opacity: 0;
+    animation: 0.5s 8s forwards appear;
+}
+
+.leaderboard .final .record:nth-child(2) {
+    font-size: min(1.4em, 8.5vw);
+    opacity: 0;
+    animation: 0.5s 4.5s forwards appear;
+}
+
+.leaderboard .final .record:nth-child(3) {
+    font-size: min(1.2em, 8vw);
+    opacity: 0;
+    animation: 0.5s 1s forwards appear;
+}
+
+.leaderboard .final .record:nth-child(3) :where(.name,.score) {
+    opacity: 0;
+    animation: 1s 2.5s forwards appear;
+}
+
+.leaderboard .final .record:nth-child(2) :where(.name,.score) {
+    opacity: 0;
+    animation: 1s 6s forwards appear;
+}
+
+.leaderboard .final .record:nth-child(1) :where(.name,.score) {
+    opacity: 0;
+    animation: 1s 9.5s forwards appear;
+}
+
+.leaderboard .final .record:nth-child(n+4) {
+    opacity: 0;
+    animation: 0.8s 12s forwards appear;
 }
 
 .question-only-container {
@@ -646,6 +692,7 @@ button {
 
 .join-watching .name {
     background: var(--answer-dark-orange);
+    font-size: min(1.5em, 3vh);
     padding: 0.2em;
     margin: 0.2em;
     color: white;

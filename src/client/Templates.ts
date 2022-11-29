@@ -48,7 +48,7 @@ const templates = {
         <div class="record-container ${final ? `final` : ``}">
             ${leaderboard.map((record, i) => `
             <div class="record" id="${record.playerID}">
-                <span class="user"><span class="rank">#${i + 1}</span>${record.playerID}</span>
+                <span class="user"><span class="rank">#${i + 1}</span><span class="name">${record.playerID}</span></span>
                 <span class="score">${record.score}</span>
             </div>`).join("")}
         </div>
@@ -59,7 +59,7 @@ const templates = {
         <div class="record-container ${final ? `final` : ``}">
             ${leaderboard.map((record, i) => `
             <div class="record" id="${record.playerID}">
-                <span class="user"><span class="rank">#${i + 1}</span>${record.playerID}</span>
+                <span class="user"><span class="rank">#${i + 1}</span><span class="name">${record.playerID}</span></span>
                 <span class="score">${record.score}</span>
             </div>`).join("")}
         </div>
