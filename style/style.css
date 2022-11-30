@@ -485,38 +485,47 @@ body {
 
 .leaderboard .final .record:nth-child(1) {
     font-size: min(2em, 9vw);
+}
+
+.leaderboard .final .record.appear-third {
     opacity: 0;
     animation: 0.5s 8s forwards appear;
 }
 
 .leaderboard .final .record:nth-child(2) {
     font-size: min(1.4em, 8.5vw);
+}
+
+.leaderboard .final .record.appear-second {
     opacity: 0;
     animation: 0.5s 4.5s forwards appear;
 }
 
 .leaderboard .final .record:nth-child(3) {
     font-size: min(1.2em, 8vw);
+}
+
+.leaderboard .final .record.appear-first {
     opacity: 0;
     animation: 0.5s 1s forwards appear;
 }
 
-.leaderboard .final .record:nth-child(3) :where(.name,.score) {
+.leaderboard .final .record.appear-first :where(.name,.score) {
     opacity: 0;
     animation: 1s 2.5s forwards appear;
 }
 
-.leaderboard .final .record:nth-child(2) :where(.name,.score) {
+.leaderboard .final .record.appear-second :where(.name,.score) {
     opacity: 0;
     animation: 1s 6s forwards appear;
 }
 
-.leaderboard .final .record:nth-child(1) :where(.name,.score) {
+.leaderboard .final .record.appear-third :where(.name,.score) {
     opacity: 0;
     animation: 1s 9.5s forwards appear;
 }
 
-.leaderboard .final .record:nth-child(n+4) {
+.leaderboard .final .record.appear-fourth {
     opacity: 0;
     animation: 0.8s 12s forwards appear;
 }
@@ -592,7 +601,7 @@ input[type=text] {
 
 .menu .form-container {
     width: 18em;
-    max-width: 40ch;
+    max-width: min(40ch, 80vw);
     font-size: 1.2em;
 }
 
@@ -691,7 +700,7 @@ button {
 }
 
 .join-watching .name {
-    background: var(--answer-dark-orange);
+    background: var(--website-dark);
     font-size: min(1.5em, 3vh);
     padding: 0.2em;
     margin: 0.2em;

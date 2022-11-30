@@ -47,7 +47,7 @@ const templates = {
         </div>
         <div class="record-container ${final ? `final` : ``}">
             ${leaderboard.map((record, i) => `
-            <div class="record" id="${record.playerID}">
+            <div class="record ${i > 2? 'appear-fourth': (i == Math.min(2, leaderboard.length-1)? 'appear-first': (i == Math.min(1, leaderboard.length-2)? 'appear-second': 'appear-third'))}" id="${record.playerID}">
                 <span class="user"><span class="rank">#${i + 1}</span><span class="name">${record.playerID}</span></span>
                 <span class="score">${record.score}</span>
             </div>`).join("")}
