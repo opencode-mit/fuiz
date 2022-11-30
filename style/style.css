@@ -595,6 +595,12 @@ input[type=text] {
     padding: 0.4em 0.4em;
 }
 
+.menu textarea:focus,
+input[type=text]:focus {
+    outline: 0.05em solid var(--website-dark);
+    border-color: var(--website-dark);
+}
+
 .menu .pushable .front {
     padding: 1em 2em;
 }
