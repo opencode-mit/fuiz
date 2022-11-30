@@ -7,16 +7,16 @@ body {
 body {
     margin: 0;
     --question-offwhite: #eee;
-    --answer-gray: #bbbbbb;
-    --answer-dark-gray: #9d9d9d;
-    --answer-red: #e21c3d;
-    --answer-dark-red: #ca1836;
-    --answer-orange: #d89d02;
-    --answer-dark-orange: #b98700;
-    --answer-blue: #1369d0;
-    --answer-dark-blue: #115db8;
-    --answer-green: #288a0e;
-    --answer-dark-green: #237b0b;
+    --answer-gray: #9a9996;
+    --answer-dark-gray: #77767b;
+    --answer-red: #c01c28;
+    --answer-dark-red: #a51d2d;
+    --answer-orange: #e66100;
+    --answer-dark-orange: #c64600;
+    --answer-blue: #1c71d8;
+    --answer-dark-blue: #1a5fb4;
+    --answer-green: #2ec27e;
+    --answer-dark-green: #26a269;
 
     --answer-correct: #67bf3a;
     --answer-dark-correct: #58a332;
@@ -33,8 +33,8 @@ body {
     --answer-disabled-choice: var(--answer-gray);
     --answer-disabled-choice-dark: var(--answer-dark-gray);
 
-    --website-main: var(--answer-orange);
-    --website-dark: var(--answer-dark-orange);
+    --website-main: var(--answer-green);
+    --website-dark: var(--answer-dark-green);
 }
 
 .pushable {
@@ -173,7 +173,7 @@ body {
     font-weight: bold;
     text-align: center;
     padding: 0.6em 0.3em;
-    border-bottom: solid black;
+    box-shadow: 0 0 4px 2px rgba(0 0 0 / 20%);
 }
 
 .question-display .middle {
