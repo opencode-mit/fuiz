@@ -7,7 +7,7 @@ const templates = {
         <div class="middle">
             ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
             <div class="image" style="background: center / auto 100% no-repeat url('${question.imageURL ?? "https://cdn150.picsart.com/upscale-253923466012212.png"}')"></div>
-            ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
+            ${actionID !== undefined ? `<button class="pushable alt" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
         <div class="answer-choice-container" id="question#${questionID}">
             ${question.answerChoices.map((answer, i) => `
@@ -43,7 +43,7 @@ const templates = {
     <div class="leaderboard">
         <div class="title">
             Leaderboard
-            ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
+            ${actionID !== undefined ? `<button class="pushable alt" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
         <div class="record-container ${final ? `final` : ``}">
             ${leaderboard.map((record, i) => `
@@ -58,7 +58,7 @@ const templates = {
         <div class="title">Leaderboard</div>
         <div class="record-container ${final ? `final` : ``}">
             ${leaderboard.map((record, i) => `
-            <div class="record" id="${record.playerID}">
+            <div class="record ${i > 2? 'appear-fourth': (i == Math.min(2, leaderboard.length-1)? 'appear-first': (i == Math.min(1, leaderboard.length-2)? 'appear-second': 'appear-third'))}" id="${record.playerID}">
                 <span class="user"><span class="rank">#${i + 1}</span><span class="name">${record.playerID}</span></span>
                 <span class="score">${record.score}</span>
             </div>`).join("")}
@@ -67,7 +67,7 @@ const templates = {
     questionOnlyHost: (content: string, actionID?: number, timeLeft?: number) => `
     <div class="question-only-container">
         ${timeLeft !== undefined ? `<div class="seconds-timer timer"></div>` : ``}
-        ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
+        ${actionID !== undefined ? `<button class="pushable alt" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         <div class="question-text">${content}</div>
     </div>`,
     questionOnlyDesktop: (content: string, timeLeft?: number) => `
@@ -83,20 +83,20 @@ const templates = {
     <main class="menu">
         <div class="form-container">
             <form id="choose" autocomplete="off">
-                <img class="logo" src="media/logo_colors.svg" />
-                <button class="pushable blue" id="show-host">
+                <img class="logo" src="media/fuiz_purple.svg" />
+                <button class="pushable alt" id="show-host">
                     <span class="front">
                         Host
                     </span>
                 </button>
-                <button class="pushable blue" id="show-join">
+                <button class="pushable alt" id="show-join">
                     <span class="front">
                         Join
                     </span>
                 </button>
             </form>
             <form id="register" style="display: none" autocomplete="off">
-                <img class="logo" src="media/logo_colors.svg" />
+                <img class="logo" src="media/fuiz_purple.svg" />
                 <button type="button" class="go-back">
                     <span class="go-back-icon"></span>
                     Go Back
@@ -108,7 +108,7 @@ const templates = {
                     <span class="error-icon"></span>
                     <span class="error-message"></span>
                 </div>
-                <button type="submit" class="pushable blue">
+                <button type="submit" class="pushable alt">
                     <span class="front">
                         Host
                     </span>
@@ -116,7 +116,7 @@ const templates = {
             </form>
             <form id="join" style="display: none" autocomplete="off">
                 <div>
-                    <img class="logo" src="media/logo_colors.svg" />
+                    <img class="logo" src="media/fuiz_purple.svg" />
                     <button type="button" class="go-back">
                         <span class="go-back-icon"></span>
                         Go Back
@@ -130,7 +130,7 @@ const templates = {
                     <span class="error-icon"></span>
                     <span class="error-message"></span>
                 </div>
-                <button type="submit" class="pushable blue">
+                <button type="submit" class="pushable alt">
                     <span class="front">
                         Join
                     </span>
@@ -142,7 +142,7 @@ const templates = {
     <main class="join-watching">
         <div class="title">
             ${sessionID}
-            ${actionID !== undefined ? `<button id="resolve#${actionID}" class="pushable blue"><div class="front">Start</div></button>` : ``}
+            ${actionID !== undefined ? `<button id="resolve#${actionID}" class="pushable alt"><div class="front">Start</div></button>` : ``}
         </div>
         <div class="players">
             ${players.map((player) => `<span class="name">${player}</span>`).join("")}
@@ -171,7 +171,7 @@ const templates = {
             </div>
             `).join("")}
             </div>
-            ${actionID !== undefined ? `<button class="pushable blue" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
+            ${actionID !== undefined ? `<button class="pushable alt" id="resolve#${actionID}"><div class="front">Next</div></button>` : ``}
         </div>
         <div class="answer-choice-container" id="question#${questionID}">
             ${answers.map((answer, i) => `

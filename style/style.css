@@ -35,6 +35,8 @@ body {
 
     --website-main: var(--answer-green);
     --website-dark: var(--answer-dark-green);
+    --alt-website-main: #4166fb;
+    --alt-website-dark: #0f3efa;
 }
 
 .pushable {
@@ -124,6 +126,22 @@ body {
 
 .pushable.blue .front {
     background: var(--answer-blue);
+}
+
+.pushable.main {
+    background: var(--website-dark);
+}
+
+.pushable.main .front {
+    background: var(--website-main);
+}
+
+.pushable.alt {
+    background: var(--alt-website-dark);
+}
+
+.pushable.alt .front {
+    background: var(--alt-website-main);
 }
 
 .pushable.green {
@@ -597,8 +615,8 @@ input[type=text] {
 
 .menu textarea:focus,
 input[type=text]:focus {
-    outline: 0.05em solid var(--website-dark);
-    border-color: var(--website-dark);
+    outline: 0.05em solid var(--alt-website-dark);
+    border-color: var(--alt-website-dark);
 }
 
 .menu .pushable .front {
