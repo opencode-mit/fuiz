@@ -4,14 +4,18 @@ import { Client } from './Client';
 import { Host } from './Host';
 import SecondsLeftCountdown from './SecondsLeftCountdown';
 import templates from './Templates';
+import JSConfetti from 'js-confetti';
+import { isJSDocThisTag } from 'typescript';
 
 const counters: Array<SecondsLeftCountdown> = [];
+let interval: NodeJS.Timer;
 
 function clearCounters(): void {
     while (counters.length) {
         const counter = counters.pop();
         counter?.clear();
     }
+    clearInterval(interval);
 }
 
 function setupTimer(timeLeft: number): void {
@@ -176,6 +180,21 @@ export class LeaderboardDrawing {
     public static onHost(leaderboard: Leaderboard, final: boolean, actionID?: number): void {
         clearCounters();
         document.body.innerHTML = templates.leaderboardHost(leaderboard, final, actionID);
+        if (final) {
+            const jsConfetti = new JSConfetti();
+            setTimeout(() => {
+                let cn = 500;
+                interval = setInterval(() => {
+                    jsConfetti.addConfetti({
+                        confettiNumber: cn
+                    });
+                    cn -= 70;
+                    if (cn <= 0) {
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            }, 3000 * Math.min(3, leaderboard.length));
+        }
     }
 
     public static onDesktop(leaderboard: Leaderboard, final: boolean, playerID?: PlayerID): void {

@@ -302,7 +302,7 @@ body {
 .question-display.mobile .answer .front {
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 50% auto;
+    background-size: 50% 50%;
 }
 
 .question-display .middle .pushable {
@@ -464,11 +464,17 @@ body {
 
 .leaderboard .record-container {
     font-size: min(1.5em, 3vh);
-    width: -webkit-fill-available;
+    width: 80%;
     max-width: 60ch;
     padding: 0 0.5em;
-    margin: 0.5em auto;
+    margin: 0.5em auto 0 auto;
     overflow: hidden;
+    scrollbar-width: none;
+    animation: 0s 9.5s forwards scroll-appear;
+}
+
+.leaderboard .record-container::-webkit-scrollbar {
+    display: none;
 }
 
 .leaderboard .record {
@@ -480,6 +486,7 @@ body {
     font-weight: bold;
     justify-content: space-between;
     background-color: var(--website-dark);
+    cursor: default;
 }
 
 .leaderboard .record-container .rank {
@@ -491,13 +498,25 @@ body {
     color: var(--website-main);
 }
 
+@keyframes scroll-appear {
+    from {
+        overflow: hidden;
+    }
+
+    to {
+        overflow: auto;
+    }
+}
+
 @keyframes appear {
     from {
         opacity: 0;
+        user-select: none;
     }
 
     to {
         opacity: 1;
+        user-select: auto;
     }
 }
 
