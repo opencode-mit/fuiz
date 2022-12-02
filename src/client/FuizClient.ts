@@ -32,30 +32,30 @@ import { Host } from "./Host";
 //     ]
 // }, 0, 10000);
 
-drawing.LeaderboardDrawing.onHost([
-    {playerID: "minecraft", score: 600},
-    {playerID: "barish", score: 400},
-    {playerID: "hannah", score: 300},
-    {playerID: "adhami", score: 100},
-    {playerID: "mahmoud", score: 100},
-    {playerID: "msobier", score: 100},
-    {playerID: "henri", score: 100},
-    {playerID: "yaseen", score: 100},
-    {playerID: "abutalib", score: 100},
-    {playerID: "khaleel", score: 100},
-    {playerID: "namazov", score: 100},
-    {playerID: "minecraft", score: 600},
-    {playerID: "barish", score: 400},
-    {playerID: "hannah", score: 300},
-    {playerID: "adhami", score: 100},
-    {playerID: "mahmoud", score: 100},
-    {playerID: "msobier", score: 100},
-    {playerID: "henri", score: 100},
-    {playerID: "yaseen", score: 100},
-    {playerID: "abutalib", score: 100},
-    {playerID: "khaleel", score: 100},
-    {playerID: "namazov", score: 100},
-], true);
+// drawing.LeaderboardDrawing.onHost([
+//     {playerID: "minecraft", score: 600},
+//     {playerID: "barish", score: 400},
+//     {playerID: "hannah", score: 300},
+//     {playerID: "adhami", score: 100},
+//     {playerID: "mahmoud", score: 100},
+//     {playerID: "msobier", score: 100},
+//     {playerID: "henri", score: 100},
+//     {playerID: "yaseen", score: 100},
+//     {playerID: "abutalib", score: 100},
+//     {playerID: "khaleel", score: 100},
+//     {playerID: "namazov", score: 100},
+//     {playerID: "minecraft", score: 600},
+//     {playerID: "barish", score: 400},
+//     {playerID: "hannah", score: 300},
+//     {playerID: "adhami", score: 100},
+//     {playerID: "mahmoud", score: 100},
+//     {playerID: "msobier", score: 100},
+//     {playerID: "henri", score: 100},
+//     {playerID: "yaseen", score: 100},
+//     {playerID: "abutalib", score: 100},
+//     {playerID: "khaleel", score: 100},
+//     {playerID: "namazov", score: 100},
+// ], true);
 
 // drawing.showQuestionOnlyHost("Am I behind you? (Hint: Yes)", 0);
 
@@ -82,6 +82,6 @@ drawing.LeaderboardDrawing.onHost([
 export const host = new Host();
 export const client = new Client();
 
-// drawing.showMainControls(client, host);
-// drawing.setUpAnswer(client);
-// drawing.setUpResolve(host);
+drawing.showMainControls(client, host);
+drawing.setUpAnswer(client);
+drawing.setUpResolve(host);
