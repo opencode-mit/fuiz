@@ -53,6 +53,7 @@ export class WebServer {
                     .type('json')
                     .send(JSON.stringify({ sessionID: sessionID, token: token }));
             } catch (error) {
+                console.log(error);
                 response
                     .status(HttpStatus.BAD_REQUEST)
                     .type('text')
