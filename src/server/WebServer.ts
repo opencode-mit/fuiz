@@ -112,6 +112,7 @@ export class WebServer {
                     ca: fs.readFileSync(process.env["CA"]!),
                 }, this.app).listen(this.httpsPort, () => {
                     console.log("server now listening at", this.httpsPort);
+                    resolve();
                 });
             } else {
                 this.server = this.app.listen(this.port, () => {
