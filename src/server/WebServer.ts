@@ -2,10 +2,14 @@ import assert from 'assert';
 import { Server } from 'http';
 import express, { Application, json } from 'express';
 import HttpStatus from 'http-status-codes';
+import https from 'https';
 import asyncHandler from 'express-async-handler';
 import { GameManager } from '../game/GameManager';
 import { AuthenticationError, JoiningError } from '../types';
 import path from 'path';
+import fs from 'fs';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: __dirname+'/../../.env' });
 
 export class WebServer {
     private readonly app: Application;
@@ -103,6 +107,16 @@ export class WebServer {
                 console.log('server now listening at', this.port);
                 resolve();
             });
+            const httpsEnabled = process.env["HTTPS_ENABLED"]!;
+            if(httpsEnabled.toString().toLocaleLowerCase() === "yes") {
+                https.createServer({
+                    key: fs.readFileSync(process.env["KEY"]!),
+                    cert: fs.readFileSync(process.env["CERT"]!),
+                    ca: fs.readFileSync(process.env["CA"]!),
+                }, this.app).listen(this.httpsPort, () => {
+                    console.log("server now listening at", this.httpsPort);
+                });
+            }
         });
     }
 
