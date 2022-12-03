@@ -103,18 +103,19 @@ export class WebServer {
 
     public start(): Promise<void> {
         return new Promise(resolve => {
-            this.server = this.app.listen(this.port, () => {
-                console.log('server now listening at', this.port);
-                resolve();
-            });
             const httpsEnabled = process.env["HTTPS_ENABLED"]!;
             if(httpsEnabled.toString().toLocaleLowerCase() === "yes") {
-                https.createServer({
+                this.server = https.createServer({
                     key: fs.readFileSync(process.env["KEY"]!),
                     cert: fs.readFileSync(process.env["CERT"]!),
                     ca: fs.readFileSync(process.env["CA"]!),
                 }, this.app).listen(this.httpsPort, () => {
                     console.log("server now listening at", this.httpsPort);
+                });
+            } else {
+                this.server = this.app.listen(this.port, () => {
+                    console.log('server now listening at', this.port);
+                    resolve();
                 });
             }
         });
