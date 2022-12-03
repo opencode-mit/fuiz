@@ -192,7 +192,7 @@ export class LeaderboardDrawing {
                     if (cn <= 0) {
                         clearInterval(interval);
                     }
-                }, 1000);
+                }, 1800);
             }, 3000 * Math.min(3, leaderboard.length));
         }
     }

@@ -11,7 +11,7 @@ export class WebServer {
     private readonly app: Application;
     public server: Server | undefined;
 
-    public constructor(private readonly gameManager: GameManager, private readonly port: number) {
+    public constructor(private readonly gameManager: GameManager, private readonly port: number, private readonly httpsPort: number) {
         this.app = express();
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
