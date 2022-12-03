@@ -1,5 +1,6 @@
 import assert from 'assert';
-import { Server as HTTPServer } from 'http';
+import http from 'http';
+import https from 'https';
 import { ServerSocket } from "../server/ServerSocket";
 import { Action, GameConfig, PlayerID, SocketID, SessionID, Hash, AuthenticationError, HASH_LENGTH, SESSION_ID_LENGTH, EASY_ALPHABET, ALPHABET, GameResponse, GameResponseType, JoiningError } from "../types";
 import { Gamemode, createGame } from "./Gamemode";
@@ -36,7 +37,7 @@ export class GameManager {
 
     public constructor() { };
 
-    public setSocketManager(server: HTTPServer) {
+    public setSocketManager(server: http.Server | https.Server) {
         this.socketManager = new ServerSocket(server, (sessionID, message) => this.receiveResponse(sessionID, message));
     }
 

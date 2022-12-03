@@ -1,5 +1,6 @@
 import assert from "assert";
-import { Server as HTTPServer } from 'http';
+import http from 'http';
+import https from 'https';
 import { Server, Socket } from "socket.io";
 import { GameResponse, Hash, SessionID, SocketID } from "../types";
 
@@ -11,7 +12,7 @@ export class ServerSocket {
     >;
 
     public constructor(
-        server: HTTPServer,
+        server: http.Server | https.Server,
         private readonly callback: (session: SessionID, message: GameResponse) => void
     ) {
         this.io = new Server(server);

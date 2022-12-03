@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Server } from 'http';
+import http from 'http';
 import express, { Application, json } from 'express';
 import HttpStatus from 'http-status-codes';
 import https from 'https';
@@ -13,7 +13,7 @@ dotenv.config({ path: __dirname+'/../../.env' });
 
 export class WebServer {
     private readonly app: Application;
-    public server: Server | undefined;
+    public server: http.Server | https.Server | undefined;
 
     public constructor(private readonly gameManager: GameManager, private readonly port: number, private readonly httpsPort: number) {
         this.app = express();
