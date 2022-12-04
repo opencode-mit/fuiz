@@ -19,9 +19,14 @@ export class WebServer {
         this.app = express();
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+        this.app.enable('trust proxy');
 
         this.app.use((request, response, next) => {
             // allow requests from web pages hosted anywhere
+            const httpsEnabled = process.env["HTTPS_ENABLED"]!.toLowerCase();
+            if(httpsEnabled === "yes" && !request.secure) { 
+                return response.redirect("https://" + request.headers.host + request.url);
+            }
             response.set('Access-Control-Allow-Origin', '*');
             next();
         });
@@ -104,8 +109,11 @@ export class WebServer {
 
     public start(): Promise<void> {
         return new Promise(resolve => {
-            const httpsEnabled = process.env["HTTPS_ENABLED"]!;
-            if(httpsEnabled.toString().toLocaleLowerCase() === "yes") {
+            const httpsEnabled = process.env["HTTPS_ENABLED"]!.toLowerCase();
+            if(httpsEnabled === "yes") {
+                this.app.listen(this.port, () => {
+                    console.log('server now listening at', this.port);
+                });
                 this.server = https.createServer({
                     key: fs.readFileSync(process.env["KEY"]!),
                     cert: fs.readFileSync(process.env["CERT"]!),
