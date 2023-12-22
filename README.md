@@ -1,3 +1,5 @@
+This project has been moved to https://gitlab.com/opencode-mit/fuiz-website
+
 # Fuiz
 
 Interactive live-quiz self-hosted platform that is simple, extensible, easy-to-use, and has elegant design.
